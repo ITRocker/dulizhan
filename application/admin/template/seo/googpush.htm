@@ -1,0 +1,61 @@
+{include file="public/layout" /}
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="seo/left" /}
+<div class="fixed-bar mb10" style="min-width:auto;margin-left:100px;">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            <li {if condition="'alt'==$Think.const.ACTION_NAME"}class="current"{/if}>
+                <a href="{:url('Seo/googpush')}">
+                    <span>谷歌推送</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="page min-hg-c-66 " style="min-width:auto;margin-left:100px;">
+    <div class="explanation" id="">
+        <ul>
+            <li>1、开启后，系统自动推送链接到谷歌搜索引擎</li>
+            <li>2、详细流程请查看帮助文档,去看<a href="" target="_blank">帮助文档</a></li>
+        </ul>
+    </div>
+    <form method="post" id="googpushpost" action="{:url('Seo/googpush')}" enctype="multipart/form-data" name="form1">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">谷歌推送开关</dt>
+                <dd class="opt">
+                    <label class="curpoin"><input id="" name="" value="1" checked type="radio">开启</label>
+                    &nbsp;
+                    <label class="curpoin"><input id="" name="" value="0" type="radio">关闭</label>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">配置文件</dt>
+                <dd class="opt">
+                    <div class="input-file-show div_addonFieldExt_fujian_eyou_local">
+                        <span class="show">
+                            <a id="file_a_addonFieldExt_fujian" class="nyroModal" rel="gal" href="" download="">
+                                <i id="file_i_addonFieldExt_fujian" class="layui-icon layui-icon-file-b"></i>
+                            </a>
+                        </span>
+                        <span class="type-file-box">
+                            <input type="text" id="addonFieldExt_fujian_eyou_local" name="addonFieldExt[fujian_eyou_local]" value="" class="type-file-text" autocomplete="off">
+                            <input type="hidden" id="addonFieldExt_fujian_filename" name="addonFieldExt[fujian_filename]" value="模板编码转换专用工具.zip" autocomplete="off">
+                            <input type="button" name="button" id="addonFieldExt_fujian_button" value="选择上传..." class="type-file-button">
+                            <input title="点击前方文件图标可下载文件，点击按钮选择文件并提交表单后上传生效" class="type-file-file" type="file" data-type="local" onchange="upload_file_addonFieldExt_fujian_1585641737(this)" size="30" hidefocus="true" nc_type="change_site_addonFieldExt_fujian">
+                        </span>
+                    </div>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <div class="bot mt30">
+                <a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green" onclick="adsubmit();">保存</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+{include file="public/footer" /}

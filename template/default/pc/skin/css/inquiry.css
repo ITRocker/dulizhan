@@ -1,0 +1,396 @@
+@charset "utf-8";
+
+/* 询盘列表页 */
+.z_inquiry_list .list_container {
+    padding-top: 60px;
+    padding-bottom: 80px;
+}
+
+.z_inquiry_list .content_box {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+}
+
+.z_inquiry_list .left_bar {
+    width: 60%;
+}
+
+.z_inquiry_list .right_bar {
+    width: 37%;
+}
+
+.z_inquiry_list .right_bar .form_box {
+    background-color: #f8f8f8;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.z_inquiry_list .form_name {
+    font-size: 48px;
+    color: #222;
+}
+
+.z_inquiry_list .form_subtitle {
+    font-size: 16px;
+    color: #555;
+    margin-top: 10px;
+}
+
+.z_inquiry_list .cart_box .cart_title {
+    font-size: 16px;
+    color: #222;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    line-height: 50px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item {
+    padding: 30px 10px;
+    border-bottom: 1px solid #e1e1e1;
+    display: flex;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .img {
+    width: 120px;
+    height: 120px;
+    margin-right: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .img img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .info {
+    flex: 1;
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .info .name {
+    padding-bottom: 10px;
+    font-size: 16px;
+    color: #222;
+    height: auto;
+    line-height: 28px;
+    padding-right: 30%;
+    overflow: hidden;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .info .name a {
+    text-overflow: ellipsis;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .info .property {
+    padding: 5px 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .info .price {
+    font-size: 14px;
+    color: #222;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .info .remove {
+    font-size: 14px;
+    color: #888;
+    text-decoration: underline;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .other {
+    align-self: center;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .other .qty>a {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    text-decoration: none;
+    vertical-align: top;
+    position: relative;
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .other .qty>a i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.z_inquiry_list .cart_box .cart_table .cart_item .other .qty input {
+    width: 50px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    vertical-align: top;
+    border: 0;
+}
+
+.z_inquiry_list .form_box .input_txt {
+    height: 48px;
+    line-height: 48px;
+    border-radius: 5px;
+    border: 1px solid #cbcbcb;
+    padding: 0 10px;
+    width: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.z_inquiry_list .form_box .rows{
+    margin-top: 25px;
+    width: 100%;
+}
+
+.z_inquiry_list .form_box .rows:first-child {
+    margin-top: 0;
+}
+
+.z_inquiry_list .form_box .rows>.label {
+    font-size: 14px;
+    padding-left: 3px;
+    color: #1a1d22;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.z_inquiry_list .form_box .rows>.label.tips {
+    font-size: 14px;
+}
+
+.z_inquiry_list .form_box .textarea_txt {
+    border-radius: 5px;
+    border: 1px solid #cbcbcb;
+    padding: 10px;
+    width: 100%;
+    height: 130px;
+    box-sizing: border-box;
+}
+
+.z_inquiry_list .form_box .global_select_box {
+    line-height: 48px;
+}
+
+.z_inquiry_list .form_box .global_select_box .input_case {
+    border-radius: 5px;
+    border: 1px solid #cbcbcb;
+    height: 48px;
+}
+
+.z_inquiry_list .form_box .global_select_box .input_case i {
+    font-size: 20px;
+    color: #000;
+}
+
+.z_inquiry_list .form_box .field_checked_box {
+    border-radius: 5px;
+    background-color: transparent;
+    padding: 10px 0 0 0;
+}
+
+.z_inquiry_list .form_box .form_tool_img_box {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    background-color: transparent;
+}
+
+.z_inquiry_list .form_box .form_tool_img_box .upload_box {
+    background-color: #fff;
+    margin: 10px 10px 0 0;
+}
+
+.z_inquiry_list .form_box .inquiry_submit {
+    min-width: 180px;
+    display: inline-block;
+    padding: 18px 30px;
+    background-color: #ffd101;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    color: #000;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+@media screen and (max-width: 1000px) {
+    .z_inquiry_list .list_container {
+        padding: 30px 0;
+    }
+
+    .z_inquiry_list .form_name {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .z_inquiry_list .form_subtitle {
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .z_inquiry_list .content_box {
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+
+    .z_inquiry_list .left_bar {
+        width: 100%;
+    }
+
+    .z_inquiry_list .right_bar {
+        width: 100%;
+        margin-top: 40px;
+    }
+
+    .z_inquiry_list .cart_box .cart_title span {
+        display: none;
+    }
+
+    .z_inquiry_list .cart_box .cart_table .cart_item {
+        padding: 20px 10px;
+        position: relative;
+    }
+
+    .z_inquiry_list .cart_box .cart_table .cart_item .img {
+        width: 80px;
+        height: 80px;
+        margin-right: 15px;
+    }
+
+    .z_inquiry_list .cart_box .cart_table .cart_item .other {
+        position: absolute;
+        right: 10px;
+        bottom: 12px;
+    }
+
+    .z_inquiry_list .cart_box .cart_table .cart_item .info {
+        padding-bottom: 20px;
+    }
+
+    .z_inquiry_list .cart_box .cart_table .cart_item .info .name {
+        font-size: 14px;
+        height: auto;
+        line-height: 22px;
+        padding: 0;
+    }
+
+    .z_inquiry_list .cart_box .cart_table .cart_item .info .remove {
+        font-size: 12px;
+    }
+
+    .z_inquiry_list .right_bar .form_box {
+        padding: 15px;
+    }
+
+    .z_inquiry_list .form_box .rows>label {
+        font-size: 14px;
+    }
+
+    .z_inquiry_list .form_box .rows>label i {
+        font-size: 12px;
+    }
+
+    .z_inquiry_list .form_box .rows>label.tips {
+        font-size: 12px;
+    }
+
+    .z_inquiry_list .form_box .input_txt {
+        font-size: 12px;
+    }
+
+    .z_inquiry_list .form_box .textarea_txt {
+        font-size: 12px;
+    }
+
+    .z_inquiry_list .form_box .global_select_box .input_case input.imitation_select {
+        font-size: 12px;
+    }
+
+    .z_inquiry_list .form_box .form_tool_img_box .upload_box {
+        width: 60px;
+        height: 60px;
+    }
+
+    .z_inquiry_list .form_box .form_tool_img_box .upload_file {
+        width: 60px;
+        height: 60px;
+    }
+
+    .z_inquiry_list .form_box .form_tool_img_box .upload_box .pic_box {
+        width: 60px;
+        height: 60px;
+    }
+
+    .z_inquiry_list .form_box .inquiry_submit {
+        padding: 12px 30px;
+    }
+}
+
+/* 询盘空白、成功页 */
+.z_inquiry_list .notice_box {
+    width: 700px;
+    margin: 0 auto;
+    padding-top: 40px;
+    padding-bottom: 120px;
+    text-align: center;
+}
+
+.z_inquiry_list .notice_box .notice_title {
+    font-size: 50px;
+    color: #000;
+    font-weight: 700;
+}
+
+.z_inquiry_list .notice_box .notice_subtitle {
+    font-size: 16px;
+    color: #333;
+    margin-top: 30px;
+}
+
+.z_inquiry_list .notice_box .notice_button {
+    min-width: 300px;
+    height: 60px;
+    line-height: 60px;
+    background-color: #000;
+    color: #fff;
+    display: inline-block;
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 30px;
+    margin-top: 40px;
+}
+
+@media screen and (max-width: 1000px) {
+    .z_inquiry_list .notice_box {
+        width: 100%;
+        padding-top: 60px;
+    }
+
+    .z_inquiry_list .notice_box .notice_title {
+        font-size: 24px;
+    }
+
+    .z_inquiry_list .notice_box .notice_subtitle {
+        font-size: 14px;
+        margin-top: 15px;
+    }
+
+    .z_inquiry_list .notice_box .notice_button {
+        height: 36px;
+        line-height: 36px;
+        min-width: 170px;
+        font-size: 14px;
+        margin-top: 20px;
+    }
+}

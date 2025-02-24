@@ -1,0 +1,22 @@
+<div class="sidebar-second ">
+    <ul>
+        <li class="sidebar-second-title">客户中心</li>
+
+        {eq name="'Member@users_index'|is_check_access" value="1"}
+        <li>
+            <a {if condition="in_array($Think.const.ACTION_NAME, ['users_index','users_edit'])"}class="active"{/if} href='{:custom_url("Member/users_index")}'>客户列表</a>
+        </li>
+        {/eq}
+        <!-- {eq name="'Member@attr_index'|is_check_access" value="1"}
+        <li>
+            <a {if condition="in_array($Request.action, ['attr_index','attr_add','attr_edit'])"}class="active"{/if} href='{:custom_url("Member/attr_index")}'>注册表单</a>
+        </li>
+        {/eq} -->
+        {eq name="'Member@users_config'|is_check_access" value="1"}
+        <li>
+            <a {if condition="in_array($Request.action, ['users_config'])"}class="active"{/if} href='{:custom_url("Member/users_config")}'>功能配置</a>
+        </li>
+        {/eq}
+                
+    </ul>
+</div>

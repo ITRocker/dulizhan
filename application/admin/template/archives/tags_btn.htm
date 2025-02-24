@@ -1,0 +1,88 @@
+<!-- 扩展 -->
+    {eq name="$Think.const.CONTROLLER_NAME.'@add'|is_check_access" value="1"}
+        {eq name='$main_lang' value='$admin_lang'}
+        <div class="fbutton" style="float: none;">
+            <input type="hidden" id="releaseUrl" value="{:url($Think.const.CONTROLLER_NAME.'/add', ['channel'=>$Request.param.channel, 'typeid'=>$Request.param.typeid, 'callback_url'=>$callback_url], true, $website_host)}">
+            <a href="javascript:void(0);" onclick="{gt name='$Request.param.typeid' value='0'}archivesRelease('{$Think.const.CONTROLLER_NAME}', {$shopOpen|default='0'}, '', {$Request.param.typeid});{else /}quick_release({$is_arctype|default='1'});{/gt}">
+                <div class="add">
+                    <span><i class="layui-icon layui-icon-addition"></i>添加</span>
+                </div>
+            </a>
+        </div>
+        {/eq}
+    {/eq}
+
+    <script type="text/javascript">
+        function archivesRelease(controller, shopOpen, url, typeid) {
+            var releaseUrl = url == '' || url === undefined || url === 'undefined' ? $('#releaseUrl').val() : url;
+            // 默认跳转路径
+            window.location.href = releaseUrl;
+        }
+
+        function productEdit(obj, shopOpen, goodsID) {
+            var releaseUrl = $(obj).attr('data-url');
+            // 默认跳转路径
+            window.location.href = releaseUrl;
+        }
+
+        // 是否确认永久不再提示
+        function ajaxNeverAgainPrompt() {
+            neverAgainPrompt = true == $('#neverAgainPrompt').is(':checked') ? 1 : 0;
+            if (1 === parseInt(neverAgainPrompt)) {
+                $.ajax({
+                    url : "{:url('System/neverAgainPrompt')}",
+                    type: "POST",
+                    data: {neverAgainPrompt: neverAgainPrompt, _ajax: 1},
+                });
+            }
+        }
+        
+        $(document).ready(function(){
+            $('#searchForm select[name=flag]').change(function(){
+                $('#searchForm').submit();
+            });
+        });
+
+        function jump_is_release() {
+            var is_release = $('#searchForm input[name=is_release]').val();
+            if (1 == is_release) {
+                $('#searchForm input[name=is_release]').val('');
+            } else {
+                $('#searchForm input[name=is_release]').val('1');
+            }
+            $('#searchForm').submit();
+        }
+
+        function quick_release(is_arctype) {
+            if (is_arctype && 0 < is_arctype) {
+                //iframe窗
+                layer.open({
+                    type: 2,
+                    title: '快捷发布文档',
+                    fixed: true, //不固定
+                    shadeClose: false,
+                    shade: layer_shade,
+                    maxmin: false, //开启最大化最小化按钮
+                    area: ['600px', '552px'],
+                    content: "//{$website_host}{$Request.baseFile}?m=admin&c=Archives&a=release&iframe=2&lang={$Request.param.lang}",
+                    success: function(layero, index){
+                        // var body = layer.getChildFrame('body', index);
+                        // var gourl = $('.curSelectedNode').attr('href');
+                        // if (!$.trim(gourl)) {
+                        //     gourl = "{:url('Archives/index_archives')}";
+                        // }
+                        // body.find('input[name=gourl]').val(gourl);
+                    }
+                });
+            } else {
+                layer.alert('至少要新增一个栏目！', {shade:layer_shade, icon: 5, title: false, btn: ['进入栏目管理']}, function(index){
+                    layer.close(index);
+                    /*左侧菜单焦点定位*/
+                    $('.eycms_cont_left .sub-menu a', window.parent.document).removeClass('on');
+                    $('#Arctype_index', window.parent.document).addClass('on');
+                    /*end*/
+                    window.location.href = "{:url('Arctype/index')}";
+                });
+            }
+        }
+    </script>

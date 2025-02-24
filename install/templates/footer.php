@@ -1,0 +1,1 @@
+<div class="footer"> Powered by  <a href="http://www.zancms.com" target="_blank">ZanCms</a></div>

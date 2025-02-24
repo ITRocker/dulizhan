@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>可视化编辑</title>
+    <script type="text/javascript">
+        var eyou_basefile = "{$Request.baseFile}";
+        var module_name = "{$Think.const.MODULE_NAME}";
+        var GetUploadify_url = "{:url('Uploadify/upload')}";
+        var __root_dir__ = "__ROOT_DIR__";
+        var __lang__ = "{$home_lang}";
+    </script>  
+    {load href="__STATIC__/common/css/uistyle.css" /}
+    {load href="__STATIC__/common/js/jquery.min.js" /}
+    {load href="__PUBLIC__/plugins/Ueditor/ueditor.config.js" /}
+    {load href="__PUBLIC__/plugins/Ueditor/ueditor.all.min.js" /}
+    {load href="__PUBLIC__/plugins/Ueditor/lang/zh-cn/zh-cn.js" /}
+    {load href="__PUBLIC__/plugins/layer-v3.1.0/layer.js" /}
+    {load href="__STATIC__/admin/js/global.js" /}
+    
+</head>
+<body>
+    <div class="panel panel-default">
+        <div class="span12 ckeditor">
+            <form class="form-horizontal" id="post_form" onsubmit="return check_submit();">
+                <div class="hend-tab">
+                    <ul class="clearfix">
+                        {volist name="$languageList" id="vo"}
+                        <li class="{if condition="$field['lang'] == $vo['mark']"} action {/if}">
+                            <a href="JavaScript:void(0);">{$vo['cn_title']}</a>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div class="control-group">
+                    {volist name="$languageList" id="vo"}
+                    <div class="control-con {if condition="$field['lang'] == $vo['mark']"} active {/if}">
+                        <textarea id="post_content_{$vo['mark']}" name="content[{$vo['mark']}]" style="width: 100%; height: 200px;">{$field['info'][$vo['mark']]['value']|default=''}</textarea>
+                    </div>
+                    {/volist}
+                </div>
+                <div class="control-group ncap-form-default">
+                    <div class="controls">
+                        <input type="hidden" name="id" value="{$field.id|default=''}">
+                        <input type="hidden" name="type" value="{$field.type|default=''}">
+                        <input type="hidden" name="page" value="{$field.page|default=''}">
+                        <input type="hidden" name="v" value="{$v|default='pc'}">
+                        <!-- <input type="hidden" name="lang" value="{$field.lang|default=$home_lang}"> -->
+                        <input type="hidden" name="idcode" value="{$field.idcode|default=''}">
+                        <input type="hidden" name="iframe" value="1">
+                        <a href="JavaScript:void(0);" onclick="check_submit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">保存</a>
+                        <!-- {if condition="!empty($doubao['doubao_api'])"}
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="JavaScript:void(0);" onclick="startTranslate(0);" class="ncap-btn-big ncap-btn-green">AI翻译</a>
+                        {/if} -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+        
+    {volist name="$languageList" id="lang"}
+    {if condition="$field.lang != $lang.mark"}
+    <div class="aiTranslateDiv" style="display: none;">
+        <input type="hidden" class="lang" value="{$lang.mark}">
+        <input type="hidden" class="cn_title" value="{$lang.cn_title}">
+    </div>
+    {/if}
+    {/volist}
+    <script type="text/javascript">
+        function startTranslate(index) {
+            var obj = $('.aiTranslateDiv').eq(index);
+            var lang = obj.find('input').eq(0).val();
+            var cn_title = obj.find('input').eq(1).val();
+            var content = $('#post_content_{$field.lang}').val();
+            if (!lang) {
+                layer.alert('翻译成功', {icon: 1, title: false, closeBtn: false});
+                return false;
+            }
+            layer_loading('正在翻译');
+            $.ajax({
+                type: 'POST',
+                url : "{:url('api/TranslateApi/translate', ['_ajax'=>1])}",
+                data: {lang: lang, content: content},
+                dataType: 'json',
+                timeout: 360000,
+                success: function(res) {
+                    layer.closeAll();
+                    if (1 === parseInt(res.code)) {
+                        if (res.data) $('#post_content_' + lang).val(res.data);
+                        index++;
+                        startTranslate(index);
+                    } else {
+                        parent.zan_showErrorAlert(res.msg);
+                    }
+                },
+                error: function(e) {
+                    layer.closeAll();
+                    parent.zan_showErrorAlert(e.responseText);
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // 选项卡点击事件
+            $('.hend-tab li').click(function() {
+                // 移除当前选中的样式
+                $('.hend-tab li').removeClass('action');
+                // 为当前点击的选项添加选中样式
+                $(this).addClass('action');
+        
+                // 获取当前点击的索引
+                var index = $(this).index();
+        
+                // 隐藏所有内容
+                $('.control-con').removeClass('active');
+                // 显示对应索引的内容
+                $('.control-con').eq(index).addClass('active');
+        
+                return false;
+            });
+        });
+        var oldhtml = parent.zan_getOldHtml();
+        var ueditor_toolbars = [[
+            'source', '|',
+            'bold', 'italic', '|', 'forecolor', 'backcolor'
+        ]];
+        {volist name="$languageList" id="vo"}
+        var ue_{$vo['mark']} = UE.getEditor("post_content_{$vo['mark']}",{
+            serverUrl: "{:url('Ueditor/index',array('savepath'=>'allimg'))}",
+            zIndex: 999,
+            initialFrameWidth: "100%", //初化宽度
+            initialFrameHeight: 300, //初化高度            
+            focus: false, //初始化时，是否让编辑器获得焦点true或false
+            maximumWords: 99999,
+            removeFormatAttributes: 'class,style,lang,width,height,align,hspace,valign',//允许的最大字符数 'fullscreen',
+            pasteplain:false, //是否默认为纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
+            autoHeightEnabled: false,
+            toolbars: ueditor_toolbars,
+            initialContent: oldhtml
+        });
+        {/volist}
+
+        var parentObj = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+        function check_submit()
+        {
+            if ($('input[name=id]').val() == '' || $('input[name=id]').val() == undefined || $('input[name=type]').val() == '' || $('input[name=page]').val() == '') {
+                parent.showErrorMsg('缺少系统参数：id、type、page，尝试请求技术支持！');
+                return false;
+            }
+            
+            {volist name="$languageList" id="vo"}
+            if(UE.getEditor("post_content_{$vo['mark']}").getContent() == ''){
+                parent.showErrorMsg('内容不能为空！');
+                return false;
+            }
+            {/volist}
+            
+            parent.zan_layer_loading('正在处理');
+            $.ajax({
+                url: "{:url('api/Uiset/submit', ['_ajax'=>1])}",
+                type: 'POST',
+                dataType: 'JSON',
+                data: $('#post_form').serialize(),
+                success: function(res){
+                    parent.layer.closeAll();
+                    if (res.code == 1) {
+                        $('#workspace', window.parent.document).attr('src', $('#workspace', window.parent.document).attr('src'));
+                        parent.layer.msg(res.msg, {icon: 1, shade: 0.3, time: 1500});
+                    } else {
+                        parent.zan_showErrorAlert(res.msg);
+                    }
+                },
+                error: function(e){
+                    parent.layer.closeAll();
+                    parent.zan_showErrorAlert(e.responseText);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

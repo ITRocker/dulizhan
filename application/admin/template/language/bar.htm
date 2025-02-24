@@ -1,0 +1,18 @@
+
+    <div class="fixed-bar mb10" style="min-width:auto;margin-left:100px;">
+        <div class="item-title">
+            <ul class="tab-base nc-row">
+                <li {if condition="'Language' == $Think.const.CONTROLLER_NAME AND in_array($Think.const.ACTION_NAME, ['index','add','edit'])"}class="current"{/if}>
+                    <a href="{:custom_url('Language/index')}">
+                        <span>语言列表</span>
+                    </a>
+                </li>
+
+                <li {if condition="'Language' == $Think.const.CONTROLLER_NAME AND preg_match('/^pack_/i', $Think.const.ACTION_NAME)"}class="current"{/if}>
+                    <a href="{:custom_url('Language/pack_batch_save')}")}">
+                        <span>语言变量</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>

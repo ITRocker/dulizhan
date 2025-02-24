@@ -1,0 +1,84 @@
+{include file="public/layout" /}
+<body class="bodystyle" style="min-width:auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page min-hg-c-10" style="min-width: auto;box-shadow:none;">
+    <form class="form-horizontal" id="post_form">
+        <input type="hidden" name="id" id="id" value="{$field.id}">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit"><label for="name"><em>*</em>国家/地区</label></dt>
+                <dd class="opt"><input type="text" name="name" id="name" value="{$field.name}" class="input-txt" placeholder="请输入国家/地区"></dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit"><label>所属大洲</label></dt>
+                <dd class="opt">
+                    <select name="continent">
+                        <option value="">请选择所属大洲</option>
+                        {volist name="$sevenContinents" id="vo"}
+                        <option value="{$key}" {eq name="$field.continent" value="$key"} selected="true" {/eq}>{$vo}</option>
+                        {/volist}
+                    </select>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit"><label>编码</label></dt>
+                <dd class="opt"><input type="text" name="code" id="code" value="{$field.code}" class="input-txt" placeholder="请输入编码"></dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit"><label>排序</label></dt>
+                <dd class="opt"><input type="text" name="sort_order" id="sort_order" value="{$field.sort_order}" class="input-txt" placeholder="请输入排序"></dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit"><label>启用</label></dt>
+                <dd class="opt">
+                    <label><input type="radio" name="status" value="0" {eq name="$field.status" value="0"} checked="true" {/eq}>否</label>
+                    &nbsp;
+                    <label><input type="radio" name="status" value="1" {eq name="$field.status" value="1"} checked="true" {/eq}>是</label>
+                </dd>
+            </dl>
+            <div class="bottom-fixed">
+                <div class="bot2">
+                    <a href="JavaScript:void(0);" onclick="submitFormSave();" class="ncap-btn-big ncap-btn-green">保存</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var parentObj = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    // 判断输入框是否为空
+    function submitFormSave() {
+        if ($('#name').val() == '') {
+            showErrorMsg('请填写国家/地区');
+            $('#name').focus();
+            return false;
+        }
+        layer_loading('正在处理');
+        $.ajax({
+            type: 'post',
+            url : "{:url('Country/edit', ['_ajax'=>1])}",
+            data: $('#post_form').serialize(),
+            dataType: 'json',
+            success: function(res) {
+                layer.closeAll();
+                if (1 === parseInt(res.code)) {
+                    var _parent = parent;
+                    _parent.layer.close(parentObj);
+                    _parent.layer.msg(res.msg, {shade: layer_shade, time: 1000}, function() {
+                        _parent.window.location.reload();
+                    });
+                } else {
+                    showErrorMsg(res.msg);
+                }
+            },
+            error: function(e) {
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+</script>
+{include file="public/footer" /}

@@ -1,0 +1,171 @@
+{include file="public/layout" /}
+
+<body class="bodystyle" style="overflow-y: scroll;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page min-hg-c-10">
+    <div class="flexigrid htitx">
+        <form class="form-horizontal" id="post_form">
+            <div class="ncap-form-default pb10">
+                <dl class="row">
+                    <dt class="tit"> <label for="group_title"><em>*</em>分组名称</label> </dt>
+                    <dd class="opt">
+                        <input type="text" name="group_title" id="group_title" placeholder="请输入名称" value="{$faqGroupField.group_title}" class="input-txt" autocomplete="off">
+                    </dd>
+                </dl>
+            </div>
+            <div class="ncap-form-default" style="z-index: 2">
+                {volist name="$languageList" id="lang_vo"}
+                <div class="hDiv">
+                    <div class="hDivBox">
+                        <table cellspacing="0" cellpadding="0" style="width: 100%">
+                            <thead><tr><th class="w10"><div class="text-l10">{$lang_vo['cn_title']}</div></th></tr></thead>
+                        </table>
+                    </div>
+                </div>
+                <dl class="row">
+                    <div class="tab-pane waimao-ad-tab-pane" style="width: 100%;">
+                        <div class="faq-list ui-sortable" id="faq-list-submit-{$lang_vo.mark}">
+                            {volist name="$faqAskList[$lang_vo.mark]['list']" id="vo"}
+                            <div class="faq-item asklist_id_{$vo.asklist_id}">
+                                <div class="ic">
+                                    <div class="drag-handle" title="拖动修改排序"><i class="iconfont e-gengduo"></i></div>
+                                    <div class="load_input" data-showorhide="show">
+                                        <textarea name="asklist_title[{$lang_vo.mark}][{$vo.auto_id}]" placeholder="请输入标题..." style="height: 40px; line-height: 30px;" class="faq_title">{$vo.asklist_title}</textarea>
+                                        <textarea name="asklist_content[{$lang_vo.mark}][{$vo.auto_id}]" placeholder="请输入说明..." style="height: 127px;" class="mb5">{$vo.asklist_content}</textarea>
+                                    </div>
+                                    {if condition="!empty($lang_vo['is_admin_default']) || !empty($global['language_split'])"}
+                                    <a class="delect" href="javascript:void(0);" onclick="delFaqAsklist({$vo.asklist_id}, 1);" title="删除"></a>
+                                    {/if}
+                                </div>
+                            </div>
+                            {/volist}
+                        </div>
+                        {if condition="!empty($lang_vo['is_admin_default']) || !empty($global['language_split'])"}
+                        <a href="javascript:void(0);" onclick="addFaqAsklist();" class="faq-add" title="新增">
+                            <div style="width: 180px; height: 180px; margin: 0 auto; position: relative;"> 
+                                <div class="y-line"></div><div class="x-line"></div>
+                            </div>
+                        </a>
+                        {/if}
+                    </div>
+                </dl>
+                {/volist}
+            </div>
+            <div class="bottom-fixed">
+                <div class="bot2">
+                    {empty name="$is_eyou_authortoken"}
+                    {if condition="$show_lang == $admin_lang && !empty($doubao['doubao_api']) && !empty($isLanguage)"}
+                    <a class="ncap-btn-big ncap-btn-green-b mr15" href="javascript:void(0);" data-href="{:url('Faq/help', ['group_id' => $faqGroupField.group_id])}" onclick="openHelpframe(this, 'AI翻译', '400px', '100%', 'r');" title="AI翻译">AI翻译</a>
+                    {/if}
+                    {/empty}
+                    <input type="hidden" name="del_asklist_id" id="del_asklist_id">
+                    <input type="hidden" name="group_id" value="{$faqGroupField.group_id}">
+                    <a href="JavaScript:void(0);" onclick="submitFaqAsklist(true);" class="ncap-btn-big ncap-btn-green">保存</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="faq-list-tpl" style="display: none;">
+    <div class="faq-item faq-item-new asklist_id_new">
+        <div class="ic">
+            <div class="drag-handle" title="拖动修改排序"><i class="iconfont e-gengduo"></i></div>
+            <div class="load_input" data-showorhide="show">
+                <textarea name="asklist_title_new[]" placeholder="请输入标题..." style="height: 40px; line-height: 30px;" class="faq_title">no title</textarea>
+                <textarea name="asklist_content_new[]" placeholder="请输入说明..." style="height: 127px;" class="mb5">no data</textarea>
+            </div>
+            <a class="delect" href="javascript:void(0);" onclick="delFaqAsklist();" title="删除"></a>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var parentObj = parent.layer.getFrameIndex(window.name);
+
+    function addFaqAsklist() {
+        var tpl = $('#faq-list-tpl').html();
+        var length = $('.faq-item-new').length;
+        var languageListJson = {$languageListJson};
+        $.each(languageListJson, function(index, value) {
+            tplNew = tpl.replace('asklist_id_new', 'asklist_id_new_' + length);
+            tplNew = tplNew.replace('asklist_title_new[]', 'asklist_title_new['+value.mark+'][]');
+            tplNew = tplNew.replace('asklist_content_new[]', 'asklist_content_new['+value.mark+'][]');
+            if (1 === parseInt(value.is_admin_default)) {
+                tplNew = tplNew.replace('delFaqAsklist();', 'delFaqAsklist('+length+', 0);');
+            } else {
+                tplNew = tplNew.replace('delect', '');
+            }
+            $('#faq-list-submit-' + value.mark).append(tplNew);
+        });
+    }
+
+    function delFaqAsklist(asklist_id, index) {
+        if (0 < parseInt(asklist_id)) {
+            if (1 === parseInt(index)) {
+                $('.asklist_id_' + asklist_id).remove();
+                var del_asklist_id = $('#del_asklist_id').val();
+                if (del_asklist_id) {
+                    del_asklist_id = del_asklist_id + ',' + asklist_id;
+                } else {
+                    del_asklist_id = asklist_id;
+                }
+                $('#del_asklist_id').val(del_asklist_id);
+            } else {
+                $('.asklist_id_new_' + asklist_id).remove();
+            }
+        }
+    }
+
+    var isSubmit = false;
+    function submitFaqAsklist(isShow) {
+        if ($('#group_title').val() == '') {
+            $('#group_title').focus();
+            layer.msg('请输入分组名称');
+            return false;
+        }
+        if (isShow) layer_loading('正在处理');
+        $.ajax({
+            type: 'post',
+            url : "{:url('Faq/edit', ['_ajax'=>1])}",
+            data: $('#post_form').serialize(),
+            dataType: 'json',
+            success: function(res) {
+                if (isShow) {
+                    layer.closeAll();
+                    if (1 == res.code) {
+                        var _parent = parent;
+                        _parent.layer.close(parentObj);
+                        _parent.layer.msg(res.msg, {icon: 1, shade: layer_shade, time: 1000}, function() {
+                            _parent.window.location.reload();
+                        });
+                    } else {
+                        showErrorMsg(res.msg);
+                    }
+                } else {
+                    isSubmit = true;
+                }
+            },
+            error: function(e) {
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+
+    // 图集相册的拖动排序相关 js
+    $( ".faq-list" ).sortable({
+        start: function( event, ui) {
+        
+        }
+        ,stop: function( event, ui ) {
+
+        }
+    });
+    //因为他们要拖动，所以尽量设置他们的文字不能选择。  
+    $( ".faq-list" ).disableSelection();
+</script>
+
+{include file="public/footer" /}

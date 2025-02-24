@@ -1,0 +1,16 @@
+<div class="fixed-bar mb10" style="min-width:auto;margin-left:100px;">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            <li {if condition="'index'==$Think.const.ACTION_NAME"}class="current"{/if}>
+                <a href="{:url('ShopProduct/index')}">
+                    <span>列表</span>
+                </a>
+            </li>
+            <li {if condition="'arctype_index'==$Think.const.ACTION_NAME"}class="current"{/if}>
+                <a href="{:url('ShopProduct/arctype_index')}">
+                    <span>分类</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

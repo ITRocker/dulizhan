@@ -1,0 +1,307 @@
+{include file="public/layout" /}
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="system/left" /}
+{include file="language/bar" /}
+<div class="page min-hg-c-66" style="min-width:auto;margin-left:100px;">
+    <div class="flexigrid">
+        <div class="mDiv mb10">
+            <div class="ftitle">
+                {eq name="'Language@add'|is_check_access" value="1"}
+                <div class="fbutton">
+                    <a href="javascript:void(0);" data-href="{:url('Language/add')}" {if condition="$php_servicemeal > 0"} onclick="openFullframe(this, '添加语言', '854px', '500px');" {else /} onclick="showErrorAlert('{$global['sys_tmpserinfo']['authormsg1']}', 4);" {/if}>
+                        <div class="add">
+                            <span><i class="layui-icon layui-icon-addition"></i>添加语言</span>
+                        </div>
+                    </a>
+                </div>
+                {/eq}
+            </div>
+        </div>
+        <div class="hDiv" style="max-width: 1000px;">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th abbr="article_show" axis="col5" class="w60">
+                            <div class="tc">排序</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="w60">
+                            <div class="tc">国旗</div>
+                        </th>
+                        <th abbr="ac_id" axis="col4">
+                            <div class="text-l10">语言</div>
+                        </th>
+                        <!-- <th abbr="article_time" axis="col6" class="w100">
+                            <div class="tc">翻译方式</div>
+                        </th> -->
+                        <th abbr="article_time" axis="col6" class="w80">
+                            <div class="tc">设为默认</div>
+                        </th>
+                        <!-- <th abbr="article_time" axis="col6" class="w100">
+                            <div class="tc">是否启用</div>
+                        </th> -->
+                        <!-- <th abbr="article_time" axis="col6" class="w200">
+                            <div class="tc">单独域名</div>
+                        </th> -->
+                        <th axis="col1" class="w180">
+                            <div class="tc">操作</div>
+                        </th>
+                        
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="max-width: 1000px;height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table class="sort-list" style="width: 100%">
+                    <tbody>
+                    {empty name="list"}
+                        <tr>
+                            <td class="no-data" align="center" axis="col0" colspan="50">
+                                <div class="no_row">
+                                    <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {else/}
+                        {foreach name="list" item="vo" key="k" }
+                        <tr class="sort-list-tr">
+                            <td class="sort">
+                                <div class="w60 tc drag-handle">
+                                    <i class="iconfont e-gengduo"></i>
+                                    <input type="checkbox" autocomplete="off" name="ids[]" value="{$vo.id}" style="display: none;">
+                                </div>
+                            </td>
+                            <td class="tc">
+                                <div class="w60 tc">
+                                    <img src="__STATIC__/common/images/language/{$vo.mark}.gif" alt="{$vo.cn_title}" style="float: unset;"/>
+                                </div>
+                            </td>
+                            <td style="width: 100%">
+                                <div class="text-l10" style="">
+                                    {$languagemarkList[$vo['mark']]['cn_title']}
+                                    {eq name="$vo['is_home_default']" value='1'}
+                                        <span style="margin-left: 5px;font-size: 12px;line-height: 14px;padding: 2px 4px;background: #d5f1ff">默认语言</span>
+                                    {/eq}
+                                </div>
+                            </td>
+                            <!-- <td class="tc">
+                                <div class="w100 tc">
+                                    <span>自定义</span>
+                                    <span class="none">页面直译</span>
+                                </div>
+                            </td> -->
+                            <td class="">
+                                <div class="w80 tc">
+                                    {eq name="$vo['is_home_default']" value='1'}
+                                        <span class="yes" {eq name="'Language@edit'|is_check_access" value="1"}onClick="changeTableVal('language','id','{$vo.id}','is_home_default',this);"{/eq}><i class="fa fa-check-circle"></i>是</span>
+                                    {else /}
+                                        <span class="no" {eq name="'Language@edit'|is_check_access" value="1"}onClick="changeTableVal('language','id','{$vo.id}','is_home_default',this);"{/eq}><i class="fa fa-ban"></i>否</span>
+                                    {/eq}
+                                </div>
+                            </td>
+                            <!-- <td class="">
+                                <div class="w100 tc">
+                                    {eq name="$vo['status']" value='1'}
+                                        <span class="yes" {eq name="'Language@edit'|is_check_access" value="1"}onClick="changeTableVal('language','id','{$vo.id}','status',this);"{/eq}><i class="fa fa-check-circle"></i>是</span>
+                                    {else /}
+                                        <span class="no" {eq name="'Language@edit'|is_check_access" value="1"}onClick="changeTableVal('language','id','{$vo.id}','status',this);"{/eq}><i class="fa fa-ban"></i>否</span>
+                                    {/eq}
+                                </div>
+                            </td> -->
+                            <!-- <td class="">
+                                <div class="w200 tc">
+                                    {$vo.url}
+                                </div>
+                            </td> -->
+                            <td class="operation">
+                                <div class="w180 tc">
+                                    <!-- <a href="javascript:void(0);" data-href="{:url('Language/pack_index', ['mark'=>$vo['mark']])}" onclick="openFullframe(this, '修改语言包内容', '90%', '90%');" class="btn blue">语言包</a><i></i> -->                                    
+                                    <a href="{$vo.langurl}" target="_blank" class="btn blue">预览</a>                                    
+                                    <i></i>
+                                    <a href="javascript:void(0);" data-href="{:url('Language/edit', ['id'=>$vo['id']])}" onclick="openFullframe(this, '编辑语言', '50%', '80%');" class="btn blue">编辑</a>
+                                    <i></i>
+                                    {if condition="$vo['is_home_default'] == 1"}
+                                        <a class="btn grey" href="javascript:void(0);" data-id="{$vo.admin_id}">删除</a>
+                                    {else /}
+                                        {eq name="'Language@del'|is_check_access" value="1"}
+                                        <a class="btn red" href="javascript:void(0)" data-url="{:url('Language/del')}" data-id="{$vo.id}" onClick="delfun(this);">删除</a>
+                                        {/eq}
+                                    {/if}
+                                </div>
+                            </td>
+                            <!-- <td class="sort">
+                                <div class="w60 tc">
+                                    {eq name="'Language@edit'|is_check_access" value="1"}
+                                    <input style="text-align: left;" type="text" onchange="changeTableVal('language','id','{$vo.id}','sort_order',this);" size="4"  value="{$vo.sort_order}" />
+                                    {else /}
+                                    {$vo.sort_order}
+                                    {/eq}
+                                </div>
+                            </td> -->
+                           
+                        </tr>
+                        {/foreach}
+                    {/empty}
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+        {$page}
+    </div>
+</div>
+<script>
+    $(function(){
+        $('input[name*=ids]').click(function(){
+            if ($('input[name*=ids]').length == $('input[name*=ids]:checked').length) {
+                $('.checkAll').prop('checked','checked');
+            } else {
+                $('.checkAll').prop('checked', false);
+            }
+        });
+        $('input[type=checkbox].checkAll').click(function(){
+            $('input[type=checkbox]:not(:disabled)').prop('checked',this.checked);
+        });
+    });
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+    });
+  
+    var add_after_jump_url = ''; // 添加语言后，跳转的url
+
+    function syn_language_pack(mark)
+    {
+        layer_loading('同步中');
+        $.ajax({
+            type : 'post',
+            url : "{:url('Language/ajax_syn_language_pack', ['_ajax'=>1])}",
+            data : {mark:mark},
+            timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
+            dataType : 'json',
+            success : function(res){
+                layer.closeAll();
+                if(res.code == 1){
+                    layer.msg(res.msg, {shade: layer_shade, time: 1000}, function(){
+                        window.location.reload();
+                    });
+                } else {
+                    showErrorAlert(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+
+    function delfun(obj){
+      var title = $(obj).attr('data-typename');
+      layer.confirm('删除后不可恢复，继续吗？', {
+          shade: layer_shade,
+          area: ['480px', '190px'],
+          move: false,
+          title: '提示',
+          btnAlign:'r',
+          closeBtn: 3,
+          btn: ['确定', '取消'] ,//按钮
+          success: function () {
+                $(".layui-layer-content").css('text-align', 'left');
+            }
+        }, function(){
+          layer_loading('正在处理');
+        // 确定
+          $.ajax({
+            type : 'post',
+            url : $(obj).attr('data-url'),
+            data : {del_id:$(obj).attr('data-id'), _ajax:1},
+            timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
+            dataType : 'json',
+            success : function(data){
+              layer.closeAll();
+              if(data.code == 1){
+                layer.msg(data.msg, {icon: 1});
+                window.location.reload();
+                // $('tr[data-id="'+$(obj).attr('data-id')+'"]').remove();
+              }else{
+                layer.alert(data.msg, {icon: 2, title:false});
+              }
+            }
+          })
+        }, function(index){
+          layer.close(index);
+        }
+      );
+      return false;
+    }
+
+    // 图集相册的拖动排序相关 js
+    $(function() {
+        var fixHelper = function(e, ui) {
+            ui.children().each(function() {
+                $(this).width($(this).width());
+            });
+            return ui;
+        };
+    
+        $(".sort-list tbody").sortable({
+            handle: '.drag-handle', // 指定拖动句柄为.drag-handle类的元素  
+            helper: fixHelper,
+            axis:"y",
+            items: ".sort-list-tr",            //拖拽对象
+            cursor: "move",
+            start:function(event, ui){
+                // 保存初始位置
+                ui.item.data('originalTop', ui.item.position().top);
+                $(".bDiv").css("overflow", "hidden"); // 拖动开始前禁用滚动条
+                return ui;
+            },
+            drag: function(event, ui) {
+                // 获取表格容器的高度
+                var containerHeight = $('.bDiv').height();
+                // 获取表格当前位置
+                var currentTop = ui.item.position().top;
+                // 如果超出容器高度，限制其位置
+                if (currentTop > containerHeight - ui.item.outerHeight()) {
+                    ui.item.css('top', containerHeight - ui.item.outerHeight() + 'px');
+                }
+            },
+            stop: function(event, ui) {
+                $(this).css('height', '');
+                $(".bDiv").css("overflow", "auto"); // 拖动结束后启用滚动条
+
+                var ids = [];
+                $('input[name*=ids]').each(function(index, item){
+                    ids.push($(item).val());
+                });
+                if (ids.length > 0) {
+                    $.ajax({
+                        type : 'post',
+                        url : "{:url('Language/ajax_update_sort_order', ['_ajax'=>1])}",
+                        data: {ids:ids, _ajax:1},
+                        dataType : 'json',
+                        success : function(res){
+                            if(res.code == 1){
+                                // window.location.reload();
+                            }
+                        },
+                        error: function(e){
+                            showErrorAlert(e.responseText);
+                        }
+                    });
+                }
+            },
+            
+        });
+    });
+</script>
+
+{include file="public/footer" /}

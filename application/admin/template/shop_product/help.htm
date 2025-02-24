@@ -1,0 +1,142 @@
+{include file="public/layout" /}
+<body class="help-page" style="min-width:auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page" style="min-width: auto;box-shadow:none;">
+    <form class="form-horizontal" id="post_form" action="{:U('Links/add')}" method="post">
+        <div class="help-form-default">
+            
+            <div  class="help_tab_index" >
+                <div class="help-title">翻译语言</div>
+                <dl class="help-row">
+                    <dd class="help-opt">
+                        <label class="">
+                            <input type="checkbox" name="required" value="1"/>简体中文
+                        </label>
+                        <label class="">
+                            <input type="checkbox" name="required" value="0"/>英语
+                        </label>
+                    </dd>
+                </dl>
+            </div>
+            <div  class="help_tab_index" >
+                <div class="help-title">翻译内容</div>
+                <dl class="help-row">
+                    <dd class="help-opt">
+                        <label class="">
+                            <input type="checkbox" name="required" value="1"/>{if condition="'ShopProduct' == $Think.const.CONTROLLER_NAME && $show_lang == $admin_lang"}产品名称{else/}标题{/if}
+                        </label>
+                        {if condition="'Single' != $Think.const.CONTROLLER_NAME"}
+                        <label class="">
+                            <input type="checkbox" name="required" value="0"/>简短介绍
+                        </label>
+                        {/if}
+                        {if condition="'ShopProduct' == $Think.const.CONTROLLER_NAME && $show_lang == $admin_lang"}
+                        <label class="">
+                            <input type="checkbox" name="required" value="0"/>参数名称
+                        </label>
+                        <label class="">
+                            <input type="checkbox" name="required" value="0"/>参数值
+                        </label>
+                        {/if}
+                        <label class="">
+                            <input type="checkbox" name="required" value="0"/>内容详情
+                        </label>
+                        <label class="">
+                            <input type="checkbox" name="required" value="0"/>移动端内容详情
+                        </label>
+                        <label class="">
+                            <input type="checkbox" name="required" value="0"/>标题（Title）
+                        </label>
+                        <label class="">
+                            <input type="checkbox" name="required" value="0"/>关键词（KeyWords）
+                        </label>
+                        <label class="">
+                            <input type="checkbox" name="required" value="0"/>描述（Description）
+                        </label>
+                    </dd>
+                </dl>
+            </div>
+            
+            
+        </div>
+    </form>
+</div>
+<script>
+  
+    function openTopframe(obj,title,width,height,offset){
+        //iframe窗
+        var url = '';
+        if (typeof(obj) == 'string' && obj.indexOf("?m=admin&c=") != -1) {
+            url = obj;
+        } else {
+            url = $(obj).data('href');
+        }
+        if (!width) width = '100%';
+        if (!height) height = '100%';
+        if (!offset) offset = 'auto';
+
+        var anim = 0;
+        var shade = layer_shade;
+        if ('r' == offset) {
+            shade = [0.05];
+            anim = 5;
+        }
+        var iframes = top.layer.open({
+            type: 2,
+            title: title,
+            fixed: true, //不固定
+            shadeClose: false,
+            shade: shade,
+            offset: offset,
+            closeBtn: 3,
+            // maxmin: true, //开启最大化最小化按钮
+            area: [width, height],
+            anim: anim,
+            content: url,
+            end: function() {
+                if (1 == $(obj).data('closereload')) window.location.reload();
+            },
+            success: function(layero, index){
+                if ('r' == offset) {
+                    $('.layui-layer-shade').click(function(){
+                        layer.close(index);
+                    });
+                }
+            }
+        });
+        if (width == '100%' && height == '100%') {
+            layer.full(iframes);
+        }
+    }
+    //跳转走
+    function toTopFame(obj){
+        var url = $(obj).data('href');
+        title = '即将跳转到新页面,编辑内容不会保存，确认跳转？';
+        btn = ['确定', '取消']; //按钮
+        top.layer.confirm(title, {
+                shade: layer_shade,
+                area: ['480px', '190px'],
+                move: false,
+                title: '提示',
+                btnAlign:'r',
+                closeBtn: 3,
+                btn: btn, //按钮
+                success: function () {
+                   top.$(".layui-layer-content").css('text-align', 'left');
+                }
+            }, function(index){
+                // 确定
+                top.layer.close(index);
+                top.$("#workspace").attr('src', url);
+//                parent.parent.location.href = url;
+            }, function(index){
+                top.layer.close(index);
+                return false;// 取消
+            }
+        );
+    }
+</script>
+
+{include file="public/footer" /}

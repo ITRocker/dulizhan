@@ -1,0 +1,181 @@
+{include file="public/layout" /}
+<script type="text/javascript" src="__SKIN__/js/clipboard.min.js"></script>
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="uiset/left" /}
+{include file="seo/bar" /}
+<div class="page min-hg-c-66 atta" style="min-width:auto;margin-left:100px;">
+    <div class="explanation" id="">
+        <ul>
+            <li>1、为了保障网站文档收录质量，请在网站基本内容填充完成后再打开sitemap功能;</li>
+            <li>2、网站主动向谷歌，必应等搜索推送最新的Sitemap数据，可缩短爬虫发现网站链接时间，加快爬虫抓取速度;</li>
+            <li>3、关闭sitemap时，默认屏蔽sitemap代码，不让搜索引擎抓取。</li>
+            <li>4、如需访问其它语言sitemap.xml，请使用对应语言域名/sitemap.xml来访问，如访问英文sitemap.xml：http://你的域名/en/sitemap.xml</li>
+        </ul>
+    </div>
+    <form method="post" id="sitemappost" action="{:url('Seo/sitemap')}" enctype="multipart/form-data" name="form1">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">sitemap</dt>
+                <dd class="opt">
+                    <label class="curpoin"><input id="sitemap_open1" name="sitemap_open" value="1" {if condition="!empty($global['sitemap_open'])"} checked="checked" {/if} type="radio">开启</label>
+                    &nbsp;
+                    <label class="curpoin"><input id="sitemap_open0" name="sitemap_open" value="0" {if condition="empty($global['sitemap_open'])"} checked="checked" {/if} type="radio">关闭</label>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label>地图类型</label>
+                </dt>
+                <dd class="opt">
+                    <div class="seo-comment-table">
+                        <div class="seo-table-wrapper">
+                            <div class="seo-table seo-table-default">
+                                <div class="seo-table-header">
+                                    <table cellspacing="0" cellpadding="0" border="0" style="width: 907px;">
+                                        <colgroup> <col width="150"> <col width="636"> <col width="150"> </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th> <div class="seo-table-cell"><span>类型</span> </div> </th>
+                                                <th> <div class="seo-table-cell"><span>链接</span> </div> </th>
+                                                <th> <div class="seo-table-cell"><span>操作</span> </div> </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="seo-table-body">
+                                    <table cellspacing="0" cellpadding="0" border="0" style="width: 907px;">
+                                        <colgroup> <col width="150"> <col width="636"> <col width="150"> </colgroup>
+                                        <tbody class="seo-table-tbody">
+                                            <tr draggable="false" class="seo-table-row">
+                                                <td>
+                                                    <div class="seo-table-cell">
+                                                        <div class="seo-table-cell-slot">
+                                                            sitemap.xml
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="seo-table-cell">
+                                                        <div class="seo-table-cell-slot">
+                                                            <a href="{$xml_url}" target="_blank">{$xml_url}</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td> 
+                                                    <div class="seo-table-cell">
+                                                        <a href="javascript:void(0);" onclick="showtext('sitemap_xml');" class="curpoin mr5 sitemap_xml" data-clipboard-text="{$xml_url}">复制链接</a>
+                                                        <a class="curpoin mr5" href="{:url('Seo/sitemap_download_file', ['filename'=>'sitemap.xml'])}" target="_blank">下载文件</a>
+                                                    </div> 
+                                                </td>
+                                            </tr>
+                                            <!-- <tr draggable="false" class="seo-table-row">
+                                                <td>
+                                                    <div class="seo-table-cell">
+                                                        <div class="seo-table-cell-slot">
+                                                            RSS地图
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="seo-table-cell">
+                                                        <div class="seo-table-cell-slot">
+                                                            <a href="{$rss_url}" target="_blank" title="头条">{$rss_url}</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td> 
+                                                    <div class="seo-table-cell">
+                                                        <a href="javascript:void(0);" onclick="showtext('sitefeed_rss');" class="curpoin mr5 sitefeed_rss" data-clipboard-text="{$rss_url}">复制链接</a>
+                                                        <a class="curpoin mr5" href="{:url('Seo/sitemap_download_file', ['filename'=>'sitefeed.rss'])}" target="_blank">下载文件</a>
+                                                    </div> 
+                                                </td>
+                                            </tr> -->
+                                            <tr draggable="false" class="seo-table-row">
+                                                <td>
+                                                    <div class="seo-table-cell">
+                                                        <div class="seo-table-cell-slot">
+                                                            siteurls.txt
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="seo-table-cell">
+                                                        <div class="seo-table-cell-slot">
+                                                            <a href="{$txt_url}" target="_blank" title="谷歌">{$txt_url}</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td> 
+                                                    <div class="seo-table-cell">
+                                                        <a href="javascript:void(0);" onclick="showtext('siteurls_txt');" class="curpoin mr5 siteurls_txt" data-clipboard-text="{$txt_url}">复制链接</a>
+                                                        <a class="curpoin mr5" href="{:url('Seo/sitemap_download_file', ['filename'=>'siteurls.txt'])}" target="_blank">下载文件</a>
+                                                    </div> 
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="err"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+    $(function(){
+        $('input[name=sitemap_open]').click(function(){
+            var sitemap_open = $(this).val();
+            layer_loading('正在处理');
+            $.ajax({
+                type : 'post',
+                url : "{:url('Seo/sitemap', ['_ajax'=>1])}",
+                data : {sitemap_open:sitemap_open},
+                dataType : 'json',
+                success : function(res){
+                    layer.closeAll();
+                    if(res.code == 1){
+                        layer.msg(res.msg, {shade: layer_shade, time: 1000});
+                    }else{
+                        showErrorMsg(res.msg);
+                    }
+                },
+                error: function(e){
+                    layer.closeAll();
+                    showErrorAlert(e.responseText);
+                }
+            });
+            /*$.ajax({
+                type : 'post',
+                url : "{:url('Seo/sitemap_update_config_data', ['_ajax'=>1])}",
+                data : {field:'sitemap.sitemap_open', value:value, is_syn:0},
+                dataType : 'json',
+                success : function(res){
+                    layer.closeAll();
+                    if(res.code == 1){
+                        layer.msg(res.msg, {shade: layer_shade, time: 1000});
+                    }else{
+                        showErrorMsg(res.msg);
+                    }
+                },
+                error: function(e){
+                    layer.closeAll();
+                    showErrorAlert(e.responseText);
+                }
+            });*/
+        });
+    });
+
+    function showtext(classname){
+        var clipboard1 = new Clipboard("."+classname);clipboard1.on("success", function(e) {layer.msg("复制成功");});clipboard1.on("error", function(e) {layer.msg("复制失败！请手动复制", {icon:5});}); 
+    }
+</script>
+
+{include file="public/footer" /}

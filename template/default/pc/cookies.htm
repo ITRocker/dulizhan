@@ -1,0 +1,17 @@
+{zan:if condition="!empty($zan['global']['cookieagrem_status'])"}
+    <div id="cookies_agreement" {zan:if condition="!empty($zan['global']['cookieagrem_position']) && 1 == $zan['global']['cookieagrem_position']"} class="cookies-bottom" {/zan:if}>
+        <div class="cookies-content">{zan:global name="cookieagrem_title" /}</div>
+        <button type="submit" class="cookies-button" onclick="accept_cookieagrem(this)">{zan:lang name='sys28' /}</button>
+    </div>
+    <div class="cookies-popup" id="cookies-popup">
+        <div class="cookies-popup-box">
+            <h2 class="cookies-popup-box-top">Cookies</h2>
+            <div class="cookies-popup-box-con" id="cookieagrem_content">
+                {zan:global name="cookieagrem_content" /}
+            </div>
+            <div class="cookies-popup-box-foot">
+                <button type="button" class="cookies-button" onclick="close_cookieagrem_popup(this)">{zan:lang name='sys29' /}</button>
+            </div>
+        </div>
+    </div>
+{/zan:if}

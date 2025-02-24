@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>跳转提示</title>
+        <link href="__SKIN__/font/css/iconfont.css?v={$version}" rel="stylesheet" />
+        <style type="text/css">
+            *{ padding: 0; margin: 0; }
+            body{ background: #fff; font-family: '微软雅黑'; color: #CCC; font-size: 16px; }
+            .system-message{ padding: 24px 30px; margin:auto; border: #e8e8e8 1px solid; top:50%; width:540px; background-color: #fff;box-shadow: 0 0 8px rgba(0,0,0,0.1);border-radius: 4px;overflow: hidden; }
+            .system-message h1{ font-size: 100px; font-weight: normal; line-height: 120px; margin-bottom: 5px; }
+            .system-message .jump{ padding-top: 10px; color: #999;}
+            .system-message .success,.system-message .error{ line-height: 1.8em;  color: #999; font-size: 36px; font-family: '黑体'; }
+            .system-message .detail{ font-size: 12px; line-height: 20px; margin-top: 12px; display:none}
+            .system-message .tit{position: relative;height: 50px;line-height: 50px;width: 100%;border-bottom: 1px solid #eee;}
+            .system-message .tit i{position: absolute;font-size: 26px;color: #53bb4c;}
+            .system-message .tit b{margin: 0 15px 0 25px;font-weight: normal;font-size: 18px;color: #53bb4c;}
+            .system-message .tit span{font-size: 14px;margin: 0 10px;color: #999;}
+            .system-message ul{margin: 10px auto; overflow: hidden;}
+            .system-message ul li{float: left;list-style: none;margin:5px 18px 5px 0;}
+        </style>
+        <script type="text/javascript" src="__STATIC__/common/js/jquery.min.js?v={$version|default='v1.6.4'}"></script>
+        <link href="__PUBLIC__/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="system-message">
+            <div class="tit">
+                <i class="iconfont e-complete"></i><span><b>成功编辑文档</b>请选择你的后续操作：</span>
+            </div>
+            <ul>
+                <li><a href="JavaScript:void(0);" onclick="parent.window.location.href='{$edit_url}'">继续编辑</a></li>
+                <li><a href="{$view_url}" target="_blank">预览文档</a></li>
+                <li><a href="JavaScript:void(0);" onclick="parent.window.location.href='{$add_url}'">添加文档</a></li>
+                <li><a href="JavaScript:void(0);" onclick="parent.window.location.href='{$list_url}'">返回列表</a></li>
+            </ul>
+        </div>
+    </body>
+</html>

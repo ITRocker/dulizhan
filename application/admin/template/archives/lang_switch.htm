@@ -1,0 +1,26 @@
+{if condition="is_language()"}
+<div class="language_dropup">
+    <div class="language_dropup_bt">
+        <a class="language_edit" href="javascript:void(0);" title="语言切换">
+            <i class="iconfont e-yuyanqiehuan"></i>{$currentLang.cn_title}<i class="fa fa-angle-down" aria-hidden="true"></i>
+        </a>
+    </div>
+    <div class="language_dropup_con">
+        <ul>
+            {volist name="$showLangList" id="lang"}
+            <li><a href="{$lang.url}" {eq name="$currentLang.mark" value="$lang.mark"} class="on" {/eq}>{$lang.cn_title}</a></li>
+            {/volist}
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    $(".language_dropup").mouseover(function(){
+        $(".language_dropup_con").show();
+        $(".language_edit").children('.fa').removeClass('fa-angle-down').addClass('fa-angle-up');
+    });
+    $(".language_dropup").mouseout(function(){
+        $(".language_dropup_con").hide();
+        $(".language_edit").children('.fa').removeClass('fa-angle-up').addClass('fa-angle-down');
+    });
+</script>
+{/if}

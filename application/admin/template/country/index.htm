@@ -1,0 +1,64 @@
+{include file="public/layout" /}
+
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="system/left" /}
+<div class="page min-hg-c-66" style="min-width:auto;margin-left:100px;">
+    <div class="explanation mb10" id="">
+        <ul>
+            <li>用于客户添加收货地址选择国家/地区时显示的数据</li>
+        </ul>
+    </div>
+    <div class="flexigrid" style="min-height: 600px;">
+        <div class="mDiv mb10">
+            <div class="ftitle">
+                <div class="fbutton" style="float: none;">
+                    <a href="javascript:void(0);" data-href="{:url('Country/add')}" onclick="openFullframe(this, '添加国家/地区', '800px', '600px');">
+                        <div class="add"> <span><i class="layui-icon layui-icon-addition"></i>添加</span> </div>
+                    </a>
+                </div>
+            </div>
+            <form class="navbar-form form-inline" id="searchForm" action="{:url('Country/index')}" method="get" onsubmit="layer_loading('正在处理');">
+                {$searchform.hidden|default=''}
+                <div class="sDiv">
+                    <div class="sDiv2">
+                        <input type="text" size="30" name="keywords" value="{$Request.param.keywords}" class="qsbox" placeholder="请输入关键词...">
+                        <input type="submit" class="btn" value="搜索">
+                        <i class="iconfont e-sousuo"></i>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th> <div style="text-align: left; padding-left: 10px;">名称</div> </th>
+                            <th class="w120"> <div class="tc">编码</div> </th>
+                            <th class="w120"> <div class="tc">所属大洲</div> </th>
+                            <th class="w120"> <div class="tc">启用</div> </th>
+                            <!-- <th class="w160"> <div class="tc">添加时间</div> </th> -->
+                            <th class="w160"> <div class="tc">更新时间</div> </th>
+                            <th class="w160"> <div class="tc">操作</div> </th>
+                            <th abbr="article_time" axis="col6" class="w60">
+                                <div class="tc sort_style"><a href="{:getArchivesSortUrl('sort_order')}">排序&nbsp;<i {eq name='$Request.param.orderby' value='sort_order'}{eq name='$Request.param.orderway' value='asc'}class="asc"{else /}class="desc"{/eq}{/eq}></i></a></div>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <div id="countryLists">
+            {include file="country/lists" /}
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+</script>
+{include file="public/footer" /}

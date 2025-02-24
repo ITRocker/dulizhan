@@ -1,0 +1,21 @@
+<div class="fixed-bar mb10" style="min-width:auto;margin-left:100px;">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            <li {if condition="'seo'==$Think.const.ACTION_NAME"}class="current"{/if}>
+                <a href="{:custom_url('Seo/seo')}">
+                    <span>URL配置</span>
+                </a>
+            </li>
+            <li {if condition="'sitemap'==$Think.const.ACTION_NAME"}class="current"{/if}>
+                <a href="{:custom_url('Seo/sitemap')}">
+                    <span>Sitemap文件</span>
+                </a>
+            </li>
+            <li {if condition="'robots'==$Think.const.ACTION_NAME"}class="current"{/if}>
+                <a href="{:custom_url('Seo/robots')}">
+                    <span>Robots</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

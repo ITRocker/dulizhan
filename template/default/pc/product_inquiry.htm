@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html lang="{$zan.global.lang_htmlmark}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta content="telephone=no" name="format-detection" />
+        <title>{$zan.field.seo_title}</title>
+        <meta name="keywords" content="{$zan.field.seo_keywords}" />
+        <meta name="description" content="{$zan.field.seo_description}" />
+        <link href="{zan:global name='web_ico' /}" rel="shortcut icon" type="image/x-icon" />
+        {zan:static file="skin/css/style.css" /}
+        {zan:static file="skin/css/inquiry.css" /}
+        {zan:static file="skin/css/iconfont.css" /}
+        {zan:static file="skin/css/jquery.bxslider.css" /}
+        {zan:static file="skin/js/jquery-3.7.0.min.js" /}
+        {zan:static file="skin/js/trade.js" /}
+        {zan:static file="skin/js/jquery.bxslider.js" /}
+    </head>
+
+    <body>
+        {zan:include file="header.htm" /}
+        <div class="in_ad">
+            <div class="banner-box">
+                <img src="{zan:global name='web_templets_pc' /}/skin/images/banner.jpg" width="100%">
+                <h1 class="typename"><a href="{$zan.field.typeurl}">{$zan.field.typename}</a></h1>
+            </div>
+        </div>
+        <div id="main" class="w article">
+            <div class="z_inquiry_list">
+                <div class="list_container">
+                    {notempty name="$goodsList"}
+                    <div class="form_name themes_box_title">{zan:lang name='diy1' /}</div>
+                    <div class="form_subtitle themes_box_subtitle">{zan:lang name='diy2' /}</div>
+                    <div class="content_box">
+                        <div class="left_bar">
+                            <div class="cart_box">
+                                <div class="cart_title"><span>{zan:lang name='users165' /}</span><span>{zan:lang name='users167' /}</span></div>
+                                <div class="cart_table">
+                                    {volist name="$goodsList" id="vo"}
+                                    <div class="cart_item" id="{$vo.goods_id}">
+                                        <div class="img pic_box">
+                                            <a href="{$vo.htmlfilename}" target="_blank" title="{$vo.title}">
+                                                <img src="{$vo.litpic}" class="img_loading"><span></span>
+                                            </a>
+                                        </div>
+                                        <div class="info">
+                                            <div class="name"><a href="{$vo.htmlfilename}" target="_blank" title="{$vo.title}">{$vo.title}</a></div>
+                                            <a href="javascript:void(0);" class="remove" title="Remove" onclick="delInquiryList({$vo.goods_id});">Remove</a>
+                                        </div>
+                                        <div class="other">
+                                            <div class="qty">
+                                                <a class="cut" href="javascript:void(0);" onclick="editInquiryList({$vo.goods_id}, 'cut');" title="decrease"><i class="iconfont icon-mb_cut3"></i></a>
+                                                <input type="text" id="goods_num_{$vo.goods_id}" name="goods_num" value="{$vo.goods_num}" onchange="editInquiryList({$vo.goods_id});">
+                                                <a class="add" href="javascript:void(0);" onclick="editInquiryList({$vo.goods_id}, 'add');" title="add"><i class="iconfont icon-mb_add3"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/volist}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right_bar">
+                            <div class="form_box">
+                                {zan:form type='default' formid='1' id='field'}
+                                <form class="global_inquiry_form" method="POST" action="{$field.action}" {$field.formhidden} onsubmit="{$field.submit}">
+                                    <div class="field_box">
+                                        <div class="rows clean colums_order_1">
+                                            <div class="label themes_box_subtitle">
+                                                {$field.itemname_1}{notempty name="$field.required_1"}<span>*</span>{/notempty}
+                                            </div>
+                                            <div class="label tips themes_box_subtitle"></div>
+                                            <div class="input">
+                                                <div class="input_box">
+                                                    <input class="input_txt" type='text' id='attr_1' name='{$field.attr_1}' maxlength="100" placeholder="{$field.placeholder_1}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="rows clean colums_order_1">
+                                            <div class="label themes_box_subtitle">
+                                                {$field.itemname_3}{notempty name="$field.required_3"}<span>*</span>{/notempty}
+                                            </div>
+                                            <div class="label tips themes_box_subtitle"></div>
+                                            <div class="input">
+                                                <div class="input_box">
+                                                    <input class="input_txt" type='email' id='attr_3' name='{$field.attr_3}' maxlength="100" placeholder="{$field.placeholder_3}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="rows clean colums_order_1">
+                                            <div class="label themes_box_subtitle">
+                                                {$field.itemname_4}{notempty name="$field.required_4"}<span>*</span>{/notempty}
+                                            </div>
+                                            <div class="label tips themes_box_subtitle"></div>
+                                            <div class="input">
+                                                <div class="textarea_box">
+                                                    <textarea id='attr_4' name='{$field.attr_4}' class="textarea_txt" maxlength="5000" placeholder="{$field.placeholder_4}"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="rows button_rows clean">
+                                            <input name="submit" type="submit" class="inquiry_submit themes_box_button inquiry_submit_1 inquiry_statistics_btn trans" value="{zan:lang name='users149' /}">
+                                        </div>
+                                    </div>
+                                    {$field.hidden}
+                                </form>
+                                {/zan:form}
+                            </div>
+                        </div>
+                    </div>
+                    {else/}
+                    <div class="content_box">
+                        <div class="notice_box">
+                            <div class="notice_title themes_box_title">{zan:lang name='diy3' /}</div>
+                            <a href="{zan:global name='web_basehost' /}" class="notice_button" title="{zan:lang name='diy384' /}">{zan:lang name='diy4' /}</a>
+                        </div>
+                    </div>
+                    {/notempty}
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        {zan:include file="footer.htm" /}
+    </body>
+</html>

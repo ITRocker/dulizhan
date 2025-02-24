@@ -1,0 +1,150 @@
+
+<div e-page="header">
+    <div class="web_header">
+        <div class="header">
+            <h1 class="logo fl pic_box">
+                <a href="{zan:global name='web_basehost' /}">
+                    <img src="{zan:global name='web_logo' /}" alt="{zan:global name='web_name' /}" /><em></em>
+                </a>
+            </h1>
+            <div class="func">
+                <div class="btn language_btn"></div>
+                <div class="btn search_btn"></div>
+                <!-- <a class="btn member_btn" href="{zan:Diyurl link='user/Users/login' /}"></a> -->
+                <div class="btn menu_btn"></div>
+            </div>
+        </div>
+        <div class="resp_search_box trans">
+            <div class="close_btn"><span></span></div>
+            <div class="clear"></div>
+            {zan:searchform type='default'}
+            <form class="search_form" method="get" action="{$field.action}" onsubmit="return searchForm();">
+                <input type="text" class="" name="keywords" id="keywords" placeholder="Search Our Catalog" />
+                <input type="submit" class="" value="" />
+                <div class="clear"></div>
+                {$field.hidden}
+            </form>
+            {/zan:searchform}
+        </div>
+        {notempty name="$zan.global.lang_switch_on"}
+        <div class="language trans">
+            <div class="close_btn"><span></span></div>
+            <div class="content">
+                {zan:language type='list'}
+                <div {zan:if condition="$zan['global']['lang_mark'] == $field['mark']"}class='list on'{zan:else /}class='list'{/zan:if}><img src="{$field.logo}" alt="{$field.title}"> <a href="{$field.pageurl}">{$field.title}</a> </div>
+                {/zan:language}
+            </div>
+        </div>
+        {/notempty}
+        <div class="nav trans">
+            {zan:navigation position_id='1' id='field1' currentclass='active'}
+            <div class="list {$field1.currentclass} {zan:notempty name='$field1.children'}has_sec{/zan:notempty}"> 
+                <a {zan:notempty name="$field1.children" }href="javascript:;" {zan:else /}href="{$field1.nav_url}" {/zan:notempty} class="title">{$field1.nav_name}{zan:notempty name="$field1.children"}<i class="trans"></i>{/zan:notempty}</a> 
+                {zan:notempty name="$field1.children"}
+                <div class="sub">
+                    <div class="cate_close"><span></span></div>
+                    {zan:navigation name='$field1.children' id='field2'}
+                    <div class="item"> 
+                        <a {zan:notempty name="$field2.children" }href="javascript:;" {zan:else /}href="{$field2.nav_url}" {/zan:notempty} class="son_nav_title">{$field2.nav_name}{zan:notempty name="$field2.children"}<i class="trans"></i>{/zan:notempty}</a> 
+                        {zan:notempty name="$field2.children"}
+                        <div class="third_nav"> 
+                            {zan:navigation name='$field2.children' id='field3'}
+                            <a href="{$field3.nav_url}">{$field3.nav_name}</a> 
+                            {/zan:navigation} 
+                        </div>
+                        {/zan:notempty}
+                    </div>
+                    {/zan:navigation}
+                </div>
+                {/zan:notempty}
+            </div>
+            {/zan:navigation}
+        </div>
+        <div class="son_nav trans"></div>
+        <div class="nav_bg"></div>
+    </div>
+    <div class="web_header header_blank"></div>
+    {zan:static file="skin/js/m-ss.js" /}
+    <div class="header_top">
+        <div class="header_top_left">
+            <span class="zan-edit" e-id="h1" e-type="text" e-page="header">
+            {zan:uitext e-id='h1' e-page="header" id='field'}
+                {$field.value}
+            {zan:else /}
+                欢迎访问某公司官方网站
+            {/zan:uitext}
+            </span>
+        </div>
+        <div class="header_top_right">
+            <ul class="header_top_menu">
+                <!-- <li class="currency">
+                    <a href="#"> usd <i class="iconfont icon-arrow2"></i> </a>
+                    <ul class="currency_selection">
+                        <li><a href="#">cad</a></li>
+                        <li><a href="#">aud</a></li>
+                    </ul>
+                </li> -->
+                <li class="language">
+                    <a href="{$zan.global.lang_pageurl}"> {$zan.global.lang_title} <i class="iconfont icon-arrow2"></i> </a>
+                    {notempty name="$zan.global.lang_switch_on"}
+                    <ul class="language_selection">
+                        {zan:language type='list'}
+                        <li {zan:if condition="$zan['global']['lang_mark'] == $field['mark']"}class='currency'{/zan:if}><img src="{$field.logo}" alt="{$field.title}"><a href="{$field.pageurl}">{$field.title}</a></li>
+                        {/zan:language}
+                    </ul>
+                    {/notempty}
+                </li>
+                <!-- <li class="account">
+                    <a href="#"> My Account <i class="iconfont icon-arrow2"></i> </a>
+                    <ul class="account_selection">
+                        <li><a href="#"><i class="fa fa-sign-in" aria-hidden="true"></i>Sign In</a></li>
+                        <li><a href="#"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a></li>
+                    </ul>
+                </li> -->
+            </ul>
+        </div>
+    </div>
+    <div class="headerWrapper relative responsive_pc_header ab_header">
+        <div class="header relative clean trans">
+            <div class="header_in">
+                <div class="right fr">
+                    <div class="h_icon search-form fl clean"> <a class="search_icon" href="javascript:;" rel="nofollow"></a>
+                        {zan:searchform type='default'}
+                        <form class="trans" method="get" action="{$field.action}" onsubmit="return searchForm();">
+                            <input class="text fl" placeholder="{zan:lang name='sys7' /}" type="text" name="keywords" id="keywords" value="" />
+                            <input type="submit" class="sub_btn fr" value="" />
+                            {$field.hidden}
+                        </form>
+                        {/zan:searchform}
+                    </div>
+                </div>
+                <a class="logo block middleImg trans fl" href="{zan:global name='web_basehost' /}"> <img src="{zan:global name='web_logo' /}" alt="{zan:global name='web_name' /}" /><span></span> </a>
+                <div class="h_right">
+                    <div class="headerNav">
+                        <div class="head-nav">
+                            {zan:navigation position_id='1' id='field1' currentclass='active'} 
+                            <div class="n_item {zan:notempty name='$field1.children'}item_icon{/zan:notempty}"> 
+                                <a href="{$field1.nav_url}" title="{$field1.nav_name}" class="{$field1.currentclass} topName block text-over trans"> {$field1.nav_name} </a>
+                                {zan:notempty name='$field1.children'}
+                                <div class="navSub trans"> 
+                                    {zan:navigation name='$field1.children' id='field2' currentclass='active'}
+                                    <a title="{$field2.nav_name}" href="{$field2.nav_url}" class="{$field2.currentclass} subName hoverColor text-over"> {$field2.nav_name} </a> 
+                                    {zan:notempty name='$field2.children'}
+                                    <div class="navSub trans"> 
+                                    {zan:navigation name='$field2.children' id='field3' currentclass='active'}
+                                    <a title="{$field3.nav_url}" href="{$field3.nav_url}" class="{$field3.currentclass} subName hoverColor text-over"> {$field3.nav_name} </a> 
+                                    {/zan:navigation} 
+                                    </div>
+                                    {/zan:notempty}
+                                    {/zan:navigation}
+                                </div>
+                                {/zan:notempty}
+                            </div>
+                             {/zan:navigation}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+{include file="public/layout" /}
+<script type="text/javascript" src="__SKIN__/js/clipboard.min.js"></script>
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="fixed-bar mb10" style="min-width:auto;">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            <li {if condition="'index' == $Think.const.ACTION_NAME"}class="current"{/if}>
+                <a href="{:custom_url('TranslateApi/index')}"><span>翻译设置</span></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="page min-hg-c-110 atta" style="min-width:auto;">
+    <div class="flexigrid htitx">
+        <form method="post" id="handlepost">
+            <div class="hDiv" id="oss">
+                <div class="hDivBox">
+                    <table cellspacing="0" cellpadding="0" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th class="sign w10"><div class="tc"></div></th>
+                                <th class="w10"><div class="tc">豆包(火山引擎)配置</div></th>
+                                <th ><div class=""></div></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="ncap-form-default">
+                <dl class="row">
+                    <dt class="tit"><label>翻译功能</label></dt>
+                    <dd class="opt">
+                        <label class="curpoin"><input name="doubao[doubao_api]" value="1" type="radio" {if condition="isset($doubao.doubao_api) AND $doubao.doubao_api eq 1"} checked="checked" {/if} onclick="doubaoApi(1);">开启</label>
+                        &nbsp;
+                        <label class="curpoin"><input name="doubao[doubao_api]" value="0" type="radio" {if condition="!isset($doubao.doubao_api) OR empty($doubao.doubao_api)"} checked="checked" {/if} onclick="doubaoApi(0);">关闭</label>
+                        <p class="notic2">查看&nbsp;<a href="JavaScript:void(0);" data-href="https://www.zancms.com/plus/view.php?aid=142&origin_eycms=1" onclick="openFullframe(this,'翻译功能配置教程');">配置教程</a></p>
+                    </dd>
+                </dl>
+
+                <dl class="row">
+                    <dt class="tit"><label for="doubao_access_key_id"><em id="doubao_access_key_id_em">{if condition="isset($doubao.doubao_api) AND $doubao.doubao_api eq 1"}*{/if}</em>Access Key ID</label></dt>
+                    <dd class="opt">
+                        <input type="text" id="doubao_access_key_id" name="doubao[doubao_access_key_id]" value="{$doubao.doubao_access_key_id|default=''}" placeholder="火山引擎中访问控制的密钥列表 Access Key ID" class="input-txt" style="width: 500px !important;" />
+                    </dd>
+                </dl>
+
+                <dl class="row">
+                    <dt class="tit"><label for="doubao_secret_access_key"><em id="doubao_secret_access_key_em">{if condition="isset($doubao.doubao_api) AND $doubao.doubao_api eq 1"}*{/if}</em>Secret Access Key</label></dt>
+                    <dd class="opt">
+                        <input type="text" id="doubao_secret_access_key" name="doubao[doubao_secret_access_key]" value="{$doubao.doubao_secret_access_key|default=''}" placeholder="火山引擎中访问控制的密钥列表 Secret Access Key" class="input-txt" style="width: 500px !important;" />
+                    </dd>
+                </dl>
+                <div class="bot mt30">
+                    <a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green" onclick="adsubmit();">保存</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    function doubaoApi (value) {
+        $('#doubao_access_key_id_em, #doubao_secret_access_key_em').html('');
+        if (1 === parseInt(value)) $('#doubao_access_key_id_em, #doubao_secret_access_key_em').html('*');
+    }
+    
+    function adsubmit() {
+        layer_loading('正在处理');
+        $.ajax({
+            type : 'post',
+            url : "{:url('TranslateApi/index', ['_ajax'=>1])}",
+            data : $('#handlepost').serialize(),
+            dataType : 'json',
+            success : function(res){
+                layer.closeAll();
+                if(res.code == 1){
+                    layer.msg(res.msg, {shade: layer_shade, time: 1000}, function(){
+                        window.location.reload();
+                    });
+                }else{
+                    showErrorMsg(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+
+</script>
+{include file="public/footer" /}

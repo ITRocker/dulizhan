@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/plugins/bootstrap/css/bootstrap.min.css?v={$version}">
+        <!-- 主题风格样式文件 -->
+        {if condition="file_exists(ROOT_PATH.'public/static/admin/css/theme/'.$global['web_theme_css_tplname'])"}
+          <link href="__SKIN__/css/theme/{$global['web_theme_css_tplname']|default='css_1.css'}?v={$version}_{$global['web_theme_style_uptime']|default=0}" rel="stylesheet" type="text/css">
+        {/if}
+        <!-- 主题风格样式文件 -->
+        {load href="__STATIC__/common/js/jquery.min.js" /}
+        <script type="text/javascript" src="__PUBLIC__/plugins/layer-v3.1.0/layer.js?v={$version}"></script>
+        <script type="text/javascript">
+            var __root_dir__ = "__ROOT_DIR__";
+            var __lang__ = "{$admin_lang}";
+        </script>
+        <script src="__SKIN__/js/global.js?v={$version}0"></script>
+    </head>
+    <style type="text/css">
+        /* .gray-bg {
+            background-color: #f3f3f4;
+        } */
+        .wrapper-content {
+            padding: 20px;
+        }
+        .ibox {
+            clear: both;
+            margin-bottom: 25px;
+            margin-top: 0;
+            padding: 0;
+        }
+        .ibox-content {
+            clear: both;
+            background-color: #ffffff;
+            color: inherit;
+            padding: 15px 20px 20px 20px;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0px;
+        }
+        .progress {
+            height: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+        }
+        .progress-bar{
+            height: 100%;
+        }
+        .progress-bar-success {
+            background-color: #1c84c6;
+        }
+        .finash-list {
+            width: 100%;
+            margin: 30px auto 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .finash-list .lang {
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            width: 33.33%;
+            padding-right: 15px;
+        }
+        .finash-list .lang:nth-child(3n) {
+            padding-right: 0;
+        }
+        .finash-list .lang span{
+            margin-right: 5px;
+        }
+        .ncap-btn-green {
+            margin: 20px auto 0;
+            width: 100px;
+            height: 36px;
+            line-height: 36px;
+            background-color: #4fc0e8;
+            border:1px solid #3aa8cf;
+            text-align: center;
+            vertical-align: middle;
+            display: block;
+            padding: 0px 9px;
+            border-radius: 3px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 13px;
+        }
+        a.ncap-btn-green:hover{
+            color: #fff;
+            text-decoration: none;
+        }
+        .red {
+            color: red;
+        }
+        .green {
+            color: green;
+        }
+        .grey {
+            color: grey;
+        }
+    </style>
+    <body class="gray-bg">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="progress progress-striped active">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+                </div>
+                <div style="text-align:center" class="success">
+                    <div class="finash" id="finash">
+                        <span><font id="title">翻译中</font>，</span>已完成<span class="percent" style="color: #ff0000; font-size: 14px;">0</span>%
+                    </div>
+                    <div class="finash-list">
+                        {volist name="$markList" id="vo"}
+                        <div class="lang"><span>{$vo.title}</span><span class="grey" id="mark_{$vo.mark}" title="等待翻译">等待翻译</span></div>
+                        {/volist}
+                    </div>
+                </div>
+            </div>
+            <a href="javascript:void(0);" id="a_close_pop" onclick="parent.window.location.reload();" class="ncap-btn-green" style="display: none;">关闭</a>
+            <div class="ibox-content" id="error_msg" style="display: none"></div>
+        </div>
+
+        <script type="text/javascript">
+            var translateArr = parent.translateArr;
+            var translateLang = 0;
+            var translateLang_ = parseInt(translateArr.langArr.length);
+            // 开始创作
+            startTranslate();
+            function startTranslate() {
+                var translateLang_0 = translateArr.langArr[0] ? translateArr.langArr[0] : '';
+                $.ajax({
+                    type: 'POST',
+                    url : "{:url('TranslateApi/batchTranslate', ['_ajax'=>1])}",
+                    data: translateArr,
+                    dataType: 'json',
+                    timeout: 360000,
+                    beforeSend: function() {
+                        $("#mark_" + translateLang_0).html('正在翻译').attr('title', '正在翻译');
+                        if (0 === parseInt(translateLang)) {
+                            $(".progress-bar").css('width', '0.5%');
+                            $(".percent").text('0.5');
+                        }
+                    },
+                    success: function(res) {
+                        if (1 === parseInt(res.code)) {
+                            // 翻译语言数
+                            translateLang++;
+                            // 设置进度条
+                            var progress = ((translateLang / translateLang_) * 100).toFixed(1);
+                            $(".percent").text(progress);
+                            $(".progress-bar").css('width', progress+'%');
+                            // 显示翻译结果(成功/失败)
+                            $("#mark_" + translateLang_0).html(res.msg).removeClass('grey').addClass(res.data.code == 1 ? 'green' : 'red');
+                            // 翻译失败原因
+                            if (res.data.msg) $("#mark_" + translateLang_0).attr('title', res.data.msg);
+                            // 删除第一个语言
+                            translateArr.langArr.splice(0, 1);
+                            // 如果全部翻译则执行
+                            if (parseInt(translateLang) === parseInt(translateLang_)) {
+                                $('#a_close_pop').show();
+                                $(".progress-bar").css('width', '100%');
+                                $("#finash").html('nav_list' == translateArr.table ? '翻译完成，请查阅翻译内容' : '翻译完成，请切换语言查看');
+                            }
+                            // 重新调用
+                            else {
+                                startTranslate();
+                            }
+                        } else {
+                            showConfirm(res.msg, {'btn': ['去配置', '确定']
+                                }, function() {
+                                    var click_url = "{:url('TranslateApi/index')}";
+                                    top.$('#System_web').attr('data-click', true).attr('data-click_url', click_url).click();
+                                }, function() {
+                                    parent.$('.layui-layer-setwin .layui-layer-ico').eq(1).click();
+                                }
+                            );
+                        }
+                    },
+                    error: function(e) {
+                        showErrorAlert(e.responseText);
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,95 @@
+<dl class="row">
+    <dt class="tit"><label for="title"><em>*</em>{$titleNameShow}</label></dt>
+    <dd class="opt d-flex">
+        <div class="title-pr">
+            <input type="text" name="title" value="{$field.title|default=''}" id="title" class="input-txt monitorInputContent" data-id="1" maxlength="255" onkeyup="monitorInputStrEach(this);" onkeypress="monitorInputStrEach(this);">
+            <div class="input-notic none" id="monitorInputClass_1"><span>0</span> / 255</div>
+        </div>
+        <div class="upper-lower">
+            <span id="convertToTitle">Aa</span>
+            <span id="toUpper">AA</span>
+            <span id="toLower">aa</span>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#convertToTitle').click(function() {
+                    var value = $('#title').val().toLowerCase().replace(/(^|\s)([a-z])/g, function(m, p1, p2) {
+                        return p1 + p2.toUpperCase();
+                    });
+                    $('#title').val(value);
+                });
+                $('#toUpper').click(function() {
+                    var value = $('#title').val().toUpperCase();
+                    $('#title').val(value);
+                });
+                $('#toLower').click(function() {
+                    var value = $('#title').val().toLowerCase();
+                    $('#title').val(value);
+                });
+            });
+        </script>
+    </dd>
+</dl>
+{if condition="'Single' != $Think.const.CONTROLLER_NAME"}
+<dl class="row">
+    <dt class="tit">
+        <label>文档属性</label>
+    </dt>
+    <dd class="opt">
+        {volist name="archives_flags" id="vo"}
+        <label><input type="checkbox" name="{$vo.flag_fieldname}" value="1" {if condition="isset($field[$vo.flag_fieldname]) && $field[$vo.flag_fieldname] == 1"} checked {/if} {if condition="$show_lang != $admin_lang"} disabled {/if} >{$vo.flag_name}<!-- [{$vo.flag_attr}] --></label>&nbsp;
+        {/volist}
+        <span class="err"></span>
+    </dd>
+</dl>
+{/if}
+<dl class="row {if condition="!isset($field['is_jump']) || $field['is_jump'] != 1"} none {/if} dl_jump">
+    <dt class="tit">
+        <div class="tit-l">
+            <label>跳转网址</label>
+            <p class="notic">请输入完整的URL网址（包含http或https），设置后访问该条信息将直接跳转到设置的网址</p>
+        </div>
+    </dt>
+    <dd class="opt">
+        <input type="text" value="{$field.jumplinks|default=''}" name="jumplinks" id="jumplinks" class="input-txt" placeholder="http://">
+        <span class="err"></span>
+    </dd>
+    <script type="text/javascript">
+        $(function(){
+            $('input[name=is_jump]').click(function(){
+                if ($(this).is(':checked')) {
+                    $('.dl_jump').show();
+                } else {
+                    $('.dl_jump').hide();
+                }
+            });
+        });
+
+        function setIsLitpic() {
+            var litpicVal = $('.sort-list-img .images_upload').eq(0).find('input').val();
+            if (litpicVal) {
+                $("input[name=is_litpic]").attr('checked', true);
+            } else {
+                var litpic = $('#litpic').val();
+                if (litpic) {
+                    $("input[name=is_litpic]").attr('checked', true);
+                } else {
+                    $("input[name=is_litpic]").attr('checked', false);
+                }
+            }
+        }
+    </script>
+</dl>
+{if condition="'Single' != $Think.const.CONTROLLER_NAME"}
+<dl class="row">
+    <dt class="tit">
+        <div class="tit-l"><label for="short_content">简短介绍</label></div>
+        <div class="tit-r">
+            <p class="notic2 {empty name='$field.short_content'}none{/empty}" id="monitorInputClass_2"><span>0</span> / 500</p>
+        </div>
+    </dt>
+    <dd class="opt">
+        <textarea rows="5" cols="60" name="short_content" id="short_content" style="height: 100px; resize: none !important;" class="input-txt monitorInputContent" data-id="2" data-syncid="seo_description" maxlength="500" onkeyup="monitorInputStrEach(this);" onkeypress="monitorInputStrEach(this);">{$field.short_content|default=''}</textarea>
+    </dd>
+</dl>
+{/if}

@@ -1,0 +1,2 @@
+application/plugins/controller/Paypal.php
+weapp/Paypal

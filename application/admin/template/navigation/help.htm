@@ -1,0 +1,86 @@
+{include file="public/layout" /}
+<body class="help-page" style="min-width:auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page" style="min-width: auto;box-shadow:none;">
+    <form class="form-horizontal" id="post_form">
+        <div class="help-form-default">
+            <div  class="help_tab_index" >
+                <div class="help-title">当前语言：{$currentLang.cn_title}</div>
+            </div>
+            <div  class="help_tab_index" >
+                <div class="help-title">翻译语言</div>
+                <dl class="help-row">
+                    <dd class="help-opt">
+                        {volist name="$showLangList" id="lang"}
+                        {neq name="$currentLang.mark" value="$lang.mark"}
+                        <label> <input type="checkbox" value="{$lang.mark}" class="langArr" checked="checked"/>{$lang.cn_title} </label>
+                        {/neq}
+                        {/volist}
+                    </dd>
+                </dl>
+            </div>
+            <div  class="help_tab_index" >
+                <div class="help-title">翻译内容</div>
+                <dl class="help-row">
+                    <dd class="help-opt">
+                        <label> <input type="checkbox" value="nav_name" checked="checked" class="fieldArr"/>菜单名称</label>
+                    </dd>
+                </dl>
+            </div>
+            <div class="bottom-fixed">
+                <div class="bot3">
+                    <a href="JavaScript:void(0);" onclick="submitTranslate();" class="ncap-btn-big ncap-btn-green">翻译</a>
+                    <a class="ncap-btn-big ncap-btn-no" href="javascript:parent.layer.closeAll();" title="取消">取消</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    function submitTranslate() {
+        var postArr = {};
+        postArr.table = 'nav_list';
+        postArr.navIdArr = parent.navIdArr;
+        postArr.position_id = {$position_id};
+        // 选择翻译语言
+        postArr.langArr = [];
+        $('.langArr').each(function() {
+            if ($(this).is(':checked')) postArr.langArr.push($(this).val());
+        });
+        if (0 === parseInt(postArr.langArr.length)) {
+            // showErrorAlert('请选择翻译语言');
+            layer.msg('请选择翻译语言', {time: 1500});
+            return false;
+        }
+        // 选择翻译内容
+        postArr.fieldArr = [];
+        $('.fieldArr').each(function() {
+            if ($(this).is(':checked')) postArr.fieldArr.push($(this).val());
+        });
+        if (0 === parseInt(postArr.fieldArr.length)) {
+            // showErrorAlert('请选择翻译内容');
+            layer.msg('请选择翻译内容', {time: 1500});
+            return false;
+        }
+        parent.translateArr = postArr;
+
+        var url = "{:url('TranslateApi/batchTranslate')}";
+        url = url + '&langStr=' + postArr.langArr.join(',');
+
+        // 打开翻译页面
+        parent.layer.open({
+            type: 2,
+            fix: false,
+            maxmin: false,
+            title: '开始翻译',
+            shade: layer_shade,
+            area: ['500px', '380px'],
+            content: url
+        });
+    }
+
+</script>
+{include file="public/footer" /}

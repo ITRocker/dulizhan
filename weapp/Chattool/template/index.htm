@@ -1,0 +1,147 @@
+{include file="header.htm" /}
+<body class="bodystyle" style="overflow-y: scroll; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page min-hg-c-15"> {include file="bar.htm" /}
+  <form class="form-horizontal" id="post_form" action="{:weapp_url('Chattool/Chattool/save')}" method="post">
+    <div class="ncap-form-default">
+      <dl class="row">
+        <dt class="tit">
+          <label>调用方式</label>
+        </dt>
+        <dd class="opt">
+          <label class="curpoin">
+            <input id="tag_weapp1" name="tag_weapp" value="1" type="radio" {if condition="!isset($Chattool.data.tag_weapp) || $Chattool.data.tag_weapp eq 1"} checked="checked"{/if}>
+            自动调用</label>
+          &nbsp;
+          <label class="curpoin">
+            <input id="tag_weapp0" name="tag_weapp" value="2" type="radio" {if condition="isset($Chattool.data.tag_weapp) && $Chattool.data.tag_weapp eq 2"} checked="checked"{/if}>
+            手工调用</label>
+          <p class="notic">自动调用会默认绑定weapp模板标签，手工调用请参考使用指南的调用方法。</p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label><b>参数位置</b></label>
+        </dt>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label for="service_height">距离顶部高度</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="service_height" value="{$Chattool.data.service_height|default='400'}" id="service_height" class="input-txt">
+          px <span class="err"></span>
+          <p class=""></p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label for="service_tit">电话名称</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="service_tit" placeholder="" id="service_tit" value="{$Chattool.data.service_tit|default='WhatsApp'}" class="input-txt">
+          <span class="err"></span>
+          <p class=""></p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label for="service_one">Whatsapp</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="service_one" placeholder="" id="service_one" value="{$Chattool.data.service_one|default='13988889999'}" class="input-txt">
+          <span class="err"></span>
+          <p class=""></p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label for="service_online">邮箱名称</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="service_online" placeholder="" id="service_online" value="{$Chattool.data.service_online|default='E-Mail'}" class="input-txt">
+          <span class="err"></span>
+          <p class=""></p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label for="service_email">Email</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="service_email" placeholder="" id="service_email" value="{$Chattool.data.service_email|default='youweb@qq.com'}" class="input-txt">
+          <span class="err"></span>
+          <p class=""></p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label for="name_Skype">Skype名称</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="name_Skype" placeholder="" id="name_Skype" value="{$Chattool.data.name_Skype|default='Skype'}" class="input-txt">
+          <span class="err"></span>
+          <p class=""></p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label for="service_skype">Skype</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="service_skype" placeholder="" id="service_skype" value="{$Chattool.data.service_skype|default='skype:cmhello'}" class="input-txt">
+          <span class="err"></span>
+          <p class=""></p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label for="wechat_logo_local">上传二维码</label>
+        </dt>
+        <dd class="opt">
+          <div class="input-file-show div_wechat_logo_local" {neq name="$Chattool.data.is_remote" value="0"}style="display: none;"{/neq}> <span class="show"> <a id="img_a_local" target="_blank" class="nyroModal" rel="gal" href="{$Chattool.data.wechat_logo_local|default='javascript:void(0);'}"> <i id="img_i_local" class="fa fa-picture-o" {notempty name="$Chattool.data.wechat_logo_local"}onmouseover="layer_tips=layer.tips('<img src={$Chattool.data.wechat_logo_local|default=''} class=\'layer_tips_img\'>',this,{tips: [1, '#fff']});"{/notempty} onMouseOut="layer.close(layer_tips);"></i> </a> </span> <span class="type-file-box">
+            <input type="text" id="wechat_logo_local" name="wechat_logo_local" value="{$Chattool.data.wechat_logo_local|default=''}" class="type-file-text">
+            <input type="button" name="button" id="button1" value="选择上传..." class="type-file-button">
+            <input class="type-file-file" onClick="GetUploadify(1,'','weapp','img_call_back','{:U('Uploadify/upload')}')" size="30" hidefocus="true" nc_type="change_site_logo"
+                                 title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
+            </span> </div>
+          <input type="text" id="wechat_logo_remote" name="wechat_logo_remote" value="{$Chattool.data.wechat_logo_remote|default=''}" placeholder="http://" class="input-txt" {neq name="$Chattool.data.is_remote" value="1"}style="display: none;"{/neq}>
+          &nbsp;
+          <label>
+            <input type="checkbox" name="is_remote" id="is_remote" value="1" {eq name="$Chattool.data.is_remote" value="1"}checked="checked"{/eq} onClick="clickRemote(this, 'wechat_logo');">
+            远程图片</label>
+          <span class="err"></span>
+          <p class="notic">建议尺寸 200 * 200 (像素) 的png|gif|jpg等图片</p>
+        </dd>
+      </dl>
+      <dl class="row">
+        <dt class="tit">
+          <label for="service_wechat">二维码名称</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" name="service_wechat" placeholder="" id="service_wechat" value="{$Chattool.data.service_wechat|default='WeChat'}" class="input-txt">
+          <span class="err"></span>
+          <p class=""></p>
+        </dd>
+      </dl>
+      <div class="bot mt30">
+        <input type="hidden" name="code" value="{$Chattool.code|default=$weappInfo.code}">
+        <a href="JavaScript:void(0);" onClick="checkForm();" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a> </div>
+    </div>
+  </form>
+</div>
+<script type="text/javascript">
+    // 判断输入框是否为空
+    function checkForm(){
+        layer_loading('正在处理');
+        $('#post_form').submit();
+    }
+    function img_call_back(fileurl_tmp)
+    {
+        $("#wechat_logo_local").val(fileurl_tmp);
+        $("#img_a_local").attr('href', fileurl_tmp);
+        $("#img_i_local").attr('onmouseover', "layer_tips=layer.tips('<img src="+fileurl_tmp+" class=\\'layer_tips_img\\'>',this,{tips: [1, '#fff']});");
+    }
+</script> 
+{include file="footer.htm" /} 

@@ -1,0 +1,364 @@
+{include file="public/layout" /}
+<script type="text/javascript" src="__PUBLIC__/plugins/laydate/laydate.js"></script>
+<body class="bodystyle eyou_body_xin" style="cursor: default; -moz-user-select: inherit;min-width:auto;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="archives/left" /}
+<div class="max-w1000 pl100">
+    <div class="fixed-bar nobg" style="width: auto;">
+        <div class="item-title mb10">
+            <div class="subject">
+                {include file="public/callback_page_1" /}<!-- 返回箭头 -->
+                <h3>添加分类</h3>
+                <h5></h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="page arctype min-hg-c-110" style="min-width: auto;">
+        <form class="form-horizontal" id="post_form">
+            <input type="hidden" name="channeltype" value="{$channeltype}">
+            <div class="ncap-form-default ncap-form-default-waimao pt0 pb0">
+                <div class="form-default-box">
+                    <div class="form-default-left" style="min-width: 100%;flex: none;">
+                        <div class="form-default-con">
+                            <dl class="row">
+                                <dt class="tit">
+                                    <div class="tit-l">
+                                        <label for="typename">分类名称</label> 
+                                        <p class="notic">保持唯一性，不可重复</p>
+                                    </div>
+                                    <div class="tit-r">
+                                        <div class="notic2 none" id="monitorInputClass_1"><span>0</span> / 70</div>
+                                    </div>
+                                </dt>
+                                <dd class="opt">
+                                    <input type="text" name="typename" id="typename" class="input-txt monitorInputContent" data-id="1" data-syncid="seo_title" onkeyup="monitorInputStrEach(this);" onkeypress="monitorInputStrEach(this);">
+                                </dd>
+                            </dl>
+
+                            <dl class="row">
+                                <dt class="tit"> <label>上级分类</label> </dt>
+                                <dd class="opt">
+                                    <select class="small form-control w300" id="topid" name="topid" onchange="AjaxGetUnderType(this, 'topid');">
+                                        <option value="0" data-dirpath="" selected="true">顶级分类</option>
+                                        {volist name="arctype_list" id="vo"}
+                                        <option value="{$vo.id}" data-dirpath="{$vo.dirpath}" {eq name="$topid" value="$vo.id"} selected="true" {/eq}>{$vo.typename}</option>
+                                        {/volist}
+                                    </select>
+                                    <select class="small form-control w300" id="parent_id" name="parent_id" onchange="AjaxGetUnderType(this, 'parent_id');" style="display: none;">
+                                        {volist name="arctype_list2" id="vo"}
+                                        <option value="{$vo.id}" data-dirpath="{$vo.dirpath}" {eq name="$parent_id" value="$vo.id"} selected="true" {/eq}>{$vo.typename}</option>
+                                        {/volist}
+                                    </select>
+                                    <input type="hidden" id="dirpath" name="dirpath" value="{$predirpath}">
+                                </dd>
+                            </dl>
+
+                            <!-- <dl class="row">
+                                <dt class="tit"> <label>分类图片</label> </dt>
+                                <dd class="opt">
+                                    <div class="dan-pane">
+                                        <div class="images_upload images_upload_html" style="display: inline-block;">
+                                            <a href="javascript:void(0);" {if condition="$show_lang == $admin_lang"} onclick="GetUploadify(1, '', 'allimg', 'goodsPicCallBack');" {/if} class="img-upload mb15" title="点击上传">
+                                                <div class="y-line" id="litpic_y_line" {notempty name="$arctype.litpic"} style="display: none;" {/notempty}></div>
+                                                <div class="x-line" id="litpic_x_line" {notempty name="$arctype.litpic"} style="display: none;" {/notempty}></div>
+                                                <img src="{$arctype.litpic|default=''}" id="litpic_src" class="pic_con" {empty name="$arctype.litpic"} style="display: none;" {/empty}>
+                                            </a>
+                                            {if condition="$show_lang == $admin_lang"}
+                                            <a href="javascript:void(0);" onclick="goodsPicClear();" class="delect" id="litpic_delect"  {empty name="$arctype.litpic"} style="display: none;" {/empty}></a>
+                                            <input type="hidden" id="litpic" name="litpic" value="{$arctype.litpic|default=''}">
+                                            {/if}
+                                        </div>
+                                        <script type="text/javascript">
+                                            function goodsPicCallBack(fileurl_tmp) {
+                                                $('#litpic').val(fileurl_tmp);
+                                                $('#litpic_src').show().attr('src', fileurl_tmp);
+                                                $('#litpic_y_line, #litpic_x_line').hide();
+                                                if (fileurl_tmp) $('#litpic_delect').attr('style', '');
+                                            }
+                                            function goodsPicClear() {
+                                                $('#litpic').val('');
+                                                $('#litpic_src').hide().attr('src', '');
+                                                $('#litpic_y_line, #litpic_x_line').show();
+                                                $('#litpic_delect').attr('style', 'display: none;');
+                                            }
+                                        </script>
+                                    </div>
+                                </dd>
+                            </dl> -->
+
+                            <dl class="row none">
+                                <dt class="tit">
+                                    <label for="current_channel">内容模型</label>
+                                </dt>
+                                <dd class="opt">
+                                    <select class="small form-control" id="current_channel" name="current_channel" onchange="ajax_get_template();">
+                                        {volist name="channeltype_list" id="vo"}
+                                        <option value="{$vo.id}" data-nid="{$vo.nid}" {eq name="$current_channel" value="$vo.id"}selected="true"{/eq}>{$vo.title}</option>
+                                        {/volist}
+                                    </select>
+                                    <span class="err"></span>
+                                    <p class="" id="notic_current_channel"></p>
+                                </dd>
+                            </dl>
+
+                            <dl class="row">
+                                <dt class="tit">
+                                    <div class="tit-l">
+                                        <label for="seo_title">标题（Title）</label> 
+                                        <!-- <p class="notic">即TKD中的Title.每个页面都有自己的Title,作为搜索引擎对页面内容主题判断的第一个标识.建议包含页面相关关键词并提出当前页面内容价值.字符数控制在70以内.</p> -->
+                                    </div>
+                                    <div class="tit-r">
+                                        <p class="notic2 none" id="monitorInputClass_3"><span>0</span> / 70</p>
+                                    </div>
+                                </dt>
+                                <dd class="opt">
+                                    <input type="text" name="seo_title" id="seo_title" class="input-txt monitorInputContent" data-id="3" onkeyup="monitorInputStrEach(this);" onkeypress="monitorInputStrEach(this);">
+                                </dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="tit">
+                                    <div class="tit-l">
+                                        <label for="seo_description">SEO描述</label>
+                                        <!-- <p class="notic">即TKD中的Description.对页面内容的描述,可以理解为对Title的补充,建议出现三次关键词,内容要精简具有可读性.字符数控制在220以内.</p> -->
+                                    </div>
+                                    <div class="tit-r">
+                                        <p class="notic2 none" id="monitorInputClass_4"><span>0</span> / 220</p>
+                                    </div>
+                                </dt>
+                                <dd class="opt">          
+                                    <textarea rows="5" cols="60" id="seo_description" name="seo_description" style="height:104px;" class="wm100 monitorInputContent" data-id="4" onkeyup="monitorInputStrEach(this);" onkeypress="monitorInputStrEach(this);"></textarea>
+                                </dd>
+                            </dl>
+                            <dl class="row">
+                                <dt class="tit">
+                                    <div class="tit-l">
+                                        <label for="seo_keywords">关键词（KeyWords）</label>
+                                        <!-- <p class="notic">即TKD中的Keywords.建议放上与页面内容相关的核心关键词和对应的长尾关键词, 建议根据关键词长度设置8-10个关键词,多个关键词请用英文逗号（,）隔开。</p> -->
+                                    </div>
+                                    <div class="tit-r">
+                                    </div>
+                                </dt>
+                                <dd class="opt">          
+                                    <textarea class="wm100" rows="5" cols="60" id="seo_keywords" name="seo_keywords"></textarea>
+                                </dd>
+                            </dl>
+                            <dl class="row" id="dl_templist">
+                                <dt class="tit">
+                                    <div class="tit-l">
+                                        <label for="templist">分类模板</label>
+                                        <p class="notic">模板命名规则：<br/>lists_<font class="font_nid">模型标识</font>.htm<br/>lists_<font class="font_nid">模型标识</font>_自定义.htm</p>
+                                    </div>
+                                    <div class="tit-r">
+                                    </div>
+                                </dt>
+                                <dd class="opt">
+                                    <select name="templist" id="templist">
+                                    </select>
+                                    <span class="err"></span>
+                                    <p class="notic"></p>
+                                </dd>
+                            </dl>
+                            <dl class="row" id="dl_tempview">
+                                <dt class="tit">
+                                    <div class="tit-l">
+                                        <label for="tempview">文档模板</label>
+                                        <p class="notic">模板命名规则：<br/>view_<font class="font_nid">模型标识</font>.htm<br/>view_<font class="font_nid">模型标识</font>_自定义.htm</p>
+                                    </div>
+                                    <div class="tit-r">
+                                    </div>
+                                </dt>
+                                <dd class="opt">
+                                    <select name="tempview" id="tempview">
+                                    </select>
+                                    <span class="err"></span>
+                                    <p class="notic"></p>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-fixed">
+                <div class="bot5">
+                    <a href="JavaScript:void(0);" onclick="arctypeSubmit();" class="ncap-btn-big ncap-btn-green">保存</a>
+                    {include file="public/callback_page_2" /}<!-- 返回按钮 -->
+                </div>
+            </div> 
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        // 如果存在上级分类ID则执行
+        var parentShow = {$parent_show|default=0};
+        if (parseInt(parentShow) === 1) $('#parent_id').show();
+    });
+
+    var templateList = {$templateList|json_encode};
+
+    $(document).ready(function() {
+        ajax_get_template();
+    });
+
+    /*根据模型ID获取模板文件名*/
+    function ajax_get_template() {
+        var is_diyseo_htmlpath = {$is_diyseo_htmlpath|default=0};
+        var obj = $('#current_channel');
+        var channel = parseInt($(obj).find('option:selected').val());
+        var js_allow_channel_arr = {$js_allow_channel_arr};
+        $('#notic_current_channel').html('');
+        if (51 == channel){
+            $("#type_attr").hide();
+            $('#dl_dirname').hide();
+        }else{
+            $("#type_attr").show();
+            if (is_diyseo_htmlpath == 1) {
+                $('#dl_dirname').hide();
+            } else {
+                $('#dl_dirname').show();
+            }
+        }
+        if (6 == channel){
+            $('#dl_typearcrank').hide();
+        }else{
+            $('#dl_typearcrank').show();
+        }
+        // 重新定义模板变量，专用于新建模板功能
+        $.ajax({
+            url: "{:url('Arctype/ajax_getTemplateList')}",
+            type: 'GET',
+            dataType: 'JSON',
+            data: {_ajax:1},
+            success: function(res){
+                if (res.code == 1) {
+                    templateList = res.data.templateList;
+                }
+            }
+        });
+        // end
+
+        if (templateList[channel] == undefined || templateList[channel] == '') {
+            showErrorMsg('模板文件不存在！');
+            return false;
+        } else if (templateList[channel]['msg'] != '') {
+            $('#notic_current_channel').html(templateList[channel]['msg']);
+        }
+
+        $('#templist').html(templateList[channel]['lists']);
+        if ($.inArray(channel, js_allow_channel_arr) == -1) {
+            if (channel == 6) {
+                $('#dl_templist').find('label[for=templist]').html('单页模板');
+                var rulelistObj = $('input[name=rulelist]');
+                if (rulelistObj.val() == '' || '{栏目目录}/list_{tid}_{page}.html' == rulelistObj.val() || '{typedir}/list_{tid}_{page}.html' == rulelistObj.val()) {
+                    rulelistObj.val('{栏目目录}/index.html');
+                }
+                $('#rule_tips_2').hide();
+            } else if (channel == 8) {
+                $('#dl_templist').find('label[for=templist]').html('留言模板');
+                var rulelistObj = $('input[name=rulelist]');
+                if (rulelistObj.val() == '' || '{栏目目录}/list_{tid}_{page}.html' == rulelistObj.val() || '{typedir}/list_{tid}_{page}.html' == rulelistObj.val()) {
+                    rulelistObj.val('{栏目目录}/index.html');
+                }
+                $('#rule_tips_2').hide();
+            }else if (51 == channel) {
+                $('#dl_templist').hide();
+                $('#dl_rulelist').hide();
+            }
+            $('#dl_tempview').hide();
+            $('#dl_ruleview').hide();
+        } else {
+            $('#rule_tips_2').show();
+            $('#dl_templist').find('label[for=templist]').html('分类模板');
+            $('#dl_tempview').show();
+
+            var is_diyseo_htmlpath = {$is_diyseo_htmlpath|default=0};
+            var seo_html_pagename = {$seo_html_pagename|default=2};
+            if (is_diyseo_htmlpath == 1 && seo_html_pagename == 4) {
+                $('#dl_ruleview').show();
+            }
+        }
+        $('#tempview').html(templateList[channel]['view']);
+
+        $('.font_nid').html(templateList[channel]['nid']);
+
+        return false;
+    }
+    /*--end*/
+
+    // 查询下级分类
+    function AjaxGetUnderType(obj, field) {
+        if ('topid' == field) {
+            // 如果上级分类ID不存在则结束
+            var parentID = $(obj).val();
+            if (parseInt(parentID) === 0) {
+                $('#dirpath').val('');
+                $('#parent_id').hide().empty().html('');
+                return false;
+            }
+            
+            // 查询下级分类
+            $.ajax({
+                type: 'post',
+                url : "{:url('Arctype/ajaxGetUnderArctypeList')}",
+                data: {parent_id: parentID, _ajax: 1},
+                dataType: 'json',
+                success: function(res){
+                    if (1 == res.code) {
+                        if (res.data.selecthtml) {
+                           $('#parent_id').show().empty().html(res.data.selecthtml);
+                        } else {
+                           $('#parent_id').hide().empty().html('');
+                        }
+                    } else {
+                       $('#parent_id').hide().empty().html('');
+                    }
+                }
+            });
+        }
+
+        // 获取分类路径
+        var dirpath = $('#'+field+' option:selected').data('dirpath');
+        if (undefined == dirpath && 'parent_id' == field) dirpath = $('#topid option:selected').data('dirpath');
+        $('#dirpath').val(dirpath ? dirpath : '');
+    }
+
+    // 加载选择的图片信息(分类图片)
+    function litpic_call_back(paths) {
+        $("#litpic").val(paths);
+        $("#litpic_a").attr('href', paths);
+        $("#litpic_i").attr('onmouseover', "layer_tips=layer.tips('<img src="+paths+" class=\\'layer_tips_img\\'>',this,{tips: [1, '#fff']});");
+    }
+
+    // 新增商品分类
+    function arctypeSubmit() {
+        if ($('#typename').val() == '') {
+            showErrorMsg('请输入分类名称');
+            $('#typename').focus();
+            return false;
+        }
+        // 执行新增
+        $.ajax({
+            type: 'post',
+            url : "{:custom_url('Arctype/add', ['_ajax' => 1])}",
+            data: $('#post_form').serialize(),
+            dataType: 'json',
+            success : function(res) {
+                if (1 === parseInt(res.code)) {
+                    showSuccessMsg(res.msg, 1500, function() {
+                        window.location.href = res.url;
+                    });
+                } else {
+                    showErrorMsg(res.msg);
+                }
+            },
+            error: function(e) {
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+</script>
+{include file="public/footer" /}

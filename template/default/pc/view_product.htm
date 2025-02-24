@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html lang="{$zan.global.lang_htmlmark}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta content="telephone=no" name="format-detection" />
+        <title>{$zan.field.seo_title}</title>
+        <meta name="keywords" content="{$zan.field.seo_keywords}" />
+        <meta name="description" content="{$zan.field.seo_description}" />
+        <link href="{zan:global name='web_ico' /}" rel="shortcut icon" type="image/x-icon" />
+        {zan:static file="skin/css/style.css" /}
+        {zan:static file="skin/css/iconfont.css" /}
+        {zan:static file="skin/css/jquery.bxslider.css" /}
+        {zan:static file="skin/js/jquery-3.7.0.min.js" /}
+        {zan:static file="skin/js/trade.js" /}
+        {zan:static file="skin/js/jquery.bxslider.js" /}
+        {zan:static file="skin/js/magiczoom.js" /}
+        {zan:static file="skin/js/jquery.superslide.js" /}
+    </head>
+    <body>
+        {zan:include file="header.htm" /}
+
+        {zan:include file="banner.htm" /}
+        <div id="main" class="w page_detail goods">
+            <div class="contenter">
+                <div class="web_position clean s1">
+                    <div class="position">{zan:position/}</div>
+                </div>
+
+                <div class="webpro_detail products_detail_module1">
+                    <div class="gallery">
+                        <div class="detail_left"> </div>
+                        <div class="bigimg"> 
+                            {zan:volist name="$zan.field.image_list" limit='0,1'}
+                            <div class="zoom_out"> 
+                                <a href="{$field.image_url}" class="MagicZoom" id="zoom" rel="zoom-position:custom; zoom-width:350px; zoom-height:350px;"> 
+                                    <img src="{$field.image_url}" id="bigimg_src" alt="" /> 
+                                </a> 
+                            </div>
+                            {/zan:volist}
+                        </div>
+                        <div id="zoom-big"></div>
+                        <div class="left_small_img">
+                            <div class="left_small_img_inner"> 
+                                {zan:volist name="$zan.field.image_list"} 
+                                <span class="slide pic_box {zan:eq name='$i' value='1'}on{/zan:eq}" pos="{$i}" pic="{$field.image_url}" big="{$field.image_url}">
+                                    <a href="javascript:;"> <img src="{$field.image_url}" alt="" /><em></em></a>
+                                </span> 
+                                {/zan:volist} 
+                            </div>
+                        </div>
+                        <div class="products_img">
+                            <ul>
+                                {zan:volist name="$zan.field.image_list"}
+                                <li><img src="{$field.image_url}" /></li>
+                                {/zan:volist}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info">
+                        <h1 class="name">{$zan.field.title}</h1>
+                        <div class="desc">{$zan.field.short_content}</div>
+                        <div class="price">{zan:global name='web_currency_unit|get_currency_unit' /}{$zan.field.users_price}</div>
+                        {zan:attribute type='default'}
+                        <div class="number"><span>{$attr.name}: </span> {$attr.value}</div>
+                        {/zan:attribute}
+                        
+                        <div class="button">
+                            {zan:form type='default' formid='1' id='field'}
+                            <a href="javascript:void(0)" class="btn_go_inquiry">{$field.form_name}</a>
+                            {/zan:form}
+                            <a class="btn_go_quote_list" href="JavaScript:void(0);" onclick="addInquiryList();">{zan:lang name='diy5' /}</a>
+                        </div>
+                    </div>
+
+                    <div class="clear"></div>
+                    <div class="description">
+                        <div class="title"> <span class="cur">Product Details</span> <!-- <span>Warranty Info</span> --> </div>
+                        <div class="contents">
+                            <div class="global_mtitle">Product Details</div>
+                            <div class="editor_cnt trans"><div>{$zan.field.content}</div></div>
+                        </div>
+                        <!-- <div class="contents">
+                            <div class="global_mtitle">Warranty Info</div>
+                            <div class="editor_cnt trans"><div></div></div>
+                        </div> -->
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="rale_products desc_news">
+                        <div class="products_title"> <span class="title"> Related&nbsp;Products </span> </div>
+                        <div class="list">
+                            {zan:artlist modelid='2' titlelen='40' loop='4' infolen='50'}
+                            <div class="item">
+                                <a href="{$field.arcurl}" class="img photo" title="{$field.title}">
+                                    <img src="{$field.litpic}" alt="{$field.title}" class="trans" />
+                                    <span></span>
+                                </a>
+                                <div class="text">
+                                    <a href="{$field.arcurl}" class="title trans" title="{$field.title}"> {$field.title} </a>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            {/zan:artlist}
+                        </div>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        product_gallery();
+                        $('.webpro_detail .title span').click(function() {
+                            showthis('.webpro_detail .title span','.webpro_detail .description>.contents', $(this).index(), 'cur');
+                        });
+                        $('.webpro_detail .description .contents:first').show();
+
+                        $('.products_detail_module1 .prod_attr_comb .show_more').click(function() {
+                            $(this).addClass('hide').parents('.prod_attr_comb').addClass('show').find('.show_less').removeClass('hide');
+                        });
+                        $('.products_detail_module1 .prod_attr_comb .show_less').click(function() {
+                            $(this).addClass('hide').parents('.prod_attr_comb').removeClass('show').find('.show_more').removeClass('hide');
+                        });
+
+                        $('.products_detail_module1 .attribute .show_more').on('click', function() {
+                            $('.products_detail_module1 .attribute .attribute_box').css('height','auto');
+                            $(this).addClass('hide');
+                            $('.products_detail_module1 .attribute .link.show_less').removeClass('hide');
+                        });
+
+                        $('.products_detail_module1 .attribute .show_less').on('click', function() {
+                            var comb_height = $('.products_detail_module1 .attribute li').eq(0).outerHeight(true);
+                            $('.products_detail_module1 .attribute .attribute_box').css('height',comb_height * 4);
+                            $(this).addClass('hide');
+                            $('.products_detail_module1 .attribute .link.show_more').removeClass('hide');
+                        });
+
+                        var comb_height = $('.prod_info_form .attribute .attribute_box li').eq(0).outerHeight(true);
+                        $('.prod_info_form .attribute .attribute_box').css('height', comb_height * 4);
+                    });
+                </script>
+
+                
+            </div>
+        </div>
+        <div class="inquiry_popOutBg" style="display: none;"></div>
+            <div class="inquiry_popOut" style="display: none;">
+                <div class="webinqu_box">
+                    <div class="inquiry_close"><i class="iconfont icon-close1"></i></div>
+                    
+                    <div class="inquiry_box">
+                        {zan:form type='default' formid='1' id='field'}
+                        <h1>{$field.form_name}</h1>
+                        <div class="inquiry_box_con">
+                            <div class="inquiry_box_top">
+                                <div class="inquiry_product_pic"><img src="{$zan.field.litpic}"/></div>
+                                <div class="inquiry_product_info">
+                                    <span>{$zan.field.title}{$zan.field.title}</span>
+                                    <p>{$zan.field.short_content}</p>
+                                </div>
+                            </div>
+                            <div style="clear: both;"></div>
+                            <form method="POST" action="{$field.action}" {$field.formhidden} onsubmit="{$field.submit}">
+                                <div class="rows ">
+                                    <label>{$field.itemname_1}{notempty name="$field.required_1"}<span>*</span>{/notempty}</label>
+                                    <span><input class="input" type='text' id='attr_1' name='{$field.attr_1}' placeholder="{$field.placeholder_1}"/></span>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="rows ">
+                                    <label>{$field.itemname_3}{notempty name="$field.required_3"}<span>*</span>{/notempty}</label>
+                                    <span><input class="input" type='email' id='attr_3' name='{$field.attr_3}' placeholder="{$field.placeholder_3}"/></span>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="rows ">
+                                    <label>{$field.itemname_4}{notempty name="$field.required_4"}<span>*</span>{/notempty}</label>
+                                    <span><textarea type='text' id='attr_4' name='{$field.attr_4}' class="form_area contents" placeholder="{$field.placeholder_4}"></textarea></span>
+                                    <div class="clear"></div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="rows submit_rows">
+                                    <label></label>
+                                    <span><input name="submit" type="submit" class="form_button" value="Submit"></span>
+                                    <div class="clear"></div>
+                                </div>
+                                <input type="hidden" name="goods_id" value="{$zan.field.aid}">
+                                {$field.hidden}
+                            </form>
+                        </div>
+                        {/zan:form}
+                        
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function(){  
+                    $(".btn_go_inquiry").on("click", function(){  
+                        $(".inquiry_popOut").css("display", "block");  
+                        $(".inquiry_popOutBg").css("display", "block");  
+                    });  
+                      
+                    $(".inquiry_popOut .inquiry_close").on("click", function(){  
+                        $(".inquiry_popOut").css("display", "none");  
+                        $(".inquiry_popOutBg").css("display", "none");  
+                    });  
+                      
+                    $(".inquiry_popOutBg").on("click", function(){  
+                        $(".inquiry_popOut").css("display", "none");  
+                        $(".inquiry_popOutBg").css("display", "none");  
+                    });
+                });
+            </script>
+        {zan:include file="footer.htm" /}
+    </body>
+</html>

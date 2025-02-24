@@ -1,0 +1,32 @@
+<div class="sidebar-second ">
+    <ul>
+        <li class="sidebar-second-title">SEO</li>
+        <!-- <li>
+            <a {if condition="'Seo' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['detection'])"}class="active"{/if} href='{:url("Seo/detection")}'>网站检测</a>
+        </li> -->
+        
+        <li>
+            <a {if condition="'Seo' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['tkd'])"}class="active"{/if} href='{:url("Seo/tkd")}'>TKD标签</a>
+        </li>
+        <li>
+            <a {if condition="'Seo' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['sitemap'])"}class="active"{/if} href='{:url("Seo/sitemap")}'>Sitemap</a>
+        </li>
+        <li>
+            <a {if condition="'Seo' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['robots'])"}class="active"{/if} href='{:url("Seo/robots")}'>Robots</a>
+        </li>
+        <li>
+            <a {if condition="'Links' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['index'])"}class="active"{/if} href='{:url("Links/index")}'>友情链接</a>
+        </li>
+        
+       <!-- <li>
+            <a {if condition="'Seo' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['googpush'])"}class="active"{/if} href='{:url("Seo/googpush")}'>谷歌推送</a>
+        </li>
+        <li>
+            <a {if condition="'Seo' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['gsc'])"}class="active"{/if} href='{:url("Seo/gsc")}'>GSC数据</a>
+        </li>
+        <li>
+            <a {if condition="'Seo' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['alt'])"}class="active"{/if} href='{:url("Seo/alt")}'>图片ALT属性</a>
+        </li> -->
+        
+    </ul>
+</div>

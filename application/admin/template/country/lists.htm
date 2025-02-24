@@ -1,0 +1,80 @@
+<div class="bDiv" style="height: auto;">
+    <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+        <table style="width: 100%;">
+            <tbody>
+            {empty name="list"}
+                <tr>
+                    <td class="no-data" align="center" axis="col0" colspan="50">
+                        <div class="no_row">
+                            <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                        </div>
+                    </td>
+                </tr>
+            {else/}
+                {foreach name="list" item="vo" key="k" }
+                <tr>
+                    <td style="width: 100%;">
+                        <div class="tl" style="padding-left: 10px;">{$vo.name|default=''}</div>
+                    </td>
+                    <td>
+                        <div class="w120 tc">
+                            {$vo.code|default=''}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="w120 tc">
+                            {$sevenContinents[$vo.continent]|default=''}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="w120 tc">
+                            {eq name="$vo['status']" value='1'}
+                            <span class="yes" onclick="changeTableVal('country', 'id', '{$vo.id}', 'status', this);"><i class="fa fa-check-circle"></i>是</span>
+                            {else /}
+                            <span class="no" onclick="changeTableVal('country', 'id', '{$vo.id}', 'status', this);"><i class="fa fa-ban"></i>否</span>
+                            {/eq}
+                        </div>
+                    </td>
+                    <!-- <td>
+                        <div class="w160 tc">
+                            {$vo.add_time|date='Y-m-d H:i:s',###}
+                        </div>
+                    </td> -->
+                    <td>
+                        <div class="w160 tc">
+                            {$vo.update_time|date='Y-m-d H:i:s',###}
+                        </div>
+                    </td>
+                    <td class="operation">
+                        <div class="w160 tc">
+                            {eq name="$Think.const.CONTROLLER_NAME.'@edit'|is_check_access" value="1"}
+                            <a href="javascript:void(0);" data-href="{:url('Country/edit', ['id' => $vo['id']])}" onclick="openFullframe(this, '编辑国家/地区', '800px', '600px');" class="btn blue">编辑</a>
+                            <i></i>
+                            {/eq}
+                            {eq name="$Think.const.CONTROLLER_NAME.'@del'|is_check_access" value="1"}
+                            <a class="btn red" href="javascript:void(0);" data-url="{:url('Country/del')}" data-id="{$vo.id}" onClick="delfun(this);">删除</a>
+                            {/eq}
+                        </div>
+                    </td>
+                     <td class="sort">
+                        <div class="w60 tc">
+                            {eq name="$Think.const.CONTROLLER_NAME.'@edit'|is_check_access" value="1"}
+                            <input type="text" value="{$vo.sort_order}" onkeyup="this.value=this.value.replace(/[^\d]/g,'');" onpaste="this.value=this.value.replace(/[^\d]/g,'');" onchange="changeTableVal('country', 'id', '{$vo.id}', 'sort_order', this);" size="4"/>
+                            {else /}
+                            {$vo.sort_order}
+                            {/eq}
+                        </div>
+                    </td>
+                </tr>
+                {/foreach}
+            {/empty}
+            </tbody>
+        </table>
+    </div>
+    <div class="iDiv" style="display: none;"></div>
+</div>
+{notempty name="list"}
+<div class="footer-oper">
+    {include file="public/page" /}
+</div>
+{/notempty}

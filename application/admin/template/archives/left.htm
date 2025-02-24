@@ -1,0 +1,55 @@
+<div class="sidebar-second order-navBox">
+    <ul id="accordion" class="accordion">
+        <li class="open">
+            <a class="link">内容管理<i class="fa fa-angle-right"></i></a>
+            <ul class="submenu" style="display: show;">
+                <li>
+                    <a {if condition="('ShopProduct' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['index', 'add', 'edit']))"}class="current"{/if} href='{:custom_url("ShopProduct/index")}'>产品</a>
+                </li>
+                <li>
+                    <a {if condition="('Article' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['index', 'add', 'edit']))"}class="current"{/if} href='{:custom_url("Article/index")}'>新闻</a>
+                </li>
+                <li>
+                    <a {if condition="('Images' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['index', 'add', 'edit']))"}class="current"{/if} href='{:custom_url("Images/index")}'>案例</a>
+                </li>
+                <li>
+                    <a {if condition="'Single' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['index', 'add', 'edit'])"}class="current"{/if} href='{:custom_url("Single/index")}'>单页</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a class="curpoin {if condition="'Arctype' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['lists', 'edit','add'])"}active{/if}"  href='{:custom_url("Arctype/lists")}'>分类管理</a>
+        </li>
+    </ul>
+</div>
+<script>
+$(function() {
+	var Accordion = function(el, multiple) {
+		this.el = el || {};
+		this.multiple = multiple || false;
+
+		// Variables privadas
+		var links = this.el.find('.link');
+		// Evento
+		links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
+	};
+
+	Accordion.prototype.dropdown = function(e) {
+		var $el = e.data.el;
+			$this = $(this);
+			$next = $this.next();
+
+		$next.slideToggle();
+		$this.parent().toggleClass('open');
+
+		if (!e.data.multiple) {
+			$el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+		}
+	};
+
+	var accordion = new Accordion($('#accordion'), false);
+	$('.submenu li').click(function () {
+		$(this).addClass('current').siblings('li').removeClass('current');
+	});
+});
+</script>

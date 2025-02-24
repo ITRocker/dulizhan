@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="{$zan.global.lang_htmlmark}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta content="telephone=no" name="format-detection" />
+        <title>{$zan.field.seo_title}</title>
+        <meta name="keywords" content="{$zan.field.seo_keywords}" />
+        <meta name="description" content="{$zan.field.seo_description}" />
+        <link href="{zan:global name='web_ico' /}" rel="shortcut icon" type="image/x-icon" />
+        {zan:static file="skin/css/style.css" /}
+        {zan:static file="skin/css/iconfont.css" /}
+        {zan:static file="skin/css/jquery.bxslider.css" /}
+        {zan:static file="skin/js/jquery-3.7.0.min.js" /}
+        {zan:static file="skin/js/trade.js" /}
+        {zan:static file="skin/js/jquery.bxslider.js" /}
+    </head>
+    <body>
+        {zan:include file="header.htm" /}
+        {zan:include file="banner.htm" /}
+        <div id="main" class="products w">
+            <div class="left_outer fl">
+                <div class="pro_cate">
+                    <div class="page_name">{zan:lang name='crumb48' /}</div>
+                    <div class="content"> 
+                        {zan:models type="top" modelid='2' currentstyle="on"}
+                        <div class="list {$field.currentstyle}">
+                            <div class="first_cate"> 
+                                <a href="{$field.typeurl}" class="{$field.currentstyle}">{$field.typename}</a>
+                                <div class="border"></div>
+                            </div>
+                            <div class="son_cate"> 
+                                {zan:models name="$field.children" id="field2" currentstyle="on"}
+                                <div class="item">
+                                    <a href="{$field2.typeurl}" class="text-over block" class="{$field2.currentstyle}">{$field2.typename}</a>
+                                </div>
+                                {/zan:models}
+                            </div>
+                        </div>
+                        {/zan:models}
+                    </div>
+                </div>
+                <div class="hot_pro">
+                    <div class="title"> {zan:lang name='crumb53' /} </div>
+                    <div class="list">
+                        {zan:artlist loop='4' modelid='2' orderby='click'}
+                        <div class="item"> 
+                            <a href="{$field.arcurl}" class="img middleImg fl"> 
+                                <img src="{$field.litpic}" />
+                                <span></span> 
+                            </a> <a href="{$field.arcurl}" class="item_title fr"> {$field.title} </a>
+                            <div class="clear"></div>
+                        </div>
+                        {/zan:artlist}
+                    </div>
+                </div>
+            </div>
+            <div class="contenter">
+                <div class="web_position clean ">
+                    <div class="title">{$zan.field.typename}</div>
+                    <div class="position">{zan:position/}</div>
+                </div>
+                <div class="brief_desction"></div>
+                <div class="clear"></div>
+                <div class="web_filter_mb"> </div>
+                <div class="contents">
+                    {zan:list titlelen='40' loop='6' mod='3'}
+                    <div class="blk fl text-center border-box">
+                        <div class="imgbox pic_box img">
+                            <a href="{$field.arcurl}" title="{$field.title}">
+                                <img src="{$field.litpic}" alt="{$field.title}" />
+                                <em></em>
+                            </a>
+                        </div>
+                        <h3 class="name">
+                            <a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a>
+                            <a class="btn_go_quote" href="JavaScript:void(0);" onclick="addInquiryList({$field.aid});">{zan:lang name='diy1' /}</a>
+                        </h3>
+                    </div>
+                    {zan:eq name='$mod' value='0'}
+                    <div class="clear_gt_991"></div>
+                    {/zan:eq}
+                    {/zan:list}
+                    <div class="clear"></div>
+                </div>
+                <div class="clear"></div>
+                <div class="annex e2">
+                    <div class="web_turn_page s1">
+                    {zan:if condition="!empty($__LIST__)"}
+                        {zan:pagelist listitem="index,pre,next,end,pageno" listsize="1" /}
+                    {zan:else/}
+                        {zan:lang name='sys52' /}
+                    {/zan:if}
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        {zan:include file="footer.htm" /}
+    </body>
+</html>

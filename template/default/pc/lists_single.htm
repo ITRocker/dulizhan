@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html lang="{$zan.global.lang_htmlmark}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta content="telephone=no" name="format-detection" />
+        <title>{$zan.field.seo_title}</title>
+        <meta name="keywords" content="{$zan.field.seo_keywords}" />
+        <meta name="description" content="{$zan.field.seo_description}" />
+        <link href="{zan:global name='web_ico' /}" rel="shortcut icon" type="image/x-icon" />
+        {zan:static file="skin/css/style.css" /}
+        {zan:static file="skin/css/iconfont.css" /}
+        {zan:static file="skin/css/jquery.bxslider.css" /}
+        {zan:static file="skin/js/jquery-3.7.0.min.js" /}
+        {zan:static file="skin/js/trade.js" /}
+        {zan:static file="skin/js/jquery.bxslider.js" /}
+    </head>
+
+    <body>
+        {zan:include file="header.htm" /}
+        <div class="in_ad">
+            <div class="banner-box">
+                <img src="{zan:global name='web_templets_pc' /}/skin/images/banner.jpg" width="100%">
+                <h1 class="typename"><a href="{$zan.field.typeurl}">{$zan.field.typename}</a></h1>
+            </div>
+        </div>
+        <div id="main" class="w article">
+            <div class="web_position clean s1">
+                <div class="position">{zan:position/}</div>
+            </div>
+            <div class="contenter">
+                <div class="webarticle_detail">
+                    <div class="contents">
+                        <div class="single">
+                            <div class="single_title">{$zan.field.typename}</div>
+                            <div class="single_other">{$zan.field.content}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        {zan:include file="footer.htm" /}
+    </body>
+</html>

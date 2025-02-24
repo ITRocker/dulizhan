@@ -1,0 +1,163 @@
+{include file="public/layout" /}
+
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="archives/left" /}
+<div class="page min-hg-c-10" style="min-width:auto;margin-left:100px;">
+    <div class="flexigrid" style="min-height: 600px;">
+        <!-- <div class="mDiv mb10">
+            <div class="ftitle">
+                <div class="fbutton" style="float: none;">
+                    <a href="{:url('Single/add')}">
+                        <div class="add">
+                            <span><i class="layui-icon layui-icon-addition"></i>添加</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <form class="navbar-form form-inline" id="searchForm" action="{:url('Single/index')}" method="get" onsubmit="layer_loading('正在处理');">
+                {$searchform.hidden|default=''}
+                <div class="sDiv">
+                    <div class="sDiv2">
+                        <input type="hidden" name="typeid" id="typeid" value="{$Request.param.typeid|default=''}">
+                        <input type="text" size="30" name="keywords" value="{$Request.param.keywords}" class="qsbox" placeholder="请输入关键词...">
+                        <input type="submit" class="btn" value="搜索">
+                        <i class="iconfont e-sousuo"></i>
+                    </div>
+                </div>
+            </form>
+        </div> -->
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th class="sign w40" axis="col0">
+                                <div class="tc"><input type="checkbox" class="checkAll" autocomplete="off"></div>
+                            </th>
+                            <th axis="col1" class="w60">
+                                <div class="tc">ID</div>
+                            </th>
+                            <th abbr="article_title" axis="col3" class="">
+                                <div class="text-l10">页面名称</div>
+                            </th>
+                            <th axis="col1" class="w160">
+                                <div class="tc">操作</div>
+                            </th>
+                            <th abbr="article_time" axis="col6" class="w60">
+                                <div class="tc sort_style"><a href="{:getArchivesSortUrl('sort_order')}">排序&nbsp;<i {eq name='$Request.param.orderby' value='sort_order'}{eq name='$Request.param.orderway' value='asc'}class="asc"{else /}class="desc"{/eq}{/eq}></i></a></div>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table style="width: 100%;">
+                    <tbody>
+                    {empty name="list"}
+                        <tr>
+                            <td class="no-data" align="center" axis="col0" colspan="50">
+                                <div class="no_row">
+                                    <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {else/}
+                        {foreach name="list" item="vo" key="k" }
+                        <tr>
+                            <td class="sign">
+                                <div class="tc w40"><input type="checkbox" class="aidArr" name="ids[]" value="{$vo.aid}" autocomplete="off"></div>
+                            </td>
+                            <td >
+                                <div class="w60 tc">
+                                    {$vo.typeid}
+                                </div>
+                            </td>
+                            <td class="" style="width: 100%;">
+                                <div class="text-l10">
+                                    <a href="{:url('Single/edit',array('id'=>$vo['aid'], 'callback_url'=>$callback_url))}">{$vo.stypename}</a>
+                                </div>
+                            </td>
+                            
+                            <td class="operation">
+                                <div class="w160 tc">
+                                    <a href="{:url('Single/edit',array('id'=>$vo['aid'], 'callback_url'=>$callback_url))}" class="btn blue">编辑</a>
+                                    <i></i>
+                                    <!-- <a class="btn red" href="javascript:void(0);" data-url="{:url('Single/del')}" data-id="{$vo.aid}" onClick="delfun(this);">删除</a>
+                                    <i></i> -->
+                                    <a href="{$vo.typeurl}" class="btn blue" target="_blank">预览</a>
+                                </div>
+                            </td>
+                            <td class="sort">
+                                <div class="w60 tc">
+                                {eq name="$Think.const.CONTROLLER_NAME.'@edit'|is_check_access" value="1"}
+                                    <input type="text" onchange="changeTableVal('archives', 'aid', '{$vo.aid}', 'sort_order' ,this);" size="4" value="{$vo.sort_order}" />
+                                {else /}
+                                    {$vo.sort_order}
+                                {/eq}
+                                </div>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    {/empty}
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        {notempty name="list"}
+        <div class="tDiv">
+            <div class="tDiv2">
+                <!-- <div class="fbutton checkboxall">
+                    <input type="checkbox" autocomplete="off" class="checkAll">
+                </div> -->
+                <!-- <div class="fbutton">
+                    {eq name="$Think.const.CONTROLLER_NAME.'@del'|is_check_access" value="1"}
+                    <a onclick="batch_del(this, 'ids');" data-url="{:url('Single/del')}"><div class="add" title="批量删除"><span>批量删除</span></div></a>
+                    {/eq}
+                </div> -->
+                {empty name="$is_eyou_authortoken"}
+                {if condition="!empty($doubao['doubao_api']) && !empty($isLanguage)"}
+                <div class="fbutton">
+                    <a href="javascript:void(0);"  data-href="{:url('Archives/help', ['channel' => 6, 'translateSource'=> 'Single'])}" onclick="batchTranslate(this);" title="AI翻译"><div class="add green-b"><span>AI翻译</span></div></a>
+                </div>
+                {/if}
+                {/empty}
+                {include file="public/page" /}
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        {/notempty}
+    </div>
+</div>
+<script type="text/javascript">
+    var aidArr = [];
+    function batchTranslate(obj) {
+        aidArr = [];
+        $('.aidArr').each(function() {
+            if ($(this).is(':checked')) aidArr.push($(this).val());
+        });
+        if (0 === parseInt(aidArr.length)) {
+            showNewAlert('请至少选择一项');
+            return false;
+        }
+        openHelpframe(obj, 'AI翻译', '400px', '100%', 'r');
+    }
+
+    $(function() {
+        $('input[name*=ids]').click(function(){
+            if ($('input[name*=ids]').length == $('input[name*=ids]:checked').length) {
+                $('.checkAll').prop('checked','checked');
+            } else {
+                $('.checkAll').prop('checked', false);
+            }
+        });
+        $('input[type=checkbox].checkAll').click(function(){
+            $('input[type=checkbox]').prop('checked',this.checked);
+        });
+    });
+</script>
+{include file="public/footer" /}

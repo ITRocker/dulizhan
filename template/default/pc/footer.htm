@@ -1,0 +1,106 @@
+<div e-page="footer">
+    <div id="newsletter">
+        {zan:form type='default' formid='3' id='field'}
+        <div class="newsletter wrap">
+            <div class="newsletter_left">
+                <div class="newsletter_text">
+                    <h4> {$field.form_name} </h4>
+                    <p> {$field.intro} </p>
+                </div>
+            </div>
+            <div class="newsletter_right">
+                
+                <form method="POST" action="{$field.action}" {$field.formhidden} onsubmit="{$field.submit}">
+                    <div class="newsletter_form">
+                        <input class="newsletter_email" type="email"  id='attr_9' name='{$field.attr_9}' placeholder="{$field.placeholder_9}">
+                        <button id="newsletter_submit" type="submit" class="newsletter_submit_btn trans_300" value="Submit">subscribe</button>
+                    </div>
+                    {$field.hidden}
+                </form>
+                
+            </div>
+        </div>
+        {/zan:form}
+    </div>
+    <div id="footer">
+        <div class="footer_top wrap">
+            <div class="f_left fl">
+                <div class="f_item">
+                    <div class="f_title zan-edit" e-id="f3" e-type="text">
+                    {zan:uitext e-id='f3' e-page="footer"}
+                        {$field.value}
+                    {zan:else /}
+                        联系我们
+                    {/zan:uitext} 
+                    </div>
+                    <div class="f_contact">
+                        <div class="row"> {zan:global name='web_attr_4' /} </div>
+                        <div class="row"> {zan:global name='web_attr_1' /} </div>
+                        <div class="row">
+                            <a href="mailto:{zan:global name='web_attr_2' /}"> {zan:global name='web_attr_2' /} </a> 
+                        </div>
+                        <div class="row"> {zan:global name='web_attr_3' /}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="f_right fr">
+                {zan:navigation position_id='2' id='field'} 
+                <div class="f_item fl">
+                    <div class="f_title">{$field.nav_name}<em></em></div>
+                    <div class="list">
+                        {zan:navigation name="$field.children" row="100" id="field2"}
+                        <a class="item block text-over hoverColor" href="{$field2.nav_url}" title="{$field2.nav_name}">{$field2.nav_name}</a> 
+                        {/zan:navigation}
+                    </div>
+                </div>
+                {/zan:navigation}
+                <div class="f_item fl share_menu">
+                    <div class="f_title"></div>
+                    <div class="f_title zan-edit" e-id="f4" e-type="text">
+                    {zan:uitext e-id='f4' e-page="footer"}
+                        {$field.value}
+                    {zan:else /}
+                        Follow us
+                    {/zan:uitext} 
+                    </div>
+                    <div class="list">
+                        <div class="share foot_share foot_share_type_0">
+                          <a href="http://www.facebook.com/" target="_blank" class="foot_share_box Facebook"></a>
+                          <a href="https://twitter.com/" target="_blank" class="foot_share_box Twitter"></a>
+                          <a href="http://pinterest.com/" target="_blank" class="foot_share_box Pinterest"></a>
+                          <!-- <a href="" target="_blank" class="foot_share_box LinkedIn"></a>
+                          <a href="" target="_blank" class="foot_share_box YouTube"></a>
+                          <a href="" target="_blank" class="foot_share_box Google"></a>
+                          <a href="" target="_blank" class="foot_share_box Vk"></a>
+                          <a href="" target="_blank" class="foot_share_box Instagram"></a> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="copyright">
+            <div class="wrap">
+                <div class="left"> {zan:global name='web_copyright' /} </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <div id="chat_window">
+        <div class="chat_box is_respon">
+            <div class="chat_box_menu">
+                <a href="javascript:;" id="go_top" class="top trans_05"></a>
+            </div>
+        </div>
+    </div>
+</div>
+{zan:include file="cookies.htm" /}
+
+{:hookexec('StationTranslation/StationTranslation/show')}
+
+<!-- 应用插件标签 start -->
+{zan:weapp type='default' /}
+<!-- 应用插件标签 end -->
+
+{zan:ui open='off' /}

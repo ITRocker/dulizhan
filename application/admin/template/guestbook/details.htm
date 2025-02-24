@@ -1,0 +1,100 @@
+{include file="public/layout" /}
+<body class="" style="cursor: default; -moz-user-select: inherit; min-width:400px;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page" style="min-width: 400px;">
+    {notempty name="$goodsList"}
+    <div style="display: flex;padding: 15px 0;">
+        <div style="width: 12%;min-width: 60px;line-height: 40px;"><strong>询盘商品</strong></div>
+        <div class="ncap-form-default inquiry-product" style="width: 88%;padding: 0;">
+            <dl class="row" style="padding: 0;">
+                <dt class="tit" style=" background: #f4f6f8;">商品名称</dt>
+                <dd class="opt" style=" background: #f4f6f8;">数量</dd>
+            </dl>
+            {volist name="$goodsList" id="vo"}
+            <dl class="row">
+                <dt class="tit ellipsis"><a href="{$vo.htmlfilename}" target="_blank"><img src="{$vo.litpic}">{$vo.title}</a> </dt>
+                <dd class="opt">X {$vo.goods_num}</dd>
+            </dl>
+            {/volist}
+        </div>
+    </div>
+    {/notempty}
+    {foreach name="attr_list" item="vo" key="k" }
+    <div style="display: flex;align-items: center;padding: 15px 0;">
+        <div style="width: 12%;min-width: 60px;"><strong>{$vo.attr_name}</strong></div>
+        <div style="width: 88%;">{$vo.attr_value}</div>
+    </div>
+    {/foreach}
+    <div style="display: flex;align-items: center;padding: 15px 0;">
+        <div style="width: 12%;min-width: 60px;"><strong>所属表单</strong></div>
+        <div style="width: 88%;">{$row.form_name|default=''}</div>
+    </div>
+    <!-- <div style="display: flex;align-items: center;padding: 15px 0;">
+        <div style="width: 12%;min-width: 60px;"><strong>来源网址</strong></div>
+        <div style="width: 88%;">{$row.ip}&nbsp;&nbsp;(<a href="{$row.submit_url}" target="_blank">{$row.submit_url}</a>)</div>
+    </div> -->
+    <div style="display: flex;align-items: center;padding: 15px 0;">
+        <div style="width: 12%;min-width: 60px;"><strong>IP来源</strong></div>
+        <div style="width: 88%;">{$row.ip}&nbsp;&nbsp;(<span id="city_name" data-ip="{$row.ip}"></span>)</div>
+    </div>
+    <div style="display: flex;align-items: center;padding: 15px 0;">
+        <div style="width: 12%;min-width: 60px;"><strong>提交来源</strong></div>
+        <div style="width: 88%;">
+            {if condition="$row['source'] == 2"}
+                手机端
+            {else /}
+                电脑端
+            {/if}
+        </div>
+    </div>
+    <div style="display: flex;align-items: center;padding: 15px 0;">
+        <div style="width: 12%;min-width: 60px;"><strong>提交时间</strong></div>
+        <div style="width: 88%;">{$row.add_time|MyDate='Y-m-d H:i:s',###}</div>
+    </div>
+    <div style="display: flex;align-items: center;padding: 15px 0;">
+        <div style="width: 12%;min-width: 60px;"><strong>查看时间</strong></div>
+        <div style="width: 88%;">{$row.update_time|MyDate='Y-m-d H:i:s',###}</div>
+    </div>
+</div>
+{notempty name='$row.reply'}
+<div class="page mt10 mb20">
+    <div style="display: flex;align-items: center;padding: 15px 0;">
+        <div style="width: 12%;min-width: 60px;"><strong>回复时间</strong></div>
+        <div style="width: 88%;">{$row.reply_time|MyDate='Y-m-d H:i:s',###}</div>
+    </div>
+    <div style="display: flex;align-items: center;padding: 15px 0;">
+        <div style="width: 12%;min-width: 60px;"><strong>回复内容</strong></div>
+        <div style="width: 88%;">{$row.reply}</div>
+    </div>
+</div>
+{/notempty}
+
+<script type="text/javascript">
+    $(function(){
+        get_ip_city_name();
+        function get_ip_city_name()
+        {
+            var ip = $('#city_name').data('ip');
+            $('#city_name').html('查询区域中……');
+            $.ajax({
+                type : 'post',
+                url : "{:url('Ajax/get_ip_city_name')}",
+                data : {ip:ip, _ajax:1},
+                dataType : 'json',
+                success : function(res){
+                    if (res.code == 1) {
+                        $('#city_name').html(res.data.city_name);
+                    } else {
+                        $('#city_name').html('<a href="https://www.baidu.com/s?wd='+ip+'" target="_blank">查看地区</a>');
+                    }
+                },
+                error:function(e){
+                    $('#city_name').html(e.responseText);
+                }
+            });
+        }
+    });
+</script>
+
+{include file="public/footer" /}

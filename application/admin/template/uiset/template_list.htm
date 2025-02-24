@@ -1,0 +1,101 @@
+{include file="public/layout" /}
+<style type="text/css">
+    .flexigrid .click_home {float: left;line-height: 24px;margin: 0 0 0 10px;}
+</style>
+
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="uiset/left" /}
+<div class="fixed-bar mb10" style="min-width:auto;margin-left:100px;">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            <li {if condition="'template_list'==$Think.const.ACTION_NAME"}class="current"{/if}>
+                <a href="{:custom_url('Uiset/template_list')}">
+                    <span>网站装修</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="page min-hg-c-66" style="min-width:auto;margin-left:100px;">
+    <div class="flexigrid htitx">
+        <div class="terminal_box">
+            <div class="tem_box">
+                {volist name="$list" id="vo"}
+                <div class="tem_list">
+                    <div class="img">
+                        <img src="{$vo['config']['logo']}" style="width: 100%; height: 100%;">
+                        <span></span>
+                        <div class="eidt_btn_items">
+                        {if condition="$vo['is_use'] == 1"}
+                            {if condition="check_template_uiset()"}
+                            <a href="{:url('Uiset/pc', ['uiset'=>$vo['config']['uiset']])}" target="_blank" class="edit_btn">编辑</a>
+                            {else /}
+                            <a href="javascript:showErrorAlert('请使用宝塔或ftp修改模板', 4);" class="edit_btn">编辑</a>
+                            {/if}
+                            <a href="{$home_url}" target="_blank" class="view_btn">预览</a>
+                        {else /}
+                            <a href="javascript:void(0);" class="edit_btn" data-web_tpl_theme="{$vo['style']}" onclick="template_use(this);">使用</a>
+                        {/if}
+                        </div>
+                    </div>
+                    <div class="edit_box">
+                        <span class="inof">
+                            <span class="title">{$vo['config']['name']}</span>
+                            <!-- {if condition="empty($vo['response_type'])"}<span class="edit_responsive">响应式</span>{/if} -->
+                        </span>
+                        <div class="inof_r">
+                            <span class="edit_responsive">{$vo['config']['type']}</span>
+                            {if condition="$vo['is_use'] == 1"}
+                            <div class="default">使用中</div>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                {/volist}
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function(){
+            location.href = location.href;
+        });
+    });
+
+    function template_use(obj)
+    {
+        var web_tpl_theme = $(obj).data('web_tpl_theme');
+        layer_loading('正在处理');
+        $.ajax({
+            type : 'post',
+            url : "{:url('Uiset/template_use', ['_ajax'=>1])}",
+            data : {web_tpl_theme:web_tpl_theme},
+            dataType : 'json',
+            success : function(res){
+                layer.closeAll();
+                if(res.code == 1){
+                    layer.msg(res.msg, {shade: layer_shade, time: 1000}, function(){
+                        window.location.reload();
+                    });
+                }else{
+                    showErrorMsg(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+</script>
+
+{include file="public/footer" /}

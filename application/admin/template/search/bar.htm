@@ -1,0 +1,20 @@
+<div class="fixed-bar mb10">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            {eq name="$Think.const.CONTROLLER_NAME.'@index'|is_check_access" value="1"}
+            <li class="{if condition="in_array($Request.action, array('index'))"}current{/if}">
+                <a href="{:url("Search/index")}">
+                    <span>搜索统计</span>
+                </a>
+            </li>
+            {/eq}
+            {eq name="$Think.const.CONTROLLER_NAME.'@conf'|is_check_access" value="1"}
+            <li class="{eq name="$Request.action" value="conf"}current{/eq}">
+                <a href="{:url("Search/conf")}">
+                    <span>搜索设置</span>
+                </a>
+            </li>
+            {/eq}
+        </ul>
+    </div>
+</div>

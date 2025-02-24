@@ -1,0 +1,70 @@
+<div class="sidebar-second order-navBox">
+    <ul id="accordion" class="accordion">
+        <li class="open">
+            <a class="link">系统设置<i class="fa fa-angle-right"></i></a>
+            <ul class="submenu" {if condition="in_array($Request.param.c, ['System','Language','Admin'])"}style="display: show;"{else/}style="display: none;"{/if}>
+                <li>
+                    <a {if condition="'System' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['web','web2'])"}class="current"{/if} href='{:custom_url("System/web")}'>基础设置</a>
+                </li>
+                
+                <li>
+                    <a {if condition="'Language' == $Think.const.CONTROLLER_NAME"}class="current"{/if} href='{:custom_url("Language/index")}'>网站语言</a>
+                </li>
+                <li>
+                    <a {if condition="'System' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['smtp','smtp_tpl','smtp_tpl_edit'])"}class="current"{/if} {if condition="$php_servicemeal > 0"} href='{:custom_url("System/smtp")}' {else /} href="javascript:showErrorAlert('{$global['sys_tmpserinfo']['authormsg1']}', 4);" {/if}>邮件通知</a>
+                </li>
+                <li>
+                    <a {if condition="in_array($Request.param.c, ['Admin', 'AuthRole'])"}class="current"{/if} href='{:custom_url("Admin/index")}'>管理员</a>
+                </li>
+                <li>
+                    <a {if condition="'System' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['cookie_agreement'])"}class="current"{/if} href='{:custom_url("System/cookie_agreement")}'>Cookie</a>
+                </li>
+                
+            </ul>
+        </li>
+        {if condition="$php_servicemeal > 1"}
+        <li>
+            <a class="link">商城设置<i class="fa fa-angle-right"></i></a>
+            <ul class="submenu" {if condition="in_array($Request.param.c, ['Shop','Country'])"}style="display: show;"{else/}style="display: none;"{/if}>
+                <li>
+                    <a {if condition="'Shop' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['conf'])"}class="current"{/if} href='{:custom_url("Shop/conf")}'>基础设置</a>
+                </li>
+                <li>
+                    <a {if condition="'Country' == $Think.const.CONTROLLER_NAME"}class="current"{/if} href='{:custom_url("Country/index")}'>国家/地区</a>
+                </li>
+            </ul>
+        </li>
+        {/if}
+    </ul>
+</div>
+<script>
+$(function() {
+	var Accordion = function(el, multiple) {
+		this.el = el || {};
+		this.multiple = multiple || false;
+
+		// Variables privadas
+		var links = this.el.find('.link');
+		// Evento
+		links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
+	};
+
+	Accordion.prototype.dropdown = function(e) {
+		var $el = e.data.el;
+			$this = $(this);
+			$next = $this.next();
+
+		$next.slideToggle();
+		$this.parent().toggleClass('open');
+
+		if (!e.data.multiple) {
+			$el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+		}
+	};
+
+	var accordion = new Accordion($('#accordion'), false);
+	$('.submenu li').click(function () {
+		$(this).addClass('current').siblings('li').removeClass('current');
+	});
+});
+</script>

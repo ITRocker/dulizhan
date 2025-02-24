@@ -1,0 +1,560 @@
+{include file="public/layout" /}
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page min-hg-c-10">
+    <div class="flexigrid">
+        {eq name="'Index@switch_map_1'|is_check_access" value="1"}
+        <div class="nav-backstage">
+            <div class="son-tit">
+                <div class="">
+                    导航菜单
+                </div>
+            </div>
+            <div class="nav-backstage-list sort-list" id="my_menu">
+            {volist name="menu_list" id="vo"}
+                <div title="拖动改变排序" class="nav-backstage-item more_li" data-id="{$vo.menu_id}" id="my_menu_{$vo.menu_id}" {if condition="in_array($vo.menu_id,$not_role_menu_id_arr) || empty($vo.is_switch)"}style="display:none"{/if}>
+                    <div class="nav-backstage-item-content">
+                        <div class="plug-item-left" >
+                            <div class="plug-icon"><i class="{$vo.icon}"></i></div>
+                            <div class="plug-text">
+                                <div class="plug-text-title">
+                                    <a href="javascript:void(0);" data-href="{$vo.controller_name.'/'.$vo.action_name|url}" onclick="gourl2(this,1);">{$vo.title}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="plug-item-right" >
+                            {if condition="$is_founder"}
+                            <div class="icon-link_add">
+                                <div id="my_menu_jianhao_{$vo.menu_id}" title="取消导航显示" data-menu_id="{$vo.menu_id}" class="iconfont e-jiahao2 e-jianhao" {if condition="empty($vo['is_menu'])"} style="display: none;" {/if}></div>
+                                <div id="my_menu_jiahao_{$vo.menu_id}" title="加入导航显示" data-menu_id="{$vo.menu_id}" class="iconfont e-jiahao2" {if condition="!empty($vo['is_menu'])"} style="display: none;" {/if}></div>
+                            </div>
+                            {/if}
+                         </div>
+                    </div>
+                </div>
+            {/volist}
+            </div>
+        </div>
+        {/eq}
+
+        <div class="plug-weapp" id="gaojixuanxiang">
+            <div class="son-tit">
+                <div class="">
+                    内置应用
+                </div>
+            </div>
+            <div class="plug-weapp-list" id="gaojixuanxiang_child">
+                {eq name="'TranslateApi@index'|is_check_access" value="1"}
+                <div class="plug-weapp-item-content more_li" id="li_2004027" {if condition="in_array('2004027',$admin_menu_id_arr) || in_array('2004027',$not_role_menu_id_arr)"}style="display:none"{/if}>
+                    <div class="plug-item">
+                        <a class="plug-item-top" {if condition="$php_servicemeal > 0"} onclick="gourl2(this,1);" href="javascript:void(0);" data-href="{:url('TranslateApi/index')}" {else /} href="javascript:showErrorAlert('{$global['sys_tmpserinfo']['authormsg1']}', 4);" {/if}>
+                            <div class="plug-icon"><i class="iconfont e-yuyanqiehuan1"></i></div>
+                            <div class="plug-text">
+                                <div class="plug-text-title"><span class="title-l">翻译设置</span></div>
+                                <div class="plug-text-des">翻译接口设置</div>
+                            </div>
+                        </a>
+                        <div class="plug-item-right">
+                            {notempty name="$is_founder"}
+                            <div class="icon-link_add">
+                                <div title="加入导航显示" data-menu_id="2004027" class="iconfont e-jiahao2"></div>
+                            </div>
+                            {/notempty}
+                        </div>
+                    </div>
+                </div>
+                {/eq}
+                
+                {eq name="'Search@index'|is_check_access" value="1"}
+                <div class="plug-weapp-item-content more_li" id="li_2004022" {if condition="in_array('2004022',$admin_menu_id_arr) || in_array('2004022',$not_role_menu_id_arr)"}style="display:none"{/if}>
+                    <div class="plug-item">
+                        <a class="plug-item-top" onclick="gourl2(this,1);" href="javascript:void(0);" data-href="{:url('Search/index')}">
+                            <div class="plug-icon"><i class="iconfont e-sousuoliebiao"></i></div>
+                            <div class="plug-text">
+                                <div class="plug-text-title"><span class="title-l">搜索管理</span></div>
+                                <div class="plug-text-des">搜索统计与搜索设置</div>
+                            </div>
+                        </a>
+                        <div class="plug-item-right">
+                            {notempty name="$is_founder"}
+                            <div class="icon-link_add">
+                                <div title="加入导航显示" data-menu_id="2004022" class="iconfont e-jiahao2"></div>
+                            </div>
+                            {/notempty}
+                        </div>
+                    </div>
+                </div>
+                {/eq}
+                
+                {eq name="'Tools@index'|is_check_access" value="1"}
+                <div class="plug-weapp-item-content more_li" id="li_2004002" {if condition="in_array('2004002',$admin_menu_id_arr) || in_array('2004002',$not_role_menu_id_arr)"}style="display:none"{/if}>
+                    <div class="plug-item">
+                        <a class="plug-item-top" onclick="gourl2(this,1);" href="javascript:void(0);" data-href="{:url('Tools/index')}">
+                            <div class="plug-icon"><i class="iconfont e-beifenhuanyuan"></i></div>
+                            <div class="plug-text">
+                                <div class="plug-text-title"><span class="title-l">备份还原</span></div>
+                                <div class="plug-text-des">网站数据备份与还原</div>
+                            </div>
+                        </a>
+                        <div class="plug-item-right">
+                            {notempty name="$is_founder"}
+                            <div class="icon-link_add">
+                                <div title="加入导航显示" data-menu_id="2004002" class="iconfont e-jiahao2"></div>
+                            </div>
+                            {/notempty}
+                        </div>
+                    </div>
+                </div>
+                {/eq}
+                
+                {eq name="'Index@theme_index'|is_check_access" value="1"}
+                <div class="plug-weapp-item-content more_li" id="li_2004025" {if condition="in_array('2004025',$admin_menu_id_arr) || in_array('2004025',$not_role_menu_id_arr)"}style="display:none"{/if}>
+                    <div class="plug-item">
+                        <a class="plug-item-top" onclick="gourl2(this,1);" href="javascript:void(0);" data-href="{:url('Index/theme_index')}">
+                            <div class="plug-icon"><i class="iconfont e-zhutifengge"></i></div>
+                            <div class="plug-text">
+                                <div class="plug-text-title"><span class="title-l">主题风格</span></div>
+                                <div class="plug-text-des">网站后台logo,ico,主题风格切换</div>
+                            </div>
+                        </a>
+                        <div class="plug-item-right">
+                            {notempty name="$is_founder"}
+                            <div class="icon-link_add">
+                                <div title="加入导航显示" data-menu_id="2004025" class="iconfont e-jiahao2"></div>
+                            </div>
+                            {/notempty}
+                        </div>
+                    </div>
+                </div>
+                {/eq}
+                
+                {eq name="'Vertify@index'|is_check_access" value="1"}
+                <div class="plug-weapp-item-content more_li" id="li_2004015" {if condition="in_array('2004015',$admin_menu_id_arr) || in_array('2004015',$not_role_menu_id_arr)"}style="display:none"{/if}>
+                    <div class="plug-item">
+                        <a class="plug-item-top" onclick="gourl2(this,1);" href="javascript:void(0);" data-href="{:url('Vertify/index')}">
+                            <div class="plug-icon"><i class="iconfont e-yanzhengmaguanli"></i></div>
+                            <div class="plug-text">
+                                <div class="plug-text-title"><span class="title-l">验证码管理</span></div>
+                                <div class="plug-text-des">网站后台登录验证码管理</div>
+                            </div>
+                        </a>
+                        <div class="plug-item-right">
+                            {notempty name="$is_founder"}
+                            <div class="icon-link_add">
+                                <div title="加入导航显示" data-menu_id="2004015" class="iconfont e-jiahao2"></div>
+                            </div>
+                            {/notempty}
+                        </div>
+                    </div>
+                </div>
+                {/eq}
+                
+                <!-- {eq name="'Tags@index'|is_check_access" value="1"}
+                <div class="plug-weapp-item-content more_li" id="li_2004011" {if condition="in_array('2004011',$admin_menu_id_arr) || in_array('2004011',$not_role_menu_id_arr)"}style="display:none"{/if}>
+                    <div class="plug-item">
+                        <a class="plug-item-top" onclick="gourl2(this,1);" href="javascript:void(0);" data-href="{:url('Tags/index')}">
+                            <div class="plug-icon"><i class="iconfont e-TAGguanli1"></i></div>
+                            <div class="plug-text">
+                                <div class="plug-text-title"><span class="title-l">TAG管理</span></div>
+                                <div class="plug-text-des">文档TAG修改与关联</div>
+                            </div>
+                        </a>
+                        <div class="plug-item-right">
+                            {notempty name="$is_founder"}
+                            <div class="icon-link_add">
+                                <div title="加入导航显示" data-menu_id="2004011" class="iconfont e-jiahao2"></div>
+                            </div>
+                            {/notempty}
+                        </div>
+                    </div>
+                </div>
+                {/eq} -->
+
+                {eq name="'ArchivesFlag@index'|is_check_access" value="1"}
+                <div class="plug-weapp-item-content more_li" id="li_2004008" {if condition="in_array('2004008',$admin_menu_id_arr) || in_array('2004008',$not_role_menu_id_arr)"}style="display:none"{/if}>
+                    <div class="plug-item">
+                        <a class="plug-item-top" onclick="gourl2(this,1);" href="javascript:void(0);" data-href="{:url('ArchivesFlag/index')}">
+                            <div class="plug-icon"><i class="iconfont e-wendangshuxing"></i></div>
+                            <div class="plug-text">
+                                <div class="plug-text-title"><span class="title-l">文档属性</span></div>
+                                <div class="plug-text-des">文档属性管理</div>
+                            </div>
+                        </a>
+                        <div class="plug-item-right">
+                            {notempty name="$is_founder"}
+                            <div class="icon-link_add">
+                                <div title="加入导航显示" data-menu_id="2004008" class="iconfont e-jiahao2"></div>
+                            </div>
+                            {/notempty}
+                        </div>
+                    </div>
+                </div>
+                {/eq}
+
+                {eq name="'System@water'|is_check_access" value="1"}
+                <div class="plug-weapp-item-content more_li" id="li_2004009" {if condition="in_array('2004009',$admin_menu_id_arr) || in_array('2004009',$not_role_menu_id_arr)"}style="display:none"{/if}>
+                    <div class="plug-item">
+                        <a class="plug-item-top" onclick="gourl2(this,1);" href="javascript:void(0);" data-href="{:url('System/water')}">
+                            <div class="plug-icon"><i class="iconfont e-shuiyinpeizhi"></i></div>
+                            <div class="plug-text">
+                                <div class="plug-text-title"><span class="title-l">图片水印</span></div>
+                                <div class="plug-text-des">自动添加水印功能</div>
+                            </div>
+                        </a>
+                        <div class="plug-item-right">
+                            {notempty name="$is_founder"}
+                            <div class="icon-link_add">
+                                <div title="加入导航显示" data-menu_id="2004009" class="iconfont e-jiahao2"></div>
+                            </div>
+                            {/notempty}
+                        </div>
+                    </div>
+                </div>
+                {/eq}
+                
+                {eq name="'Faq@index'|is_check_access" value="1"}
+                <div class="plug-weapp-item-content more_li" id="li_2004050" {if condition="in_array('2004050',$admin_menu_id_arr) || in_array('2004050',$not_role_menu_id_arr)"}style="display:none"{/if}>
+                    <div class="plug-item">
+                        <a class="plug-item-top" onclick="gourl2(this,1);" href="javascript:void(0);" data-href="{:url('Faq/index')}">
+                            <div class="plug-icon"><i class="iconfont e-fqa"></i></div>
+                            <div class="plug-text">
+                                <div class="plug-text-title"><span class="title-l">FAQ</span></div>
+                                <div class="plug-text-des">常见问题管理</div>
+                            </div>
+                        </a>
+                        <div class="plug-item-right">
+                            {notempty name="$is_founder"}
+                            <div class="icon-link_add">
+                                <div title="加入导航显示" data-menu_id="2004050" class="iconfont e-jiahao2"></div>
+                            </div>
+                            {/notempty}
+                        </div>
+                    </div>
+                </div>
+                {/eq}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // 加减左侧菜单通用变量
+    var update_admin_menu_url = "{:url('Ajax/update_admin_menu', ['_ajax'=>1])}";   //添加、删除入口地址
+    var is_founder = {$is_founder|default=0};
+
+    /*----------------------------- 加减左侧菜单 start -----------------------------*/
+    var leftmenu_default_ids = {$leftmenu_default_ids|json_encode};
+    var all_menu_list = {$all_menu_list|json_encode};
+    var module_rele_menu = {$module_rele_menu|json_encode};
+    var module_default_menu = {$module_default_menu|json_encode};
+    var module_reverse_menu = {$module_reverse_menu|json_encode};
+    var not_role_menu_id_arr = {$not_role_menu_id_arr|json_encode};
+    /*
+     * 1、给gengduogongneng类第2N个元素加上class,
+     * 2、其中一个子元素的高大于100，其他的高也设置为相同
+     */
+    /*function add_show2n_class(child,id) {
+        var min_height = 100;
+        var max_height = 0;
+        var childs = 1;
+        $(id).find(child).css('min-height',min_height);
+        $(id).find(child).each(function (index,element) {
+            height = $(element).get(0).offsetHeight;  //获取真实高度 height + padding + border
+            if(height > max_height){
+                max_height = height;
+            }
+            $(element).removeClass("show_2n");
+            if (!$(element).is(":hidden")){
+                childs ++;
+                if (childs%2){
+                    $(element).addClass("show_2n");
+                }
+            }
+        });
+        if (max_height > min_height){
+            $(id).find(child).css('min-height',max_height);
+        }
+    }*/
+    /*
+     * 判断element中是否还有显示的子元素，来控制本元素，以及上级元素的显示和隐藏
+     * flag     为true时候，需要先将所有父元素设置未显示状态
+     * child    子元素
+     * id       当前待检测元素块
+     * parent   跟id同时隐藏显示的元素
+     */
+    function div_visible(flag,child,id,parent) {
+        if (flag){
+            $(id).show();
+            $(parent).show();
+        }
+        var has_child = false;
+        $(id).find(child).each(function (index,element) {
+            if (!$(element).is(":hidden")){
+                has_child = true;
+            }
+        });
+        if (has_child){  //存在显示子元素
+            $(id).show();
+            $(parent).show();
+        }else{
+            $(id).hide();
+            $(parent).hide();
+        }
+    }
+    //通过判断模块是否还存在子组件来决定是否显示,flag为true时候，需要先将所有父元素设置未显示状态
+    function module_visible(flag) {
+        // $('#gengduogongneng').show();  //必须先把最顶级设置为显示，下级判断显示隐藏才有效
+        // div_visible(flag,'.more_li','#mokuaikaiguan');
+        div_visible(flag,'.more_li','#gaojixuanxiang_child','#gaojixuanxiang');
+        // div_visible(flag,'.more_li','#wendangxiagnguan_child','#wendangxiagnguan');
+        // div_visible(flag,'.more_li','#shangchengmokuai_child','#shangchengmokuai');
+        // div_visible(flag,'.more_li','#dingdanmokuai_child','#dingdanmokuai');
+        // div_visible(flag,'.more_li','#seomokuai_child','#seomokuai');
+        // div_visible(flag,'.more_li','#gengduogongneng');
+
+        // add_show2n_class('.on-off_list_bg','#gengduogongneng');
+    }
+    //添加模块菜单到导航和左侧菜单
+    function add_menu(menu_id,controller_name,action_name,param,icon,title,original_title) {
+        $.ajax({
+            type: "POST",
+            url: update_admin_menu_url,
+            data: {title:title,original_title:original_title,controller_name:controller_name,action_name:action_name,menu_id:menu_id,icon:icon,param:param,type:1},
+            dataType: 'json',
+            success:function (res) {
+                if(res.code == 1){
+                    layer.closeAll();
+                    if (0 <= $.inArray(menu_id, leftmenu_default_ids)) {
+                        $("#my_menu_jiahao_"+menu_id).hide();
+                        $("#my_menu_jianhao_"+menu_id).show();
+                        //获取取消菜单的html，包含自己和子元素
+                        var my_html = $("#my_menu_"+menu_id).prop('outerHTML');
+                        //删除"我的菜单"
+                        $("#my_menu_"+menu_id).remove();
+                    } else {
+                        $('#li_'+menu_id).hide();
+                        //添加"我的菜单"
+                        if(is_founder !== 1){  //没有权限取消
+                            var my_html = 
+                            '<div class="nav-backstage-item more_li" data-id="'+menu_id+'" id="my_menu_'+menu_id+'"> ' +
+                            '    <div class="nav-backstage-item-content"> ' +
+                            '        <div class="plug-item-left" > ' +
+                            '            <div class="plug-icon"><i class="'+ icon +'"></i></div> ' +
+                            '            <div class="plug-text"> ' +
+                            '                <div class="plug-text-title"> ' +
+                            '                    <a href="javascript:void(0);" data-href="'+res.data.url+'" onclick="gourl2(this,1);">'+title+'</a> ' +
+                            '                </div> ' +
+                            '            </div> ' +
+                            '        </div> ' +
+                            '        <div class="plug-item-right" ></div> ' +
+                            '    </div> ' +
+                            '</div> ';
+                        }else{
+                            var my_html = 
+                            '<div title="拖动改变排序" class="nav-backstage-item more_li" data-id="'+menu_id+'" id="my_menu_'+menu_id+'"> ' +
+                            '    <div class="nav-backstage-item-content"> ' +
+                            '        <div class="plug-item-left" > ' +
+                            '            <div class="plug-icon"><i class="'+ icon +'"></i></div> ' +
+                            '            <div class="plug-text"> ' +
+                            '                <div class="plug-text-title"> ' +
+                            '                    <a href="javascript:void(0);" data-href="'+res.data.url+'" onclick="gourl2(this,1);">'+title+'</a> ' +
+                            '                </div> ' +
+                            '            </div> ' +
+                            '        </div> ' +
+                            '        <div class="plug-item-right" > ' +
+                            '            <div class="icon-link_add"> ' +
+                            '                <div title="取消导航显示" data-menu_id="'+menu_id+'" class="iconfont e-jiahao2 e-jianhao"></div> ' +
+                            '            </div> ' +
+                            '         </div> ' +
+                            '    </div> ' +
+                            '</div> ';
+                        }
+                    }
+
+                    //添加左侧菜单
+                    var html = '<a data-child="0"  data-id="'+menu_id+ '" class="left_menu_'+menu_id+ ' '+controller_name+'_'+action_name+'_'+menu_id+'" id="'+controller_name+'_'+action_name+'" data-menu_id="' + menu_id + '"  href="javascript:void(0);" data-param="'+controller_name+'|'+action_name+param+'" >'
+                        +'<i class="'+icon+'"></i>'+title+'</a>';
+                    if ($("#my_menu_2004")){
+                        $("#my_menu_2004").before(my_html);
+                        parent.$(".left_menu_2004").before(html);
+                    }else{
+                        $("#my_menu").append(my_html);
+                        parent.$("#sub-menu").append(html);
+                    }
+                    module_visible();
+                }
+                return false;
+            }
+        });
+    }
+    $(function(){
+        //通过判断模块是否还存在子组件来决定是否显示
+        module_visible();
+        // 当前导航的拖动排序相关 js
+        if(is_founder === 1){
+            $( ".sort-list" ).sortable({
+                start: function( event, ui) {
+                }
+                ,stop: function( event, ui ) {
+                    if(is_founder !== 1){
+                        return false;
+                    }
+                    // 这里ajax实现保存排序逻辑
+                    var ul =$("<ul></ul>");
+                    var idarr = [];
+                    $(".sort-list").children().each(function () {
+                        var id = $(this).data("id");
+                        var li = parent.$("#sub-menu").find(".left_menu_"+id);
+                        ul.append(li);
+                        idarr.push(id);
+
+                    });
+                    parent.$("#sub-menu").empty().append(ul);
+                    //保存数据
+                    $.ajax({
+                        type: "POST",
+                        url: "{:url('Ajax/ajax_move_admin_menu', ['_ajax'=>1])}",
+                        data: {menu_id:idarr},
+                        dataType: 'json',
+                        success:function (res) {
+                            if(res.code == 1){
+                                console.log("修改完成");
+                            }
+                            return false;
+                        }
+                    });
+
+                }
+            });
+            //因为他们要拖动，所以尽量设置他们的文字不能选择。
+            $( ".sort-list" ).disableSelection();
+        }
+        //添加、取消成为栏目
+        $(".bodystyle").on('click','.e-jiahao2',function () {
+            if(is_founder !== 1){
+                return false;
+            }
+            var menu_id = $(this).data('menu_id');
+            var title = original_title = $.trim(all_menu_list[menu_id]['name']);
+            var controller_name = all_menu_list[menu_id]['controller'];
+            var action_name = all_menu_list[menu_id]['action'];
+            var param = all_menu_list[menu_id]['param'] === undefined ? '' :  all_menu_list[menu_id]['param'];
+            var icon = all_menu_list[menu_id]['icon'] ;
+            var url =  $(this).data('url');
+            if($(this).hasClass('e-jianhao')){  //原本为“已添加”，去除"我的菜单"，修改下面块为“未添加”模式，且显示
+                $.ajax({
+                    type: "POST",
+                    url: update_admin_menu_url,
+                    data: {title:title,controller_name:controller_name,action_name:action_name,menu_id:menu_id,icon:icon,param:param,type:2},
+                    dataType: 'json',
+                    success:function (res) {
+                        if(res.code == 1){
+                            if (0 <= $.inArray(menu_id, leftmenu_default_ids)) {
+                                //加号显示，减号隐藏
+                                $("#my_menu_jiahao_"+menu_id).show();
+                                $("#my_menu_jianhao_"+menu_id).hide();
+                                //获取取消菜单的html，包含自己和子元素
+                                var my_html = $("#my_menu_"+menu_id).prop('outerHTML');
+                                //删除"我的菜单"
+                                $("#my_menu_"+menu_id).remove();
+                                //去除左侧菜单
+                                parent.$("."+controller_name+'_'+action_name+'_'+menu_id).remove();
+                                //追加到导航菜单里
+                                if ($("#my_menu_2004")){
+                                    $("#my_menu_2004").before(my_html);
+                                }else{
+                                    $("#my_menu").append(my_html);
+                                }
+                            } else {
+                                $('#li_'+menu_id).show();
+                                //删除"我的菜单"
+                                $("#my_menu_"+menu_id).remove();
+                                //去除左侧菜单
+                                parent.$("."+controller_name+'_'+action_name+'_'+menu_id).remove();
+                            }
+                            module_visible(1);
+                        }
+                        return false;
+                    }
+                });
+            }else{              //原本为“未添加”，添加;添加到"我的菜单",修改下面块为"添加"模式，且隐藏
+                if (0 <= $.inArray(menu_id, leftmenu_default_ids)) {
+                    add_menu(menu_id,controller_name,action_name,param,icon,title,original_title);
+                } else {
+                    layer.prompt({
+                        title: '加入左侧菜单',
+                        id: 'layerid_1733984832',
+                        value: title,
+                        btn: ['确定'],
+                        shade: layer_shade,
+                        closeBtn: 3,
+                        success: function(layero, index) {
+                            var before_str = "<div style='margin: -8px 0px 10px 0px;font-weight: bold;'>原名称："+title+"</div>";
+                            $("#layerid_1733984832").prepend(before_str);
+                            $("#layerid_1733984832").find('input').attr('placeholder', '请填写简短的菜单名称');
+                            $("#layerid_1733984832").find('input').bind('keydown', function(event) {
+                                if (event.keyCode == 13) {
+                                    if ($(this).val()) {
+                                        title = $(this).val();
+                                    }
+                                    add_menu(menu_id,controller_name,action_name,param,icon,title,original_title);
+                                }
+                            });
+                        },
+                        btn2: function(index, layero){
+                            return false;
+                        }
+                    }, function(value, index) {
+                        if (value) {
+                            title = value;
+                        }
+                        add_menu(menu_id,controller_name,action_name,param,icon,title,original_title);
+                    });
+                }
+            }
+            return false;
+        })
+    });
+    //打开链接
+    function gourl2(obj,type){
+        var security_ask_open = {$security_ask_open|default=0};
+        var menu_id = $(obj).data('menu_id');
+        if (2004003 == menu_id) {
+            if (0 == security_ask_open) {
+                showConfirm('需要设置密保问题验证才可以继续', {btn:['去设置', '取消']}, function(){
+                    layer.closeAll();
+                    var iframes = layer.open({
+                        type: 2,
+                        title: '安全验证中心',
+                        fixed: true, //不固定
+                        shadeClose: false,
+                        shade: layer_shade,
+                        offset: 'auto',
+                        // maxmin: true, //开启最大化最小化按钮
+                        area: ['100%', '100%'],
+                        content: "{:url('Security/second_ask_init', ['gourl'=>url('Filemanager/index')])}",
+                        success: function(layero, index){
+
+                        }
+                    });
+                    layer.full(iframes);
+                });
+                return false;
+            }
+        }
+        var leftmenu = $(obj).data('leftmenu');
+        var href = $(obj).data('href');
+        $('.eycms_cont_left .sub-menu a', window.parent.document).removeClass('on');
+        $('.eycms_cont_left .sub-menu dl.jslist dt', window.parent.document).removeClass('on');
+
+        if (2 == type) {
+            $('#'+leftmenu+' dt', window.parent.document).addClass('on');
+        } else {
+            $('#'+leftmenu, window.parent.document).addClass('on');
+        }
+        window.location.href = href;
+    }
+    /*----------------------------- 加减左侧菜单 end -----------------------------*/
+</script>
+
+{include file="public/footer" /}

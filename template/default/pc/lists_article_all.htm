@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html lang="{$zan.global.lang_htmlmark}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta content="telephone=no" name="format-detection" />
+        <title>{$zan.field.seo_title}</title>
+        <meta name="keywords" content="{$zan.field.seo_keywords}" />
+        <meta name="description" content="{$zan.field.seo_description}" />
+        <link href="{zan:global name='web_ico' /}" rel="shortcut icon" type="image/x-icon" />
+        {zan:static file="skin/css/style.css" /}
+        {zan:static file="skin/css/iconfont.css" /}
+        {zan:static file="skin/css/jquery.bxslider.css" /}
+        {zan:static file="skin/js/jquery-3.7.0.min.js" /}
+        {zan:static file="skin/js/trade.js" /}
+        {zan:static file="skin/js/jquery.bxslider.js" /}
+    </head>
+    <body>
+        {zan:include file="header.htm" /}
+        {zan:include file="banner.htm" /}
+        <div id="main" class="w page_detail">
+            <div class="web_position clean s1">
+                <div class="position">{zan:position/}</div>
+            </div>
+            <div class="web_info_list"> 
+                {zan:list loop='9'}
+                <div class="item">
+                    <div class="img">
+                        <a href="{$field.arcurl}" title="{$field.title}">
+                            <img src="{$field.litpic}" alt="{$field.title}"/>
+                        </a>
+                    </div>
+                    <div class="info fr">
+                        <h3 class="title">
+                            <a href="{$field.arcurl}" title="{$field.title}">{$field.title}</a>
+                        </h3>
+                        <div class="time">
+                            <span>{$field.update_time|MyDate='M',###} {$field.update_time|MyDate='d',###}, {$field.update_time|MyDate='Y',###}</span>
+                        </div>
+                        <a href="{$field.arcurl}" title="{$field.title}" class="desc">{$field.short_content|html_msubstr=###,0,300,true}</a>
+                    </div>
+                    <a class="link" href="{$field.arcurl}" title="{$field.title}"></a>
+                    <div class="clear"></div>
+                </div>
+                {/zan:list}
+                <div class="clear"></div>
+                <div class="web_turn_page s1">
+                    {zan:if condition="!empty($__LIST__)"}
+                        {zan:pagelist listitem="index,pre,next,end,pageno" listsize="1" /}
+                    {zan:else/}
+                        {zan:lang name='sys52' /}
+                    {/zan:if}
+                </div>
+            </div>
+            <div class="rale_news">
+                <div class="news_title">
+                    <div class="title fl"> {zan:lang name='crumb54' /} </div>
+                    {zan:type typeid="10"}<a href="{$field.typeurl}" class="read_btn fr"> Read More&nbsp;<span>&gt;&gt;</span> </a>{/zan:type}
+                    <div class="clear"></div>
+                </div>
+                <div class="list"> 
+                    {zan:artlist titlelen='40' loop='4' infolen='50'}
+                    <div class="item"> 
+                        <a href="{$field.arcurl}" class="img middleImg" title="{$field.title}"> 
+                            <img src="{$field.litpic}" alt="{$field.title}" class="trans" /> 
+                        </a> 
+                        <a href="{$field.arcurl}" class="title trans" title="{$field.title}"> {$field.title} </a>
+                        <div class="time"> {$field.update_time|MyDate='M',###} .{$field.update_time|MyDate='d',###}.{$field.update_time|MyDate='Y',###} </div>
+                        <div class="brief"> {$field.seo_description|html_msubstr=###,0,80,true} </div>
+                    </div>
+                    {/zan:artlist}
+                </div>
+            </div>
+        </div>
+        {zan:include file="footer.htm" /}
+    </body>
+</html>

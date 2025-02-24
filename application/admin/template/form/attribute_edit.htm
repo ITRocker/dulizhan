@@ -1,0 +1,89 @@
+{include file="public/layout" /}
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;min-width: auto;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page min-hg-c-10" style="min-width:auto;">
+    <form class="form-horizontal" id="post_form">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit"><label for="attr_name"><em>*</em>字段名称</label></dt>
+                <dd class="opt"><input type="text" name="attr_name" value="{$field.attr_name}" id="attr_name" class="input-txt" autocomplete="off"></dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="tit"><label>字段类型</label></dt>
+                <dd class="opt">
+                    {volist name='$attrInputTypeArr' id='vo'}
+                        {eq name="$field.attr_input_type" value="$key"}
+                        <label class="w150 blocki"><input type="radio" value="{$key}" checked disabled>{$vo}</label>&nbsp;
+                        {/eq}
+                    {/volist}
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="tit"><label for="ac_name">框内提示语</label></dt>
+                <dd class="opt"><input type="text" name="placeholder" value="{$field.placeholder}" class="input-txt" autocomplete="off"></dd>
+            </dl>
+
+            {if condition="$show_lang == $admin_lang"}
+            <dl class="row">
+                <dt class="tit"><label>前台必填</label></dt>
+                <dd class="opt">
+                    <label class="curpoin">
+                        <input type="radio" name="required" value="1" {eq name='$field.required' value='1'} checked="checked" {/eq}/>是
+                    </label>
+                    &nbsp;&nbsp;
+                    <label class="curpoin">
+                        <input type="radio" name="required" value="0" {eq name='$field.required' value='0'} checked="checked" {/eq}/>否
+                    </label>
+                    <p class="notic">用于控制前台用户提交是否必填验证</p>
+                    <input type="hidden" name="required_old" value="{$field.required}"/>
+                </dd>
+            </dl>
+            {/if}
+
+            <div class="bottom-fixed">
+                <div class="bot3">
+                    <input type="hidden" name="auto_id" value="{$field.auto_id}">
+                    <input type="hidden" name="attr_id" value="{$field.attr_id}">
+                    <a href="JavaScript:void(0);" onclick="checkForm();" class="ncap-btn-big ncap-btn-green">保存</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    // 判断输入框是否为空
+    function checkForm() {
+        var attr_name = $('#attr_name').val();
+        if (attr_name == '') {
+            showErrorMsg('请填写字段名称');
+            $('#attr_name').focus();
+            return false;
+        }
+        layer_loading('正在处理');
+        $.ajax({
+            type: 'post',
+            url : "{:url('Form/attribute_edit', ['_ajax' => 1, 'showlang' => $show_lang])}",
+            data: $('#post_form').serialize(),
+            dataType: 'json',
+            success: function(res) {
+                var _parent = parent;
+                var attr_id = {$field.attr_id};
+                _parent.layer.closeAll();
+                if (1 === parseInt(res.code)) {
+                    _parent.showSuccessMsg(res.msg, 1500);
+                    _parent.$('#attr_name_' + attr_id).html(attr_name);
+                } else {
+                    showErrorMsg(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+</script>
+{include file="public/footer" /}

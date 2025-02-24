@@ -1,0 +1,318 @@
+{include file="public/layout" /}
+<script type="text/javascript" src="__SKIN__/js/clipboard.min.js"></script>
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;min-width:auto;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="system/left" /}
+{include file="language/bar" /}
+<div class="page min-hg-c-66" style="min-width:auto;margin-left:100px;">
+    <div class="flexigrid">
+        <div class="mDiv mb10">
+            <!-- <div class="ftitle">
+                <h3>标识列表</h3>
+                <h5>(共{$pager->totalRows}条数据)</h5>
+            </div> -->
+            <div class="ftitle_nav">
+                {volist name="$pack_type_arr" id="vo"}
+                <div class="fbutton">
+                    <a href="{:url('Language/pack_batch_save', ['type'=>$key])}">
+                        <div class="{eq name='$type' value='$key'} cur {/eq}">
+                            {$vo}
+                        </div>
+                    </a>
+                </div>
+                {/volist}
+            </div>
+            <form class="navbar-form form-inline" action="{:url('Language/pack_batch_save')}" method="get" onsubmit="layer_loading('正在处理');">
+                {$searchform.hidden|default=''}
+                <div class="sDiv">
+                    <div class="sDiv2">
+                        <input type="hidden" name="type" value="{$type|default=0}">
+                        <input type="text" size="30" name="keywords" value="{$Request.param.keywords}" class="qsbox" placeholder="标识搜索...">
+                        <input type="submit" class="btn" value="搜索">
+                        <i class="iconfont e-sousuo"></i>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {if condition="$type == 99"}
+        <div class="mDiv mb10">
+            <div class="ftitle">
+                {eq name="'Language@pack_add'|is_check_access" value="1"}
+                <div class="fbutton">
+                    <a href="javascript:void(0);" data-href="{:url('Language/pack_add')}" onclick="openFullframe(this, '添加语言变量', '854px', '80%');">
+                        <div class="add">
+                            <span><i class="layui-icon layui-icon-addition"></i>添加变量</span>
+                        </div>
+                    </a>
+                </div>
+                {/eq}
+            </div>
+        </div>
+        {/if}
+        <div class="bDiv" style="height: auto;">
+            <form id="post_form">
+                <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                    <table id="table-breakpoint">
+                        <thead class="hDiv">
+                            <tr>
+                                <th class="w100">
+                                    <div class="tl text-l10">变量</div>
+                                </th>
+                                <th style="min-width: 100px;">
+                                    <div class="text-l10">变量说明</div>
+                                </th>
+                                {volist name="$languageList" id="vo2"}
+                                <th style="min-width: 100px;">
+                                    <div class="text-l10">{$vo2.cn_title}</div>
+                                </th>
+                                {/volist}
+                                <th {if condition="$type == 99"} class="w120" {else/} class="w80" {/if}>
+                                    <div class="tc">操作</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_html">
+                        {empty name="$data['cn']['list']"}
+                            <tr>
+                                <td class="no-data" align="center" axis="col0" colspan="50">
+                                    <div class="no_row">
+                                        <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {else/}
+                            {foreach name="$data['cn']['list']" item="vo" key="k" }
+                            <tr>
+                                <td class="">
+                                    <div class="w100 tl text-l10">
+                                        {$vo.name}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="pl10 pr10 d-flex vertical-center">
+                                        <input type="text" value="{$vo.value|htmlentities=###}" class="input-txt wm100 nobd nobs" style="cursor: no-drop;" disabled="disabled" />
+                                    </div>
+                                </td>
+                                {volist name="$languageList" id="vo2"}
+                                {assign name="langData" value="$data[$vo2['mark']]['list'][$vo['name']]"}
+                                <td class="td_value_{$vo2['mark']}">
+                                    <div class="pl10 pr10 d-flex vertical-center">
+                                        <input type="hidden" name="auto_id[{$vo2['mark']}][]" value="{$langData['auto_id']}">
+                                        <input type="hidden" name="name[{$vo2['mark']}][]" value="{$langData['name']}">
+                                        <input type="text" name="value[{$vo2['mark']}][]" value="{$langData['value']|htmlentities=###}" class="input-txt wm100 {empty name="$langData['value']"} border-red {/empty}" data-cn_title="{$data[$vo2['mark']]['info']['cn_title']}" autocomplete="off"/>
+                                        <input type="hidden" name="old_value[{$vo2['mark']}][]" value="{$langData['value']|htmlentities=###}" class="input-txt wm100 {empty name="$langData['value']"} border-red {/empty}" data-cn_title="{$data[$vo2['mark']]['info']['cn_title']}" autocomplete="off"/>
+                                    </div>
+                                </td>
+                                {/volist}
+                                <td class="operation">
+                                    <div class="tc">
+                                        {eq name="'Language@pack_del'|is_check_access" value="1"}
+                                            {if condition="$type == 99"}
+                                            <a class="btn red" href="javascript:void(0);" data-url="{:url('Language/pack_del', ['type'=>$vo['type']])}" data-id="{$vo.pack_id}" onClick="delfun(this);">删除</a>
+                                            <i></i>
+                                            {/if}
+                                        {/eq}
+                                        <a href="javascript:void(0);" onclick="showtext('{$vo['name']}');" class="btn blue {$vo['name']}" data-clipboard-text="{{php} echo 'zan:lang name=\'';{/php}{$vo['name']}{php} echo '\' /';{/php}}">复制标签</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {/foreach}
+                        {/empty}
+                        </tbody>
+                    </table>
+                </div>
+                <input type="hidden" name="type" value="{$type|default=0}">
+            </form>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        {notempty name="$data['cn']['list']"}
+        <div class="tDiv mb50">
+            <div class="tDiv2">
+                {include file="public/page" /}
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        {/notempty}
+        <div class="bottom-fixed">
+            <div class="bot4">
+                {empty name="$is_eyou_authortoken"}
+                {if condition="!empty($doubao['doubao_api']) && !empty($isLanguage)"}
+                <a class="ncap-btn-big ncap-btn-green-b mr15" href="javascript:void(0);"  data-href="{:url('Language/help')}" onclick="openHelpframe(this, 'AI翻译', '400px', '100%', 'r');" title="AI翻译">AI翻译</a>
+                {/if}
+                {/empty}
+                <a href="JavaScript:void(0);" onclick="checkForm(true);" class="ncap-btn-big ncap-btn-green" id="submitBtn">保存</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        var jump = {$jump|default=0};
+        if (1 == jump && 1 == getCookie('pack_batch_save_jump_tips')) {
+            delCookie('pack_batch_save_jump_tips');
+            layer.msg("请填写【{$data[$vo2['mark']]['info']['cn_title']}】的标识数据", {time:2000});
+        }
+
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+
+        var mark = "{$mark|default=''}";
+        if (mark) {
+            $('.td_value_'+mark).find('input[name^="value['+mark+']"]').each(function(index, item){
+                if ($.trim($(item).val()) == '') {
+                    $(item).focus();
+                    return false;
+                }
+            });
+        } else {
+            $('#tbody_html').find('input[name^="value"]').each(function(index, item){
+                if ($.trim($(item).val()) == '') {
+                    $(item).focus();
+                    return false;
+                }
+            });
+        }
+
+        // 监控标识输入框，有内容不显示红色框，没内容才显示
+        $('#tbody_html').find('input[name^="value"]').keyup(function(){
+            var value = $(this).val();
+            if (value == '') {
+                $(this).addClass('border-red');
+            } else {
+                $(this).removeClass('border-red');
+            }
+        });
+    });
+
+    // 复制标签
+    function showtext(classname){
+        var clipboard1 = new Clipboard("."+classname);clipboard1.on("success", function(e) {layer.msg("复制成功");});clipboard1.on("error", function(e) {layer.msg("复制失败！请手动复制", {icon:5});}); 
+    } 
+
+    // 翻译参数数组
+    var isSubmit = false;
+    var translateArr = {};
+
+    // 判断输入框是否为空
+    function checkForm(isShow) {
+        var cn_title_arr = [];
+        var is_submit = true;
+        $('#tbody_html').find('input[name^="value"]').each(function(index, item){
+            if ($.trim($(item).val()) == '') {
+                var cn_title = $(item).data('cn_title');
+                if (-1 == $.inArray(cn_title, cn_title_arr)) {
+                    cn_title_arr.push(cn_title);
+                }
+                is_submit = false;
+            }
+        });
+
+        if (true === is_submit || !isShow) {
+            submit_handle(isShow);
+        } else {
+            var msg = '检测到'+cn_title_arr.join("、")+'未填写完整，未填写的字段在前端展示里将自动使用默认语言变量代替';
+            layer.confirm(msg, {
+                shade: layer_shade,
+                area: ['480px', '190px'],
+                move: false,
+                title: '温馨提示',
+                btnAlign:'r',
+                closeBtn: 3,
+                btn: ['继续填写','确定'], //按钮
+                success: function () {
+                    $(".layui-layer-content").css('text-align', 'left');
+                }
+            }, function (index, layero) {
+                layer.close(index);
+            }, function (index) {
+                layer.close(index);
+                submit_handle(isShow);
+            });
+        }
+    }
+
+    function submit_handle(isShow) {
+        if (isShow) layer_loading('正在处理');
+        $.ajax({
+            type : 'post',
+            url : "{:url('Language/pack_batch_save', ['_ajax'=>1])}",
+            data : $('#post_form').serialize(),
+            dataType : 'json',
+            success : function(res){
+                if (isShow) {
+                    layer.closeAll();
+                    if(res.code == 1){
+                        layer.msg(res.msg, {shade: layer_shade, time: 1000}, function(){
+                            var originalUrl = window.location.href;
+                            urlWithoutParam = removeURLParameter(originalUrl, "mark");
+                            urlWithoutParam = removeURLParameter(urlWithoutParam, "jump");
+                            window.location.href = urlWithoutParam;
+                        });
+                    }else{
+                        showErrorMsg(res.msg);
+                        if (res.data.mark) {
+                            $('.td_value_'+res.data.mark).find('input[name^="value['+res.data.mark+']"]').each(function(index, item){
+                                if (index == res.data.empty_value_key) {
+                                    $(item).focus();
+                                    return false;
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    isSubmit = true;
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+  
+    function delfun(obj){
+        layer.confirm('<font color="#ff0000">将同步删除全部语言的该变量</font>，确认删除？', {
+            shade: layer_shade,
+            area: ['480px', '190px'],
+            move: false,
+            title: '提示',
+            btnAlign:'r',
+            closeBtn: 3,
+            btn: ['确定', '取消'] ,//按钮
+            success: function () {
+                $(".layui-layer-content").css('text-align', 'left');
+            }
+        }, function(){
+            layer_loading('正在处理');
+            // 确定
+            $.ajax({
+                type : 'post',
+                url : $(obj).attr('data-url'),
+                data : {del_id:$(obj).attr('data-id'), _ajax:1},
+                dataType : 'json',
+                success : function(res){
+                    layer.closeAll();
+                    if(res.code == 1){
+                        layer.msg(res.msg, {shade: layer_shade, time: 1000}, function(){
+                            window.location.reload();
+                        });
+                    }else{
+                        showErrorAlert(res.msg);
+                    }
+                },
+                error: function(e){
+                    layer.closeAll();
+                    showErrorAlert(e.responseText);
+                }
+            })
+        }, function(index){
+            layer.close(index);
+        });
+        return false;
+    }  
+</script>
+{include file="public/footer" /}

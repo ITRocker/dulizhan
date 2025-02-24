@@ -1,0 +1,83 @@
+<style type="text/css">
+    .red_imp{
+        color: red!important;
+    }
+</style>
+<div id="link_arctype">
+    <div class="flexigrid" style="min-height: 600px;">
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th abbr="article_title" axis="col3" class="">
+                                <div class="text-l10">页面名称</div>
+                            </th>
+                            <th axis="col1" class="w100">
+                                <div class="tc">操作</div>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table style="width: 100%;">
+                    <tbody>
+                    {empty name="$single_list.list"}
+                        <tr>
+                            <td class="no-data" align="center" axis="col0" colspan="50">
+                                <div class="no_row">
+                                    <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {else/}
+                        {foreach name="$single_list.list" item="vo" key="k" }
+                        <tr>
+                            <td class="" style="width: 100%;">
+                                <div class="text-l10">{$vo.typename}</div>
+                            </td>
+                            <td class="operation">
+                                <div class="w60 tc">
+                                    <a href="javascript:void(0);" data-hostid="2" data-typeurl="{$vo.typeurl}" data-typeid="{$vo.typeid}" data-typename="{$vo.typename}" id="a_title_btn_{$vo.typeid}" onclick="selectArchives(this);" class="btn blue select_btn">选择</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    {/empty}
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        // $('#a_arctype_btn_{$ad_link_id}').click();
+    });
+
+    function selectArchives(obj) {
+        $('#link_arctype a.select_btn').html('选择').removeClass('red_imp').addClass('blue');
+        $(obj).html('已选').removeClass('blue').addClass('red_imp');
+
+        // $('#host_id').val($(obj).attr('data-hostid'));
+        // $('#type_id').val($(obj).attr('data-typeid'));
+        // $('#type_url').val($(obj).attr('data-typeurl'));
+        // $('#type_name').val($(obj).attr('data-typename'));
+
+        var linkJsonData = [];
+        linkJsonData.host_id = $(obj).attr('data-hostid');
+        linkJsonData.type_id = $(obj).attr('data-typeid');
+        linkJsonData.type_url = $(obj).attr('data-typeurl');
+        linkJsonData.type_name = $(obj).attr('data-typename');
+        parent.loadSelectLink(linkJsonData);
+
+        // $('#link_id').val($(obj).attr('data-typeid'));
+        // $('#host_id').val({$ad_host_id|default=0});
+        // $('#link_names').val($(obj).attr('data-typename'));
+        // $('#link_jsondata').val($('#linkarctype_jsondata').val());
+    }
+</script>

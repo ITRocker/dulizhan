@@ -1,0 +1,176 @@
+{include file="public/layout" /}
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="form/left" /}
+<div class="fixed-bar nobg" style="width: auto;margin-left: 100px;">
+    <div class="item-title mb10">
+        <div class="subject">
+            {include file="public/callback_page_1" /}<!-- 返回箭头 -->
+            <h3>表单设置</h3>
+            <h5></h5>
+        </div>
+        {include file="archives/lang_switch" /}
+    </div>
+</div>
+
+<div class="page min-hg-c-10" style="min-width:auto;margin-left:100px;">
+    <form class="form-horizontal" id="post_form" action="{:url('Form/field_edit')}" method="post" onsubmit="return false;">
+        <input type="hidden" name="form_id" value="{$info.form_id}">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label for="form_name">表单ID</label>
+                </dt>
+                <dd class="opt" style="width: auto;">
+                    {$info.form_id}
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="form_name"><em>*</em>表单名称</label>
+                </dt>
+                <dd class="opt" style="width: auto;">
+                    <input type="text" name="form_name" value="{$info.form_name}" id="form_name" class="w200" autocomplete="off">
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="intro">表单描述</label>
+                </dt>
+                <dd class="opt" style="width: auto;">
+                    <textarea rows="5" cols="60" id="intro" name="intro" style="height: 60px;" class="w600 ui-input">{$info.intro}</textarea>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit"><label>表单字段</label></dt>
+                <dd class="opt" style="width: auto;">
+                    <div class="flexigrid mt0">
+                        <div class="bDiv" style="height: auto;">
+                            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                                <table id="table-breakpoint">
+                                    <thead class="hDiv">
+                                        <tr>
+                                            <th class="w60"> <div class="tc">ID</div> </th>
+                                            <th class="w200"> <div class="text-l10">字段名称</div> </th>
+                                            <th class="w400"> <div class="text-l10">框内提示语</div> </th>
+                                            <th class="w120"> <div class="tc">字段类型</div> </th>
+                                            <th class="w100"> <div class="tc">前台必填</div> </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {volist name="$formAttr" id="attr"}
+                                        <tr>
+                                            <input type="hidden" name="auto_id[]" value="{$attr.auto_id}">
+                                            <td>
+                                                <div class="tc">{$attr.attr_id}</div>
+                                            </td>
+                                            <td>
+                                                <div class="pl10 pr10 d-flex vertical-center">
+                                                    <input type="text" name="attr_name[{$attr.auto_id}]" value="{$attr.attr_name}" class="wm100 input_showhide" placeholder="字段名称" autocomplete="off">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="pl10 pr10 d-flex vertical-center">
+                                                    <input type="text" name="placeholder[{$attr.auto_id}]" value="{$attr.placeholder}" class="wm100 input_showhide" placeholder="框内提示语" autocomplete="off">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="w120 tc">{eq name="$attr.attr_input_type" value="2"}多行文本{else/}单行文本{/eq}</div>
+                                            </td>
+                                            <td>
+                                                <div class="tc">
+                                                    <input type="checkbox" name="required[{$attr.auto_id}]" value="1" {eq name="$attr.required" value="1"} checked {/eq}>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {/volist}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="iDiv" style="display: none;"></div>
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+
+            {if condition="$show_lang == $admin_lang"}
+            <dl class="row none">
+                <dt class="tit"><label>开启验证码</label></dt>
+                <dd class="opt" style="width: auto;">
+                    <label class="curpoin">
+                        <input type="radio" name="open_validate" value="1" {eq name="$info.open_validate" value="1"} checked="checked" {/eq}/>是
+                    </label>
+                    &nbsp;&nbsp;
+                    <label class="curpoin">
+                        <input type="radio" name="open_validate" value="0" {eq name="$info.open_validate" value="0"} checked="checked" {/eq}/>否
+                    </label>
+                    <input type="hidden" name="open_validate_old" value="{$info.open_validate}"/>
+                </dd>
+            </dl>
+            {/if}
+
+            <div class="bottom-fixed">
+                <div class="bot4">
+                    {empty name="$is_eyou_authortoken"}
+                    {if condition="$show_lang == $admin_lang && !empty($doubao['doubao_api']) && !empty($isLanguage)"}
+                    <a class="ncap-btn-big ncap-btn-green-b mr15" href="javascript:void(0);" data-href="{:url('Form/help', ['form_id' => $info.form_id])}" onclick="openHelpframe(this, 'AI翻译', '400px', '100%', 'r');" title="AI翻译">AI翻译</a>
+                    {/if}
+                    {/empty}
+                    <a href="JavaScript:void(0);" onclick="checkForm(true);" class="ncap-btn-big ncap-btn-green">保存</a>
+                    <!-- <a href="JavaScript:void(0);" onclick="delForm();" class="ncap-btn-big ncap-btn-red ml20">删除</a> -->
+                    {include file="public/callback_page_2" /}<!-- 返回按钮 -->
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('input[name=form_name]').focus();
+    });
+
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) checkForm();
+    });
+
+    // 翻译参数数组
+    var isSubmit = false;
+    var translateArr = {};
+
+    // 判断输入框是否为空
+    function checkForm(isShow) {
+        if ($('#form_name').val() == '') {
+            showErrorMsg('请填写表单名称');
+            $('#form_name').focus();
+            return false;
+        }
+        if (isShow) layer_loading('正在处理');
+        $.ajax({
+            type: 'post',
+            url : "{:url('Form/field_edit', ['_ajax' => 1, 'showlang' => $show_lang])}",
+            data: $('#post_form').serialize(),
+            dataType: 'json',
+            success: function(res) {
+                if (isShow) {
+                    layer.closeAll();
+                    if (1 === parseInt(res.code)) {
+                        showSuccessMsg(res.msg, 1500, function() {
+                            window.location.reload();
+                        });
+                    } else {
+                        showErrorMsg(res.msg);
+                    }
+                } else {
+                    isSubmit = true;
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+</script>
+{include file="public/footer" /}

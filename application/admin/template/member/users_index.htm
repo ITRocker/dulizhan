@@ -1,0 +1,366 @@
+{include file="public/layout" /}
+
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="member/left" /}
+<div class="page min-hg-c-10" style="min-width:auto;margin-left:100px;">
+    <div class="flexigrid">
+        <div class="mDiv pt0">
+            <div class="ftitle">
+                {eq name="'Member@users_batch_add'|is_check_access" value="1"}
+                    <div class="fbutton">
+                        <a href="javascript:void(0);" data-href="{:url('Member/users_batch_add')}" onclick="openFullframe(this, '添加','600px','450px');">
+                            <div class="add" title="添加">
+                                <span><i class="layui-icon layui-icon-addition"></i>添加</span>
+                            </div>
+                        </a>
+                    </div>
+                {/eq}
+            </div>
+        </div>
+        <div class="header-bar mt15 mb20">
+            <div class="more">
+                <div class="search">
+                    <div class="content">
+                        <form id="postForm" action="{:url('Member/users_index')}" method="get" onsubmit="layer_loading('正在处理');" style="display: unset;">
+                            {$searchform.hidden|default=''}
+
+                            <div class="ey-form-item"><label class="users-form-item-label">关键词：</label>
+                                <div class="users-form-item-content">
+                                    <div class="users-select">
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div class="sDiv2">
+                                                <input type="text" size="50" name="keywords" value="{$Request.param.keywords}" class="qsbox w220" placeholder="请输入邮箱/昵称">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="ey-form-item"><label class="users-form-item-label">注册时间：</label>
+                                <div class="users-form-item-content">
+                                    <div class="users-select">
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div class="sDiv2">
+                                                <input type="text" name="add_time" id="eYLaydateTimeLinkage" data-max_date="{php}echo date('Y-m-d');{/php}" autocomplete="off"  class="qsbox" placeholder="请选择" lay-key="1" style="width: 220px;" value="{$Request.param.add_time}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        <div class="ey-form-item" style="margin-left: 20px;">
+                            <div class="users-form-item-content">
+                                <span class="bt-xin" onclick="OrderQuery();">查询</span>
+                                <span class="bt-xin-no" onclick="OrderQuery('reset');">重置</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flexigrid">
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th class="sign w40" axis="col0">
+                            <div class="tc"><input type="checkbox" autocomplete="off" class="checkAll"></div>
+                        </th>
+                        <!-- <th abbr="article_title" axis="col3" class="w40">
+                            <div class="tc">ID</div>
+                        </th> -->
+                        <th abbr="" axis="col3" class="w40">
+                            <div class="tc">头像</div>
+                        </th>
+                        <th abbr="" axis="col4" class="w300">
+                            <div class="tl text-l10">邮箱</div>
+                        </th>
+                        <th axis="">
+                            <div class="tl text-l10">昵称</div>
+                        </th>
+                        <th abbr="" axis="col4" class="w150">
+                            <div class="tc">注册日期</div>
+                        </th>
+                        <th axis="" class="w120">
+                            <div class="tc">操作</div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table style="width: 100%">
+                    <tbody>
+                    {empty name="list"}
+                        <div class="no-data">
+                            <div class="no_row">
+                                <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                            </div>
+                        </div>
+                    {else/}
+                        {foreach name="list" item="vo" key="k" }
+                        <tr>
+                            <td class="sign">
+                                <div class="w40 tc">
+                                    <input type="checkbox" autocomplete="off" name="ids[]" value="{$vo.users_id}">
+                                </div>
+                            </td>
+                            <!-- <td class="sort">
+                                <div class="w40 tc">{$vo.users_id}</div>
+                            </td> -->
+                            <td class="">
+                                <div class="tc w40">
+                                    <a class="pic_box" style="width: 40px;height: 40px;" href="{:url('Member/users_edit',array('id'=>$vo['users_id']))}">
+                                        <img id="img_head_pic" src="{$vo.head_pic|get_head_pic=###,false,$vo['sex']}" />
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="">
+                                <div class="text-l10 w300">
+                                    <a href="{:url('Member/users_edit',array('id'=>$vo['users_id']))}">{$vo.email}</a>
+                                </div>
+                            </td>
+                            <td style="width: 100%">
+                                <div class="text-l10 w300">
+                                    <p style="margin-top: -5px;">
+                                    {eq name="'Member@users_edit'|is_check_access" value="1"}
+                                        <a href="{:url('Member/users_edit',array('id'=>$vo['users_id']))}">{$vo.nickname|default=$vo.username}</a>
+                                    {else /}
+                                        {$vo.nickname|default=$vo.username}
+                                    {/eq}
+                                    </p>
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <div class="w150 tc">
+                                    {$vo.reg_time|MyDate='Y-m-d H:i:s',###}
+                                </div>
+                            </td>
+                            <td class="operation">
+                                <div class="w120 tc">
+                                    {eq name="'Member@users_edit'|is_check_access" value="1"}
+                                    <a href="{:url('Member/users_edit',array('id'=>$vo['users_id']))}" class="btn blue">编辑</a>
+                                    {/eq}
+                                    {eq name="'Member@users_del'|is_check_access" value="1"}
+										<i></i>
+                                        <a class="btn red"  href="javascript:void(0);" data-url="{:url('Member/users_del')}" data-id="{$vo.users_id}" data-admin_id="{$vo.admin_id}" data-username="{$vo.username}" onclick="usersdel(this);">删除</a>
+                                    {/eq}
+                                </div>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    {/empty}
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        {notempty name="list"}
+        <div class="footer-oper">
+            {eq name="'Member@users_del'|is_check_access" value="1"}
+            <span class="ml15">
+                <input type="checkbox" autocomplete="off" class="checkAll">
+            </span>
+            <div class="nav-dropup">
+                <a onclick="batch_del(this, 'ids');" data-url="{:url('Member/users_del')}" class="layui-btn layui-btn-primary">
+                    <div class="add">
+                        <span>批量删除</span>
+                    </div>
+                </a>
+            </div>
+            {/eq}
+			{include file="public/page" /}
+            <div style="clear:both"></div>
+        </div>
+        {/notempty}
+	</div>
+</div>
+<script>
+    $(function(){
+        $('input[name*=ids]').click(function(){
+            if ($('input[name*=ids]').length == $('input[name*=ids]:checked').length) {
+                $('.checkAll').prop('checked','checked');
+            } else {
+                $('.checkAll').prop('checked', false);
+            }
+        });
+        $('input[type=checkbox].checkAll').click(function(){
+            $('input[type=checkbox]').prop('checked',this.checked);
+        });
+    });
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function(){
+            location.href = location.href;
+        });
+    });
+
+    // 删除
+    function usersdel(obj){
+        var admin_id = $(obj).data('admin_id');
+        if (0 < admin_id) {
+            var title = "系统管理员前台ID，删除不可恢复？<br/>包含该会员数据有(订单、询盘等)";
+        } else {
+            var title = "是否删除该会员？删除后不可找回。<br/>包含该会员数据有(订单、询盘等)";
+        }
+        layer.confirm(title, {
+            shade: layer_shade,
+            area: ['480px', '200px'],
+            move: false,
+            title: '提示',//$(obj).attr('data-username'),
+            btnAlign:'r',
+            closeBtn: 3,
+            btn: ['确定','取消'], //按钮
+            success: function () {
+                  $(".layui-layer-content").css('text-align', 'left');
+              }
+        }, function(){
+            layer_loading('正在处理');
+            // 确定
+            $.ajax({
+                type : 'post',
+                url : $(obj).attr('data-url'),
+                data : {del_id:$(obj).attr('data-id'), _ajax:1},
+                dataType : 'json',
+                success : function(data){
+                    layer.closeAll();
+                    if(data.code == 1){
+                        layer.msg(data.msg, {icon: 1});
+                        window.location.reload();
+                    }else{
+                        layer.alert(data.msg, {icon: 2, title:false});
+                    }
+                }
+            })
+        }, function(index){
+            layer.close(index);
+        });
+        return false;
+    }
+
+    /**
+     * 批量删除提交
+     */
+    function batch_del(obj, name) {
+        var a = [];
+        $('input[name^='+name+']').each(function(i,o){
+            if($(o).is(':checked')){
+                a.push($(o).val());
+            }
+        })
+        if(a.length == 0){
+            layer.alert('请至少选择一项', {
+                shade: layer_shade,
+                area: ['480px', '190px'],
+                move: false,
+                title: '提示',
+                btnAlign:'r',
+                closeBtn: 3,
+                success: function () {
+                      $(".layui-layer-content").css('text-align', 'left');
+                  }
+            });
+            return;
+        }
+        // 删除按钮
+        layer.confirm('确认批量彻底删除？<br/>包含该会员数据有(订单、询盘等)', {
+            shade: layer_shade,
+            area: ['480px', '190px'],
+            move: false,
+            title: '提示',
+            btnAlign:'r',
+            closeBtn: 3,
+            btn: ['确定', '取消'] ,//按钮
+            success: function () {
+                  $(".layui-layer-content").css('text-align', 'left');
+              }
+        }, function () {
+            layer_loading('正在处理');
+            $.ajax({
+                type: "POST",
+                url: $(obj).attr('data-url'),
+                data: {del_id:a, _ajax:1},
+                dataType: 'json',
+                success: function (data) {
+                    layer.closeAll();
+                    if(data.code == 1){
+                        layer.msg(data.msg, {icon: 1});
+                        window.location.reload();
+                    }else{
+                        layer.alert(data.msg, {icon: 2, title:false});
+                    }
+                },
+                error:function(e){
+                    layer.closeAll();
+                    layer.alert(e.responseText, {icon: 2, title:false});
+                }
+            });
+        }, function (index) {
+            layer.closeAll(index);
+        });
+    }
+    
+    $(document).keydown(function(event){
+        if(event.keyCode ==13){
+            OrderQuery();
+        }
+    });
+
+    // 订单查询
+    function OrderQuery(isReset) {
+        if (isReset && 'reset' == isReset) {
+            window.location.href = "{:url('Member/users_index')}";
+        } else {
+            $('#postForm').submit();
+        }
+    }
+
+    function changeIsActivation(table,id_name,id_value,field,obj) {
+        var is_activation = $(obj).data('value');
+        console.log(is_activation)
+        var title = '';
+        if (0 == is_activation) {
+            title = '确认关闭激活吗?关闭后前台该会员将无法登录!';
+        } else if (1 == is_activation) {
+            title = '确认激活吗?激活后会员将可以前台登录';
+        }
+
+        // 删除按钮
+        layer.confirm(title, {
+            shade: layer_shade,
+            area: ['480px', '190px'],
+            move: false,
+            title: '提示',
+            btnAlign:'r',
+            closeBtn: 3,
+            btn: ['确定', '取消'] ,//按钮
+            success: function () {
+                $(".layui-layer-content").css('text-align', 'left');
+            }
+        }, function () {
+            changeTableVal(table,id_name,id_value,field,obj);
+            layer.closeAll();
+        }, function (index) {
+            layer.closeAll();
+        });
+
+    }
+    
+</script>
+<!-- 日期联动选择js文件 start -->
+<script type="text/javascript" src="__PUBLIC__/static/common/js/ey_laydate_time_linkage.js?v={$version}"></script>
+<!-- 日期联动选择js文件 end -->
+{include file="public/footer" /}

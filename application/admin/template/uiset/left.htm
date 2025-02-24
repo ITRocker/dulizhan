@@ -1,0 +1,23 @@
+<div class="sidebar-second ">
+    <ul>
+        <li class="sidebar-second-title">网站设置</li>
+        <li>
+            <a {if condition="'Uiset' == $Think.const.CONTROLLER_NAME"}class="active"{/if} href='{:custom_url("Uiset/template_list")}'>网站装修</a>
+        </li>
+        <li>
+            <a {if condition="'Navigation' == $Think.const.CONTROLLER_NAME"}class="active"{/if} href='{:custom_url("Navigation/index", ["position_id"=>1])}'>导航管理</a>
+        </li>
+        <li>
+            <a {if condition="'AdPosition' == $Think.const.CONTROLLER_NAME"}class="active"{/if} href='{:custom_url("AdPosition/index")}'>广告管理</a>
+        </li>
+        <li>
+            <a {if condition="'Links' == $Think.const.CONTROLLER_NAME"}class="active"{/if} href='{:custom_url("Links/index")}'>友情链接</a>
+        </li>
+        <li>
+            <a {if condition="'Seo' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['seo'])"}class="active"{/if} href='{:custom_url("Seo/seo")}'>SEO管理</a>
+        </li>
+        <li>
+            <a {if condition="'Seo' == $Think.const.CONTROLLER_NAME and in_array($Think.const.ACTION_NAME, ['tkd'])"}class="active"{/if} href='{:url("Seo/tkd")}'>TKD管理</a>
+        </li>
+    </ul>
+</div>

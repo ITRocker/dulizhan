@@ -1,0 +1,163 @@
+{include file="public/layout" /}
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="member/left" /}
+<div class="fixed-bar mb10" style="min-width:auto;margin-left:100px;">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            <li class="current">
+                <a href="{:showlang_url('Member/attr_index')}">
+                    <span>注册表单</span>
+                </a>
+            </li>
+        </ul>
+        {include file="archives/lang_switch" /}
+    </div>
+</div>
+<div class="page min-hg-c-110" style="min-width:auto;margin-left:100px;">
+    <form class="form-horizontal" id="post_form" action="{:showlang_url('Member/attr_index')}" method="post" onsubmit="return false;">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label for="form_name"><em>*</em>注册表单</label>
+                </dt>
+                <dd class="opt" style="width: auto;">
+                    <div class="flexigrid mt0">
+                        <div class="bDiv" style="height: auto;">
+                            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                                <table id="table-breakpoint">
+                                    <thead class="hDiv">
+                                        <tr>
+                                            <th class="w60">
+                                                <div class="tc">ID</div>
+                                            </th>
+                                            <th class="w300">
+                                                <div class="text-l10">字段名称</div>
+                                            </th>
+                                            <th class="w120">
+                                                <div class="tc">字段类型</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody_html">
+                                        {foreach name="list" item="vo" key="k" }
+                                        <tr>
+                                            <td>
+                                                <div class="tc">{$k+1}</div>
+                                            </td>
+                                            <td>
+                                                <div class="pl10 pr10 d-flex vertical-center">
+                                                    <input type="hidden" name="auto_id[]" value="{$vo.auto_id}">
+                                                    <input type="hidden" name="pack_id[]" value="{$vo.pack_id}">
+                                                    <input type="text" name="value[]" value="{$vo.value}" class="wm100 input_showhide" autocomplete="off">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="w120 tc">
+                                                    {$vo.dtypetitle}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="iDiv" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <span class="err"></span>
+                </dd>
+            </dl>
+            <div class="bottom-fixed">
+                <div class="bot4">
+                    <a href="JavaScript:void(0);" onclick="checkForm(true);" class="ncap-btn-big ncap-btn-green" id="submitBtn">保存</a>
+                    {include file="public/callback_page_2" /}<!-- 返回按钮 -->
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+
+        $('#tbody_html').find('input[name^="value"]').each(function(index, item){
+            if ($.trim($(item).val()) == '') {
+                $(item).focus();
+                return false;
+            }
+        });
+
+        // 监控标识输入框，有内容不显示红色框，没内容才显示
+        $('#tbody_html').find('input[name^="value"]').keyup(function(){
+            var value = $(this).val();
+            if (value == '') {
+                $(this).addClass('border-red');
+            } else {
+                $(this).removeClass('border-red');
+            }
+        });
+    });
+
+    // 翻译参数数组
+    var isSubmit = false;
+    var translateArr = {};
+
+    // 判断输入框是否为空
+    function checkForm(isShow) {
+        var is_submit = true;
+        $('#tbody_html').find('input[name^="value"]').each(function(index, item){
+            if ($.trim($(item).val()) == '') {
+                $(item).addClass('border-red');
+                is_submit = false;
+            }
+        });
+
+        if (!is_submit) {
+            showErrorMsg('字段名称必填');
+        } else {
+            submit_handle(isShow);
+        }
+    }
+
+    function submit_handle(isShow) {
+        if (isShow) layer_loading('正在处理');
+        $.ajax({
+            type : 'post',
+            url : "{:showlang_url('Member/attr_batch_save', ['_ajax'=>1])}",
+            data : $('#post_form').serialize(),
+            dataType : 'json',
+            success : function(res){
+                if (isShow) {
+                    layer.closeAll();
+                    if(res.code == 1){
+                        layer.msg(res.msg, {shade: layer_shade, time: 1000}, function(){
+                            window.location.reload();
+                        });
+                    }else{
+                        showErrorMsg(res.msg);
+                        /*$('#tbody_html').find('input[name^="value"]').each(function(index, item){
+                            if (index == res.data.empty_value_key) {
+                                $(item).focus();
+                                $(item).addClass('border-red');
+                                return false;
+                            }
+                        });*/
+                    }
+                } else {
+                    isSubmit = true;
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+</script>
+
+{include file="public/footer" /}

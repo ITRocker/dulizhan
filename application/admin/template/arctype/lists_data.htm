@@ -1,0 +1,133 @@
+<div class="bDiv" style="height: auto;">
+    <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+        <table class="sort-list" style="width: 100%"  id="arctype_table" >
+            <thead class="hDiv">
+                <tr>
+                    {if condition="$show_lang == $admin_lang"}
+                    <th class="sign w40">
+                        <div class="tc"><input type="checkbox" onclick="javascript:$('input[name*=ids]').prop('checked', this.checked);"></div>
+                    </th>
+                    {/if}
+                    <th axis="col2" class="w60"> <div class="tc">ID</div> </th>
+                    {volist name="$showLangList" id="lang"}
+                    <th>
+                        <div style="padding-left: 10px;">
+                            {if condition="!empty($tree['cookied_treeclicked'])"}
+                            <img src="__SKIN__/images/tv-collapsable-last.gif" id="all_treeclicked" title="关闭所有子菜单" style="float: none;" data-status="open" onClick="treeClicked(this, 'all', 0);">
+                            {else /}
+                            <img src="__SKIN__/images/tv-expandable.gif" id="all_treeclicked" title="展开所有子菜单" style="float: none;" data-status="close" onClick="treeClicked(this, 'all', 0);">
+                            {/if}
+                            {$lang.title}
+                        </div>
+                    </th>
+                    {/volist}
+                    <th class="w60"> <div class="tc">显示</div> </th>
+                    {if condition="$show_lang == $admin_lang"}
+                    <th class="w280"> <div class="tc">操作</div> </th>
+                    {/if}
+                    <th class="w60"> <div class="tc">排序</div> </th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {empty name="arctype_list"}
+                <tr>
+                    <td class="no-data" align="center" axis="col0" colspan="50">
+                        <div class="no_row">
+                            <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                        </div>
+                    </td>
+                </tr>
+            {else/}
+                {foreach name="arctype_list[$show_lang]" item="vo" key="k" }
+                <tr nctype="0" {if condition="!in_array($vo.parent_id, $tree.cookied_treeclicked) && 0 < $vo.parent_id "} style="display: none;" {/if} class="parent_id_{$vo['parent_id']}" data-level="{$vo['level']}" data-id="{$vo['id']}">
+                    {if condition="$show_lang == $admin_lang"}
+                    <td class="sign">
+                        <div class="w40 tc"><input type="checkbox" class="tidArr" name="ids[]" value="{$vo.id}"></div>
+                    </td>
+                    {/if}
+                    <td class="sort">
+                        <div class="w60 tc">
+                            {$vo.id}
+                        </div>
+                    </td>
+                    {volist name="$showLangList" id="lang"}
+                    <td >
+                        <div style="text-align: left;padding-left: 10px;">
+                            {gt name='vo.level' value='0'}
+                            {php}
+                            if (1 == $vo['level']) {
+                                echo '<span class="w40x"></span>';
+                            } else if ($vo['level'] >= 2) {
+                                echo '<span class="w40x w40xc'.$vo['level'].'" style="margin-right:'.(($vo['level'] - 1) * 25).'px;"></span>';
+                            }
+                            {/php}
+                            {/gt}
+                            {gt name="vo.has_children" value="0"}
+                            <img src="{in name='$vo.id' value='$tree.cookied_treeclicked'}__SKIN__/images/tv-collapsable-last.gif{else /}__SKIN__/images/tv-expandable.gif{/in}" style="float: none;" fieldid="2" status="open" nc_type="flex" onclick="treeClicked(this, {$vo['id']}, 0);" class="has_children childrenImg" data-level="{$vo['level']}" data-id="{$vo['id']}">
+                            {else /}
+                            <img src="__SKIN__/images/tv-collapsable-last.gif" style="float: none;" fieldid="2" status="open" nc_type="flex" class="childrenImg">
+                            {/gt}
+                            {eq name="'Arctype@add'|is_check_access" value="1"}
+                            <input class="input-nb" type="text" onchange="changeTableVal('arctype', 'auto_id', '{$arctype_list[$lang.mark][$vo.id][\'auto_id\']}', 'typename', this);" value="{$arctype_list[$lang.mark][$vo.id]['typename']}"/>
+                            {else /}
+                            {$arctype_list[$lang.mark][$vo.id]['typename']}
+                            {/eq}
+                        </div>
+                    </td>
+                    {/volist}
+                    <td class="">
+                        <div class="w60 tc">
+                        {if condition='$vo.is_hidden eq 1'}
+                            <span class="no" {eq name="$Think.const.CONTROLLER_NAME.'@edit'|is_check_access" value="1"}onClick="changeTableVal('arctype','id','{$vo.id}','is_hidden',this);"{/eq} ><i class="fa fa-ban"></i>否</span>
+                        {else /}
+                            <span class="yes" {eq name="$Think.const.CONTROLLER_NAME.'@edit'|is_check_access" value="1"}onClick="changeTableVal('arctype','id','{$vo.id}','is_hidden',this);"{/eq} ><i class="fa fa-check-circle"></i>是</span>
+                        {/if}
+                        </div>
+                    </td>
+                    {if condition="$show_lang == $admin_lang"}
+                    <td>
+                        <div class="w280 tc">
+                            {if condition="$vo['current_channel'] == 6" /}
+                            <a href="{$vo.id|getSingleContentEditUrl=###}" class="btn blue">内容</a>
+                            {elseif condition="$vo['current_channel'] == 2"}
+                            <a href="{:url('ShopProduct/index', ['typeid'=>$vo['id']])}" class="btn blue">内容</a>
+                            {else /}
+                            <a href="{:url($channeltype_list[$vo['current_channel']]['ctl_name'].'/index', ['typeid'=>$vo['id']])}" class="btn blue">内容</a>
+                            {/if}
+                            <i></i>
+                            <a href="{:url('Arctype/edit', ['id' => $vo['id'], 'channeltype' => $vo['channeltype']])}" class="btn blue">编辑</a>
+                            {eq name="'Arctype@add'|is_check_access" value="1"}
+                            <i></i>
+                            {if condition="$vo['grade'] < ($arctype_max_level - 1)"}
+                            <a data-href="{:url('Arctype/lists_save', ['auto_id'=>$vo['auto_id']])}" onclick="openFullframe(this, '添加分类', '800px', '600px');" class="btn blue">增加子分类</a>
+                            {else /}
+                            <a class="btn grey" title="不支持增加四级分类">不支持增加</a>
+                            {/if}
+                            {/eq}
+                            {eq name="'ShopProduct@arctype_del'|is_check_access" value="1"}
+                            <i></i>
+                            <a class="btn red" href="javascript:void(0);" onclick="arctypeDel({$vo.id}, {$vo.current_channel});">删除</a>
+                            {/eq}
+                            <i></i>
+                            <a href="{$vo|get_typeurl=###}" class="btn blue" target="_blank">预览</a>
+                        </div>
+                    </td>
+                    {/if}
+                    <td class="sort">
+                        <div class="w60 tc">
+                            {eq name="'Arctype@add'|is_check_access" value="1"}
+                            <input type="text" onchange="changeTableVal('arctype', 'id', '{$vo.id}', 'sort_order', this);" size="4" value="{$vo.sort_order}" class="tc" onkeyup="this.value=this.value.replace(/^\D*([0-9]\d*)?.*$/,'$1');" onpaste="this.value=this.value.replace(/^\D*([0-9]\d*)?.*$/,'$1');"/>
+                            {else /}
+                            {$vo.sort_order}
+                            {/eq}
+                        </div>
+                    </td>
+                </tr>
+                {/foreach}
+            {/empty}
+            </tbody>
+        </table>
+    </div>
+    <div class="iDiv" style="display: none;"></div>
+</div>

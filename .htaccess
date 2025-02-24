@@ -1,0 +1,22 @@
+
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks -Multiviews
+    RewriteEngine On
+
+    #http跳转到https
+    #RewriteCond %{SERVER_PORT} !^443$
+    #RewriteRule ^(.*)$ https://www.yourweb.com/$1 [L,R=301]
+
+    #去掉URL小尾巴index.php
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php?s=/$1 [QSA,PT,L]
+    #RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+    #RewriteRule ^(.*)$ index.php?/$1 [QSA,PT,L]
+
+    #限制目录禁止访问一些文件
+    RewriteCond % !^$
+    RewriteRule data/(.*).(php|php3|php4|php5|php6|php7|pht|phtml|asp|aspx|jsp|exe|js|sql|perl|cgi|asa)$ ?C [F]
+    RewriteRule template/(.*).(php|php3|php4|php5|php6|php7|pht|phtml|asp|aspx|jsp|exe|perl|cgi|asa)$ ?C [F]
+    RewriteRule uploads/(.*).(php|php3|php4|php5|php6|php7|pht|phtml|asp|aspx|jsp|exe|js|perl|cgi|asa)$ ?C [F] 
+</IfModule>

@@ -1,0 +1,108 @@
+{include file="public/layout" /}
+<body class="help-page" style="min-width:auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page" style="min-width: auto;box-shadow:none;">
+    <form class="form-horizontal" id="post_form">
+        <div class="help-form-default">
+            <div  class="help_tab_index" >
+                <div class="help-title">当前语言：{$currentLang.cn_title}</div>
+            </div>
+            <div  class="help_tab_index" >
+                <div class="help-title">翻译语言</div>
+                <dl class="help-row">
+                    <dd class="help-opt">
+                        {volist name="$showLangList" id="lang"}
+                        {neq name="$currentLang.mark" value="$lang.mark"}
+                        <label> <input type="checkbox" value="{$lang.mark}" class="langArr" checked="checked"/>{$lang.cn_title} </label>
+                        {/neq}
+                        {/volist}
+                    </dd>
+                </dl>
+            </div>
+            <div  class="help_tab_index" >
+                <div class="help-title">翻译内容</div>
+                <dl class="help-row">
+                    <dd class="help-opt">
+                    {if condition="$source == 'customvar_index'"}
+                        <label class="wm100"><input type="checkbox" value="1" checked="checked" onclick="allChecked(this);" />全选</label>
+                        <div class="wm100" style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid #E5E6EB"></div>
+                        {foreach name="list" item="vo" key="k" }
+                        <label> <input type="checkbox" value="{$vo['attr_var_name']}" checked="checked" class="fieldArr"/>{$vo['attr_name']}</label>
+                        {/foreach}
+                    {else /}
+                        <label> <input type="checkbox" value="web_name" checked="checked" class="fieldArr"/>网站名称</label>
+                        <label> <input type="checkbox" value="web_copyright" checked="checked" class="fieldArr"/>版权信息</label>
+                        <label> <input type="checkbox" value="web_title" checked="checked" class="fieldArr"/>Title</label>
+                        <label> <input type="checkbox" value="web_keywords" checked="checked" class="fieldArr"/>KeyWords</label>
+                        <label> <input type="checkbox" value="web_description" checked="checked" class="fieldArr"/>Description</label>
+                    {/if}
+                    </dd>
+                </dl>
+            </div>
+            <div class="bottom-fixed">
+                <div class="bot3">
+                    <a href="JavaScript:void(0);" onclick="submitTranslate();" class="ncap-btn-big ncap-btn-green">翻译</a>
+                    <a class="ncap-btn-big ncap-btn-no" href="javascript:parent.layer.closeAll();" title="取消">取消</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    function allChecked(obj) {
+        var checked = $(obj).is(':checked');
+        $('.fieldArr').prop('checked', false);
+        if (true === checked) $('.fieldArr').prop('checked', true);
+    }
+    
+    function submitTranslate() {
+        var source = '{$source}';
+        if (source == 'customvar_index') {
+            parent.customvar_save(false);
+        } else {
+            parent.adsubmit(false);
+        }
+        var postArr = {};
+        postArr.table = '{$table}';
+        // 选择翻译语言
+        postArr.langArr = [];
+        $('.langArr').each(function() {
+            if ($(this).is(':checked')) postArr.langArr.push($(this).val());
+        });
+        if (0 === parseInt(postArr.langArr.length)) {
+            // showErrorAlert('请选择翻译语言');
+            layer.msg('请选择翻译语言', {time: 1500});
+            return false;
+        }
+        // 选择翻译内容
+        postArr.fieldArr = [];
+        $('.fieldArr').each(function() {
+            if ($(this).is(':checked')) postArr.fieldArr.push($(this).val());
+        });
+        if (0 === parseInt(postArr.fieldArr.length)) {
+            // showErrorAlert('请选择翻译内容');
+            layer.msg('请选择翻译内容', {time: 1500});
+            return false;
+        }
+        parent.translateArr = postArr;
+
+        var url = "{:url('TranslateApi/batchTranslate')}";
+        url = url + '&langStr=' + postArr.langArr.join(',');
+
+        // 打开翻译页面
+        parent.layer.open({
+            type: 2,
+            fix: false,
+            maxmin: false,
+            title: '开始翻译',
+            shade: layer_shade,
+            area: ['500px', '380px'],
+            content: url
+        });
+    }
+
+</script>
+{include file="public/footer" /}

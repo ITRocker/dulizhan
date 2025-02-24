@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="{$zan.global.lang_htmlmark}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta content="telephone=no" name="format-detection" />
+        <title>{$zan.field.seo_title}</title>
+        <meta name="keywords" content="{$zan.field.seo_keywords}" />
+        <meta name="description" content="{$zan.field.seo_description}" />
+        <link href="{zan:global name='web_ico' /}" rel="shortcut icon" type="image/x-icon" />
+        {zan:static file="skin/css/style.css" /}
+        {zan:static file="skin/css/iconfont.css" /}
+        {zan:static file="skin/css/jquery.bxslider.css" /}
+        {zan:static file="skin/js/jquery-3.7.0.min.js" /}
+        {zan:static file="skin/js/trade.js" /}
+        {zan:static file="skin/js/jquery.bxslider.js" /}
+    </head>
+    <body>
+        {zan:include file="header.htm" /}
+        {zan:include file="banner.htm" /}
+        <div id="main" class="w page_detail">
+            <div class="web_position clean s1">
+                <div class="position">{zan:position/}</div>
+            </div>
+            <div class="contenter">
+                <div class="webinfo_detail">
+                    <h1 class="title">{$zan.field.title}</h1>
+                    <div class="ext_mes">
+                        <div>{zan:lang name='sys30' /} : {zan:arcclick /}</div>
+                        <div>{zan:lang name='sys31' /} : {$zan.field.update_time|MyDate='M',###} .{$zan.field.update_time|MyDate='d',###}.{$zan.field.update_time|MyDate='Y',###}</div>
+                    </div>
+                    <div class="contents">{$zan.field.content}</div>
+                    
+                    <div class="pro_prev_next info_prev_next clean">
+                        {zan:prenext get='pre'}
+                        <span>{zan:lang name='sys11' /} : </span>
+                        <a href="{$field.arcurl}" title="{$field.title}" class="next">{$field.title}</a>
+                        {zan:else /}
+                        <span>{zan:lang name='sys11' /} : </span>
+                        <a class="next">{zan:lang name='sys10' /}</a>
+                        {/zan:prenext}
+                        <div class="blank12"></div>
+                        {zan:prenext get='next'} 
+                        <span>{zan:lang name='sys12' /} : </span>
+                        <a href="{$field.arcurl}" title="{$field.title}" class="prev">{$field.title}</a>
+                        {zan:else /}
+                        <span>{zan:lang name='sys12' /} : </span> 
+                        <a class="prev">{zan:lang name='sys10' /}</a> 
+                        {/zan:prenext}
+                        
+                    </div>
+                </div>
+                <div class="rale_news desc_news">
+                    <div class="news_title"> <span class="title"> {zan:lang name='crumb54' /} </span> </div>
+                    <div class="list">
+                        {zan:artlist modelid='1' titlelen='40' loop='4' infolen='50'}
+                        <div class="item">
+                            <a href="{$field.arcurl}" class="img photo fl" title="{$field.title}">
+                                <img src="{$field.litpic}" alt="{$field.title}" class="trans" />
+                                <span></span>
+                            </a>
+                            <div class="text fr">
+                                <a href="{$field.arcurl}" class="title trans" title="{$field.title}"> {$field.title} </a>
+                                <div class="time"> {$field.update_time|MyDate='M',###} .{$field.update_time|MyDate='d',###}.{$field.update_time|MyDate='Y',###} </div>
+                                <div class="brief"> {$field.short_content|html_msubstr=###,0,80,true} </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        {/zan:artlist}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {zan:include file="footer.htm" /}
+    </body>
+</html>

@@ -1,0 +1,276 @@
+{include file="public/layout" /}
+<style type="text/css">
+    .layui-layer-btn .layui-layer-btn-star{
+        color: #666 !important;
+        background-color: #fff !important;
+    }
+</style>
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="form/left" /}
+<div class="page min-hg-c-66" style="min-width:auto;margin-left:100px;">
+    <div class="flexigrid" style="min-height: 600px;">
+        <div class="header-bar mb20">
+            <div class="more">
+                <div class="search search-nowrap">
+                    <div class="content">
+                        <form id="postForm" action="{:url('Form/index', ['form_id' => $form_id])}" method="get" onsubmit="layer_loading('正在处理');" style="display: unset;">
+                            {$searchform.hidden|default=''}
+                            <input type="hidden" name="form_id" value="{$form_id|default=1}">
+                            <div class="ey-form-item">
+                                <label class="users-form-item-label">阅读状态：</label>
+                                <div class="users-form-item-content">
+                                    <div class="users-select">
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div>
+                                                <select name="count_type">
+                                                    <option value="all" {if condition="empty($Request.param.count_type) || 'all' == $Request.param.count_type"} selected {/if}>全部</option>
+                                                    <option value="unread" {if condition="!empty($Request.param.count_type) && 'unread' == $Request.param.count_type"} selected {/if}>未读</option>
+                                                    <option value="read" {if condition="!empty($Request.param.count_type) && 'read' == $Request.param.count_type"} selected {/if}>已读</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ey-form-item"><label class="users-form-item-label">关键词：</label>
+                                <div class="users-form-item-content">
+                                    <div class="users-select">
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div class="sDiv2">
+                                                <input type="text" size="50" name="keywords" value="{$Request.param.keywords}" class="qsbox w220" placeholder="请输入{volist name="$formAttr" id="attr"}{neq name='$key' value='0'}/{/neq}{$attr.attr_name}{/volist}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ey-form-item"><label class="users-form-item-label">提交时间：</label>
+                                <div class="users-form-item-content">
+                                    <div class="users-select">
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div class="sDiv2">
+                                                <input type="text" name="add_time" id="eYLaydateTimeLinkage" data-max_date="{php}echo date('Y-m-d');{/php}" autocomplete="off"  class="qsbox" placeholder="请选择" lay-key="1" style="width: 220px;" value="{$Request.param.add_time}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="ey-form-item">
+                            <div class="users-form-item-content">
+                                <span class="bt-xin" onclick="formQuery();">查询</span>
+                                <span class="bt-xin-no" onclick="formQuery('reset');">重置</span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            function formQuery(isReset) {
+                                if (isReset && 'reset' == isReset) {
+                                    window.location.href = $('#postForm').attr('action');
+                                } else {
+                                    $('#postForm').submit();
+                                }
+                            }
+                        </script>
+                    </div>
+                    <div class="fbutton">
+                        <a class="ncap-btn ncap-btn-green" title="编辑表单" href="{:url('Form/field_edit', ['form_id' => $form_id])}">编辑表单</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table id="table-breakpoint">
+                    <thead class="hDiv">
+                        <tr class="form-list-attr">
+                            {volist name="$formAttr" id="attr"}
+                            <th {if condition="3 == $Request.param.form_id"}style="width: auto;"{/if}><div class="text-l10">{$attr.attr_name}</div></th>
+                            {/volist}
+                            <th class=""><div class="tc">提交时间</div></th>
+                            <th class=""><div class="tc">阅读状态</div></th>
+                            <!-- <th class="w120"><div class="tc">回复状态</div></th> -->
+                            <th class=""><div class="tc">操作</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {empty name="list"}
+                            <tr id="null-data">
+                                <td class="no-data" align="center" axis="col0" colspan="50">
+                                    <div class="no_row">
+                                        <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {else/}
+                        {foreach name="list" item="vo" key="k" }
+                            <tr>
+                                {volist name="$vo.attr_list" id="attr"}
+                                <td><div class="text-l10">{$attr.attr_value}</div></td>
+                                {/volist}
+                                <td><div class="tc">{$vo.add_time|date='Y-m-d H:i:s',###}</div></td>
+                                <td>
+                                    <div class="tc" id="td_is_read_{$vo.aid}">
+                                        {eq name="$vo.is_read" value="1"}<span>已读</span>{else/}<span class="red">未读</span>{/eq}
+                                    </div>
+                                </td>
+                                <!-- <td><div class="tc">未回复</div></td> -->
+                                <td>
+                                    <div class="tc">
+                                        <a href="javascript:void(0);" data-href="{:url('Guestbook/details', ['aid' => $vo['aid'], 'form_type' => $vo['form_type'], 'showlang' => $vo['lang']])}" onclick="openDetails(this, {$vo.aid});" class="btn blue">查看</a>
+                                        <i></i>
+                                        <!-- <a href="{:url('Form/reply')}" class="btn blue">回复</a>
+                                        <i></i> -->
+                                        <a class="btn red" href="javascript:void(0);" data-url="{:url('Guestbook/del', ['_ajax' => 1, 'form_type' => $vo['form_type'], 'lang' => $vo['lang']])}" data-id="{$vo.aid}" onClick="delfun(this);">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {/foreach}
+                    {/empty}
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        {notempty name="list"}
+        <div class="footer-oper">
+            {include file="public/page" /}
+        </div>
+        {/notempty}
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+    });
+
+    //留言详情
+    function openDetails(obj,aid) {
+        var btn1 = $(obj).attr('data-btn1');
+        var is_star = $(obj).attr('data-is_star');
+        is_star = (is_star == 1) ? 0 : 1;
+        var iframes = layer.open({
+            type: 2
+            ,title: '查看详情'
+            ,fixed: true //不固定
+            ,shadeClose: false
+            ,shade: layer_shade
+            ,offset: 'auto'
+            // ,maxmin: true //开启最大化最小化按钮
+            ,area: ['800px','80%']
+            ,anim: 5
+            ,content: $(obj).data('href')
+            ,btn: ['知道了']
+            ,btn2: function(index, layero){
+                window.location.reload();
+            }
+            ,end: function() {
+                window.location.reload();
+            }
+            ,success: function(layero, index){
+                $('#td_is_read_'+aid).html('<span>已读</span>');
+                // if (is_star == 1) {
+                //     $('.layui-layer-btn0').html(btn1).removeClass('layui-layer-btn-star');
+                // } else {
+                //     $('.layui-layer-btn0').html(btn1).addClass('layui-layer-btn-star');
+                // }
+            }
+        });
+    }
+
+    function guest_reply(obj){
+        var aid = $(obj).attr('data-aid');
+        layer.prompt({
+            formType: 2,
+            shade: layer_shade,
+            placeholder: '输入留言回复',
+            title: '请输入留言回复',
+            btnAlign:'r',
+            closeBtn: 3,
+            value: $(obj).attr('data-reply'),
+        }, function(value, index, elem){
+            layer.close(index);
+            $.ajax({
+                type : 'post',
+                url : "{:url('Form/editReply')}",
+                data : {aid:aid,reply:value, _ajax:1},
+                dataType : 'json',
+                success : function(res){
+                    layer.closeAll();
+                    if(res.code == 1){
+                        layer.msg(res.msg, {icon: 1, time:1000}, function(){
+                            window.location.reload();
+                        });
+                    }else{
+                        layer.msg(res.msg, {icon: 2, time:1000});
+                    }
+                },
+                error:function(){
+                    layer.closeAll();
+                    layer.alert('未知错误', {icon: 2, title:false});
+                }
+            })
+
+        });
+
+    }
+
+    function to_examine(obj) {
+        layer.confirm('确认审核表单信息，并显示在前端', {
+            area: ['480px', '190px'],
+            shade: layer_shade,
+            title: '提示',
+            closeBtn: 3,
+            btnAlign:'r',
+            btn: ['审核','拒绝','取消'],
+            success: function () {
+                  $(".layui-layer-content").css('text-align', 'left');
+              }
+        }, function() {
+            layer_loading('正在处理');
+            $.ajax({
+                url: "{:url('Form/to_examine')}",
+                data: {aid: $(obj).data('aid'), examine: 1, _ajax: 1},
+                type:'post',
+                dataType:'json',
+                success:function(res) {
+                    layer.closeAll();
+                    if (1 == res.code) {
+                        layer.msg(res.msg, {time: 1500},function(){
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.msg(res.msg, {time: 1500});
+                    }
+                }
+            });
+        }, function() {
+            layer_loading('正在处理');
+            $.ajax({
+                url: "{:url('Form/to_examine')}",
+                data: {aid: $(obj).data('aid'), examine: 2, _ajax: 1},
+                type:'post',
+                dataType:'json',
+                success:function(res) {
+                    layer.closeAll();
+                    if (1 == res.code) {
+                        layer.msg(res.msg, {time: 1500},function(){
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.msg(res.msg, {time: 1500});
+                    }
+                }
+            });
+        },function(index) {
+            layer.closeAll(index);
+        });
+    }
+</script>
+<!-- 日期联动选择js文件 start -->
+<script type="text/javascript" src="__PUBLIC__/static/common/js/ey_laydate_time_linkage.js?v={$version}"></script>
+<!-- 日期联动选择js文件 end -->
+{include file="public/footer" /}

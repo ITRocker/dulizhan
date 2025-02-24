@@ -1,0 +1,192 @@
+{include file="public/layout" /}
+
+{eq name="$editor.editor_select" value="1"}
+    {load href="__PUBLIC__/plugins/Ueditor/ueditor.config.js" /}
+    {load href="__PUBLIC__/plugins/Ueditor/ueditor.all.min.js" /}
+    {load href="__PUBLIC__/plugins/Ueditor/lang/zh-cn/zh-cn.js" /}
+{else/}
+    {load href="__PUBLIC__/plugins/ckeditor/ckeditor.js" /}
+{/eq}
+
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="system/left" /}
+<div class="fixed-bar nobg" style="width: auto;margin-left: 100px;">
+    <div class="item-title mb10">
+        <div class="subject">
+            {include file="public/callback_page_1" /}<!-- 返回箭头 -->
+            <h3>修改{当前通知名称变量}</h3>
+            <h5></h5>
+        </div>
+        <!-- 判断只有主题语言时隐藏语言切换 -->
+        <div class="language_dropup">
+            <div class="language_dropup_bt">
+                <a class="language_edit" href="javascript:void(0);" title="语言切换"><i class="iconfont e-yuyanqiehuan"></i>简体中文<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+            </div>
+            <div class="language_dropup_con">
+                <ul>
+                    <li><a href="">简体中文<span>默认</span></a></li>
+                    <li><a href="">English</a></li>
+                    <li><a href="">Lithuanian</a></li>
+                </ul>
+            </div>
+        </div>
+        <script type="text/javascript">
+          $(".language_dropup").mouseover(function(){
+             $(".language_dropup_con").show();
+             $(".language_edit").children('.fa').removeClass('fa-angle-down').addClass('fa-angle-up');
+          });
+          $(".language_dropup").mouseout(function(){
+             $(".language_dropup_con").hide();
+             $(".language_edit").children('.fa').removeClass('fa-angle-up').addClass('fa-angle-down');
+          });
+        </script>
+    </div>
+</div>
+<div class="page pd0 min-hg-c-110 mb-20 nobg" style="min-width:auto;margin-left:100px;">
+    <form class="form-horizontal" id="post_form" action="{:url('System/smtp_tpl_edit')}" method="post">
+        <!-- 常规信息 -->
+        <div class="ncap-form-default ncap-form-default-waimao pt0 pb0 tab_div_1">
+            <div class="form-default-box">
+                <div class="form-default-left">
+                    <div class="form-defaul-con mb10">
+                        <dl class="row">
+                            <dt class="tit">
+                                <label for="title"><em>*</em>邮件主题</label>
+                            </dt>
+                            <dd class="opt">
+                                <input type="text" name="title" value="" id="title" class="input-txt" maxlength="200" {eq name="$channelRow.is_repeat_title" value="0"} oninput="check_title_repeat(this,0);" {/eq}>
+                                <span class="err"></span>
+                                <p class="notic"></p>
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="tit">
+                                <label for="">邮件内容</label>
+                            </dt>
+                            <dd class="opt">
+                                {load href="__PUBLIC__/plugins/Ueditor/ueditor.config.js" /}
+                                {load href="__PUBLIC__/plugins/Ueditor/ueditor.all.min.js" /}
+                                {load href="__PUBLIC__/plugins/Ueditor/lang/zh-cn/zh-cn.js" /}
+                                <textarea class="span12 ckeditor" id="reg_agreement_content" data-func="reg_agreement_content" name="agreement[1][content]">{$agreement[1]['content']|default=''}</textarea>
+                                <span class="err"></span>
+                                <p class="notic"></p>
+                            </dd>
+                            <script type="text/javascript">
+                                var ue_reg_agreement_content = UE.getEditor('reg_agreement_content',{
+                                    serverUrl :"{:url('Ueditor/index',array('savepath'=>'allimg'))}",
+                                    zIndex: 999,
+                                    initialFrameWidth: "100%", //初化宽度
+                                    initialFrameHeight: 450, //初化高度
+                                    focus: false, //初始化时，是否让编辑器获得焦点true或false
+                                    maximumWords: 99999,
+                                    removeFormatAttributes: 'class,style,lang,width,height,align,hspace,valign',//允许的最大字符数 'fullscreen',
+                                    pasteplain:false, //是否默认为纯文本粘贴。false为不使用纯文本粘贴，true为使用纯文本粘贴
+                                    autoHeightEnabled: false,
+                                    toolbars: ueditor_toolbars
+                                });
+                                //必须在提交前渲染编辑器；
+                                function reg_agreement_content() {
+                                    //判断编辑模式状态:0表示【源代码】HTML视图；1是【设计】视图,即可见即所得；-1表示不可用
+                                    if(UE.getEditor("reg_agreement_content").queryCommandState('source') != 0) {
+                                        UE.getEditor("reg_agreement_content").execCommand('source'); //切换到【设计】视图
+                                    }
+                                }
+                            </script>
+                        </dl>
+                    </div>
+                </div>
+                <div style="width: 10px;background-color: #f4f4f4;"></div>
+                <div class="form-default-right">
+                    <div class="form-defaul-con mb30">
+                        <dl class="row">
+                            <dt class="tit mb10">
+                                <label class="f-16" for="title"><strong>变量</strong></label>
+                            </dt>
+                            <dd class="opt">
+                                <div class="input">
+                                    <strong class="fc_gory">全局变量，所有模板可用：</strong><br>
+                                    <span class="red">{Logo}</span>: 网站Logo图片<br>
+                                    <span class="red">{SiteName}</span>: 网站网站名称<br>
+                                    <span class="red">{Domain}</span>: 网站域名，不包含http或https<br>
+                                    <span class="red">{FullDomain}</span>: 网站完整域名，包含http或https，适用于超链接URL设置<br>
+                                    <span class="red">{Time}</span>: 邮件发送时间<br>
+                                    <span class="red">{UserName}</span>: 客户姓名<br>
+                                    <span class="red">{Email}</span>: 客户邮箱<br>
+                                    <span class="red">{Password}</span>: 客户密码<br>
+                                    <strong class="fc_gory">询盘模板变量：</strong><br>
+                                    <span class="red">{InquiryNumber}</span>: 询盘单号<br>
+                                    <span class="red">{InquiryDetail}</span>: 询盘表单内容<br>
+                                    <span class="red">{InquiryTime}</span>: 询盘时间<br>
+                                </div>
+                                <span class="err"></span>
+                                <p class="notic"></p>
+                            </dd>
+                        </dl>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 常规信息 -->
+        <!-- #weapp_div# -->
+        <div class="bottom-fixed">
+            <div class="bot4">
+                <a href="JavaScript:void(0);" onclick="submit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">保存</a>
+                <a href="JavaScript:void(0);" onclick="submit();" class="ncap-btn-big ncap-btn-green-b" id="submitBtn">预览</a>
+                <a href="JavaScript:void(0);" onclick="submit();" class="ncap-btn-big ncap-btn-green-b" id="submitBtn">重置</a>
+                {include file="public/callback_page_2" /}<!-- 返回按钮 -->
+            </div>
+        </div> 
+    </form>
+</div>
+<script type="text/javascript">
+    
+
+    // 判断输入框是否为空
+    function checkForm(){
+        if($.trim($('input[name=tpl_title]').val()) == ''){
+            showErrorMsg('邮件标题不能为空！');
+            $('input[name=tpl_title]').focus();
+            return false;
+        }
+    
+        layer_loading('正在处理');
+        $.ajax({
+            url: "{:url('System/smtp_tpl_edit', ['_ajax'=>1])}",
+            type: 'POST',
+            dataType: 'JSON',
+            data: $('#post_form').serialize(),
+            success: function(res){
+                layer.closeAll();
+                if (res.code == 1) {
+                    layer.msg(res.msg, {shade: 0.1, time: 1000}, function(){
+                        window.location.href = res.url;
+                    });
+                } else {
+                    layer.alert(res.msg, {icon:5, title:false});
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                layer.alert(e.responseText, {icon:5, title:false});
+            }
+        });
+    
+        return false;
+    }
+
+    function open_free_content() {
+        var url = "{:url('Article/free_content')}";
+        layer.open({
+            type: 2,
+            title:'请输入预览内容',
+            shade: layer_shade,
+            area: ['90%', '90%'], //宽高
+            content: url
+        });
+    }
+</script>
+
+{include file="public/footer" /}

@@ -1,0 +1,127 @@
+{include file="public/layout" /}
+<script type="text/javascript" src="__SKIN__/js/clipboard.min.js"></script>
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;min-width:auto;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page min-hg-c-10">
+    <div class="flexigrid">
+        <div class="mDiv pt0">
+            <div class="ftitle">
+                {eq name="'Language@pack_add'|is_check_access" value="1"}
+                <div class="fbutton">
+                    <a href="javascript:void(0);" data-href="{:url('Language/pack_add')}" onclick="openFullframe(this, '新增语言变量', '600px', '480px');">
+                        <div class="add">
+                            <span><i class="layui-icon layui-icon-addition"></i>新增变量</span>
+                        </div>
+                    </a>
+                </div>
+                {/eq}
+                {eq name="'Language@pack_batch_add'|is_check_access" value="1"}
+                <div class="fbutton">
+                    <a href="javascript:void(0);" data-href="{:url('Language/pack_batch_add')}" onclick="openFullframe(this, '批量新增语言变量', '600px', '550px');">
+                        <div class="adds">
+                            <span>批量新增</span>
+                        </div>
+                    </a>
+                </div>
+                {/eq}
+            </div>
+            <form class="navbar-form form-inline" action="{:url('Language/pack_index')}" method="get" onsubmit="layer_loading('正在处理');">
+                {$searchform.hidden|default=''}
+                <div class="sDiv">
+                    <div class="sDiv2">
+                        <input type="text" size="30" name="keywords" value="{$Request.param.keywords}" class="qsbox" placeholder="变量搜索...">
+                        <input type="submit" class="btn" value="搜索">
+                        <i class="iconfont e-sousuo"></i>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0" style="width: 100%">
+                    <thead>
+                    <tr>
+                        
+                        <th abbr="article_time" axis="col6" class="w120">
+                            <div class="tl text-l10">变量名</div>
+                        </th>
+                        <th abbr="article_title" axis="col3" class="">
+                            <div class="tl text-l10">变量值</div>
+                        </th>
+                        <th axis="col1" class="w100">
+                            <div class="tc">操作</div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table style="width: 100%;">
+                    <tbody>
+                    {empty name="list"}
+                        <tr>
+                            <td class="no-data" align="center" axis="col0" colspan="50">
+                                <div class="no_row">
+                                    <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {else/}
+                        {foreach name="list" item="vo" key="k" }
+                        <tr>
+                            
+                            <td class="">
+                                <div class="w120 tl text-l10">
+                                    {$vo.name}
+                                </div>
+                            </td>
+                            <td class="" style="width: 100%;">
+                                <div class="pl10 pr10 d-flex vertical-center">
+                                {eq name="$Think.const.CONTROLLER_NAME.'@pack_edit'|is_check_access" value="1"}
+                                    <input type="text" onchange="changeTableVal('language_pack','auto_id','{$vo.auto_id}','value',this);" class="input-txt wm100" value="{$vo.value|htmlentities=###}" autocomplete="off" />
+                                {else /}
+                                    {$vo.value|htmlentities=###}
+                                {/eq}
+                                </div>
+                            </td>
+                            <td class="operation">
+                                <div class="w100 tc">
+                                    <a href="javascript:void(0);" onclick="showtext('{$vo['name']}');" class="btn blue {$vo['name']}" data-clipboard-text="{{php} echo 'zan:lang name=\'';{/php}{$vo['name']}{php} echo '\' /';{/php}}">复制标签</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    {/empty}
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        {notempty name="list"}
+        <div class="tDiv">
+            <div class="tDiv2">
+                {include file="public/page" /}
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        {/notempty}
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+    });
+
+    // 复制标签
+    function showtext(classname){
+        var clipboard1 = new Clipboard("."+classname);clipboard1.on("success", function(e) {layer.msg("复制成功");});clipboard1.on("error", function(e) {layer.msg("复制失败！请手动复制", {icon:5});}); 
+    }
+</script>
+
+{include file="public/footer" /}

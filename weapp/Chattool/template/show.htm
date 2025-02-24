@@ -1,0 +1,21 @@
+<link rel="stylesheet" type="text/css" href="__WEAPP_TEMPLATE__/skin/css/chattool.css">
+<div id="ey-mkf" style="top:{$Chattool.data.service_height|default='400'}px;">
+  <ul class="ey-list">
+    <li class='ey-whatsapp'><a href="{$Chattool.data.service_one|default='13988889999'}" target="_blank"><i class='ey-icon'></i>
+      <p>{$Chattool.data.service_tit|default='WhatsApp'}</p>
+      </a></li>
+    <li class='ey-skype'><a href="{$Chattool.data.service_skype|default='skype:cmhello'}"><i class='ey-icon'></i>
+      <p>{$Chattool.data.name_Skype|default='Skype'}</p>
+      </a></li>
+    <li class='ey-email'><a href="mailto:{$Chattool.data.service_email|default='youweb@qq.com'}"><i class='ey-icon'></i>
+      <p>{$Chattool.data.service_online|default='E-Mail'}</p>
+      </a></li>
+    <li class='ey-wechat'><a href="javascript:;"><i class='ey-icon'></i>
+      <p>{$Chattool.data.service_wechat|default='WeChat'}</p>
+      </a>
+      <div class='ey-wechat-img'><img src="{$Chattool.data.wechat_logo|default='__WEAPP_TEMPLATE__/skin/images/weixin.jpg'}" width="100" height="100">
+        <p><em></em>{$Chattool.data.service_wechat|default='WeChat'}</p>
+      </div>
+    </li>
+  </ul>
+</div>

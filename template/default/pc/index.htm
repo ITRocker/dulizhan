@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html lang="{$zan.global.lang_htmlmark}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, maximum-scale=1.0 " />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta content="telephone=no" name="format-detection" />
+        <title>{zan:global name='web_title' /}_{zan:global name='web_name' /}</title>
+        <meta name="keywords" content="{zan:global name='web_keywords' /}" />
+        <meta name="description" content="{zan:global name='web_description' /}" />
+        <link href="{zan:global name='web_ico' /}" rel="shortcut icon" type="image/x-icon" />
+        {zan:static file="skin/css/style.css" /}
+        {zan:static file="skin/css/index.css" /}
+        {zan:static file="skin/css/iconfont.css" /}
+        {zan:static file="skin/css/jquery.bxslider.css" /}
+        {zan:static file="skin/js/jquery-3.7.0.min.js" /}
+        {zan:static file="skin/js/trade.js" /}
+        {zan:static file="skin/js/jquery.bxslider.js" /}
+    </head>
+    <body>
+        {zan:include file="header.htm" /}
+        <div e-page="index">
+          
+            <div class="index-banner">
+                <div class='bxSlide-outter' >
+                    <div class='bxslider_1'> 
+                        {zan:adv pid='1'}
+                        <div>
+                            <a href='{$field.links}' {$field.target}>
+                                <img src='{$field.litpic}' alt='{$field.title}' width='100%'>
+                            </a>
+                        </div>
+                        {/zan:adv}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="i_pro zan-edit" e-id="i1" e-type="type">
+             {zan:uitype modelid='2' e-id='i1' e-page='index' id='field'}
+                {zan:type type='self' empty='<div style="text-align: center;font-size: 28px;">未找到指定分类，请到网站后台>网站装修>编辑模板>指定分类</div>'}
+                <div class="title"> {$field.typename} </div>
+                <div class="pro_list"> 
+                    {zan:artlist id='field2' loop="8"}
+                    <div class="item fl">
+                        <div class="img"> 
+                            <a href="{$field2.arcurl}" title="{$field2.title}"> 
+                                <img class="trans" src="{$field2.litpic}" alt="{$field2.title}"><span></span> 
+                            </a> 
+                        </div>
+                        <div class="info"> <a href="{$field2.arcurl}" alt="{$field2.title}">{$field2.title}</a> </div>
+                    </div>
+                    {/zan:artlist}
+                    <div class="clear"></div>
+                    <div class="all_pro"> <a href="{$field.typeurl}">{zan:lang name='sys8' /}</a> </div>
+                </div>
+                {/zan:type}
+            {/zan:uitype}
+            </div>
+            <div class="i_txt">
+                <div class="title zan-edit" e-id="i2" e-type="text">
+                {zan:uitext e-id='i2' e-page="index"}
+                    {$field.value}
+                {zan:else /}
+                    Welcome to visit the official website of a certain company 
+                {/zan:uitext} 
+                </div>
+                <div class="brief zan-edit" e-id="i21" e-type="text">
+                {zan:uitext e-id='i21' e-page="index"}
+                    {$field.value}
+                {zan:else /}
+                    Factory direct sales, first-hand supply, sufficient supply, quality supply for you to choose, a phone call to us, we provide quality products and services, so that love procurement more assured, choose the industry's high-quality women .
+                {/zan:uitext} 
+                </div>
+                <div class="brief zan-edit" e-id="i300" e-type="upload">
+                    <!-- uiupload可视化标签调用 start -->
+                    {zan:uiupload e-id='i300' e-page='index' id='field'}
+                        {$field.value}
+                    {zan:else /}
+                        <img src="{zan:global name='web_templets_pc' /}/skin/images/banner.jpg" alt="about" />
+                    {/zan:uiupload}
+                    <!-- uiupload可视化标签调用 end -->
+                </div>
+                <div class="zan-edit" e-id="i31" e-type="single">
+                {zan:uisingle aid='16' e-id='i31' e-page='index' id='field'}
+                    {zan:single empty='<div style="text-align: center;font-size: 28px;">未找到指定单页，请到网站后台>网站装修>编辑模板>指定单页</div>'}
+                    <a href="{$field.typeurl}" class="read_more">{zan:lang name='sys8' /}</a>
+                    {/zan:single}
+                {/zan:uisingle}
+                </div>
+            </div>
+            
+            <div class="i_info zan-edit" e-id="i4" e-type="type">
+            {zan:uitype modelid='1' e-id='i4' e-page='index' id='field'}
+                {zan:type type='self' empty='<div style="text-align: center;font-size: 28px;">未找到指定分类，请到网站后台>网站装修>编辑模板>指定分类</div>'}
+                <div class="title">{$field.typename}</div>
+                <div class="info_list"> 
+                    {zan:artlist id='field2' loop="4"}
+                    <div class="item fl">
+                        <div class="img"> 
+                            <a href="{$field2.arcurl}" title="{$field2.title}">
+                                <img src="{$field2.litpic}" alt="{$field2.title}">
+                            </a> 
+                        </div> 
+                        <div class="info">
+                            <div class="date"> {$field2.update_time|MyDate='d',###}.{$field2.update_time|MyDate='M',###}.{$field2.update_time|MyDate='Y',###} </div>
+                            <div class="s_title"> <a href="{$field2.arcurl}" title="{$field2.title}">{$field2.title}</a> </div>
+                            <div class="read_more"> <a href="{$field2.arcurl}" title="{$field2.title}">Read More</a> </div>
+                        </div>
+                    </div>
+                    {/zan:artlist}
+                    <div class="clear"></div>
+                </div>
+                {/zan:type}
+            {/zan:uitype}
+            </div>
+        </div>
+        
+        {zan:include file="footer.htm" /}
+    </body>
+</html>

@@ -1,0 +1,98 @@
+{include file="public/layout" /}
+<body class="bodystyle" style="min-width:auto;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page min-hg-c-10">
+    <form class="form-horizontal" id="post_form" action="{:url('Language/add')}" method="post">
+        <div class="ncap-form-default">
+            <div class="default_language_list">
+                <!-- 已选择的不显示在这里 -->
+                {volist name="$languagemark" id="vo"}
+                <a href="javascript:;" data-mark="{$vo.mark}" onclick="selectLanguage(this);">
+                    <img width="20" src="__STATIC__/common/images/language/{$vo.mark}.gif" class="ml10"> {$vo.cn_title}
+                </a>
+                {/volist}
+                <div class="clear"></div>
+            </div>
+            <div class="bottom-fixed">
+                <div class="bot2">
+                    <input type="hidden" name="mark" id="mark" value="">
+                    <a href="JavaScript:void(0);" onclick="checkForm();" class="ncap-btn-big ncap-btn-green" id="submitBtn">保存</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+      $('.default_language_list a').click(function () {
+        $('.default_language_list a').removeClass('current');
+        $(this).addClass('current');
+      });
+    });
+    var parentObj = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+    function selectLanguage(obj)
+    {
+        var mark = $(obj).data('mark');
+        $('input[name=mark]').val(mark);
+    }
+
+    // 判断输入框是否为空
+    function checkForm(){
+        if($('input[name=mark]').val() == ''){
+            showErrorMsg('请选择语言！');
+            return false;
+        }
+        
+        layer_loading('正在处理');
+        $.ajax({
+            type : 'post',
+            url : "{:url('Language/add', ['_ajax'=>1])}",
+            data : $('#post_form').serialize(),
+            timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
+            dataType : 'json',
+            success : function(res){
+                layer.closeAll();
+                if(res.code == 1){
+                    var _parent = parent;
+                    if (res.data.jump && 1 == res.data.jump) {
+                        _parent.add_after_jump_url = res.url;
+                        _parent.layer.close(parentObj);
+                        var msg = '添加成功，请填写语言标识，未填写的字段在前端展示里将自动使用英语语言标识代替';
+                        msg += '<style type="text/css">.layui-layer-content{text-align:left!important;}</style>';
+                        _parent.layer.confirm(msg, {
+                            shade: layer_shade,
+                            area: ['480px', '190px'],
+                            move: false,
+                            title: '温馨提示',
+                            btnAlign:'r',
+                            closeBtn: false,
+                            btn: ['确定','去填写'], //按钮
+                            success: function () {
+                                $(".layui-layer-content").css('text-align', 'left');
+                            }
+                        }, function (index, layero) {
+                            _parent.layer.close(index);
+                            _parent.syn_language_pack(res.data.mark);
+                        }, function (index) {
+                            _parent.gourl(_parent.add_after_jump_url)
+                        });
+                    } else {
+                        _parent.layer.close(parentObj);
+                        _parent.layer.msg(res.msg, {shade: layer_shade, time: 1000}, function(){
+                            _parent.window.location.reload();
+                        });
+                    }
+                }else{
+                    showErrorMsg(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+</script>
+{include file="public/footer" /}

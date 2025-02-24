@@ -1,0 +1,313 @@
+{eq name="'Index@theme_conf'|is_check_access" value="1"}
+<style type="text/css">
+    #theme_main_color,#theme_assist_color {
+        /*margin:0;*/
+        /*padding:0;*/
+        border:solid 1px #ccc;
+        width:70px;
+        height:20px;
+        border-right:40px solid green;
+        /*line-height:20px;*/
+    } 
+</style>
+<form class="form-horizontal" id="postForm">
+    <div class="ncap-form-default">
+        <dl class="row">
+            <dt class="tit">
+                <label for="login_logo">登录logo</label>
+            </dt>
+            <dd class="opt">
+                <div class="input-file-show">
+                    <span class="show">
+                        <a id="img_a_login_logo" class="nyroModal" rel="gal" href="{$global.web_loginlogo|default='javascript:void(0);'}?t={php}echo getTime();{/php}" target="_blank">
+                            <i id="img_i_login_logo" class="fa fa-picture-o" {notempty name="$global.web_loginlogo"}onmouseover="layer_tips=layer.tips('<img src={$global.web_loginlogo|default=''} class=\'layer_tips_img\'>',this,{tips: [1, '#fff']});"{/notempty} onmouseout="layer.close(layer_tips);"></i>
+                        </a>
+                    </span>
+                    <span class="type-file-box">
+                        <input type="text" id="login_logo" name="login_logo" value="{$global.web_loginlogo|default=''}" class="type-file-text" autocomplete="off">
+                        <input type="button" name="button" id="button1" value="选择上传..." class="type-file-button">
+                        <input class="type-file-file" onClick="GetUploadify(1,'','loginlogo','login_logo_call_back','{:url('Uploadimgnew/upload_full', ['width'=>180, 'height'=>60])}');" size="30" hidefocus="true" nc_type="change_site_logo" title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
+                    </span>
+                </div>
+                <span class="err"></span>
+                <p class="notic"></p>
+            </dd>
+        </dl>
+        <dl class="row">
+            <dt class="tit">
+                <label for="login_bgimg">背景图</label>
+            </dt>
+            <dd class="opt">
+                <div class="input-file-show">
+                    <span class="show">
+                        <a id="img_a_login_bgimg" class="nyroModal" rel="gal" href="{$global.web_loginbgimg|default='javascript:void(0);'}" target="_blank">
+                            <i id="img_i_login_bgimg" class="fa fa-picture-o" {notempty name="$global.web_loginbgimg"}onmouseover="layer_tips=layer.tips('<img src={$global.web_loginbgimg|default=''} class=\'layer_tips_img\'>',this,{tips: [1, '#fff']});"{/notempty} onmouseout="layer.close(layer_tips);"></i>
+                        </a>
+                    </span>
+                    <span class="type-file-box">
+                        <input type="text" id="login_bgimg" name="login_bgimg" value="{$global.web_loginbgimg|default=''}" class="type-file-text" autocomplete="off">
+                        <input type="button" name="button" id="button1" value="选择上传..." class="type-file-button">
+                        <input class="type-file-file" onClick="GetUploadify(1,'','loginbgimg','login_bgimg_call_back','{:url('Uploadimgnew/upload_full', ['width'=>1920, 'height'=>1080])}');" size="30" hidefocus="true" nc_type="change_site_logo" title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
+                    </span>
+                </div>
+                <span class="err"></span>
+                <p class="notic"></p>
+            </dd>
+        </dl>
+        <dl class="row">
+            <dt class="tit">
+                <label for="admin_logo">后台logo</label>
+            </dt>
+            <dd class="opt">
+                <div class="input-file-show">
+                    <span class="show">
+                        <a id="img_a_admin_logo" class="nyroModal" rel="gal" href="{$global.web_adminlogo|default='javascript:void(0);'}?t={php}echo getTime();{/php}" target="_blank">
+                            <i id="img_i_admin_logo" class="fa fa-picture-o" {notempty name="$global.web_adminlogo"}onmouseover="layer_tips=layer.tips('<img src={$global.web_adminlogo|default=''} class=\'layer_tips_img\'>',this,{tips: [1, '#fff']});"{/notempty} onmouseout="layer.close(layer_tips);"></i>
+                        </a>
+                    </span>
+                    <span class="type-file-box">
+                        <input type="text" id="admin_logo" name="admin_logo" value="{$global.web_adminlogo|default=''}" class="type-file-text" autocomplete="off">
+                        <input type="button" name="button" id="button1" value="选择上传..." class="type-file-button">
+                        <input class="type-file-file" onClick="GetUploadify(1,'','adminlogo','admin_logo_call_back','{:url('Uploadimgnew/upload_full', ['width'=>45, 'height'=>45])}');" size="30" hidefocus="true" nc_type="change_site_logo" title="点击前方预览图可查看大图，点击按钮选择文件并提交表单后上传生效">
+                    </span>
+                </div>
+                <span class="err"></span>
+                <p class="notic"></p>
+            </dd>
+        </dl>
+        <dl class="row">
+            <dt class="tit">
+                <label for="theme_id">后台主题</label>
+            </dt>
+            <dd class="opt">
+                <div class="theme_style" id="theme_login_style">
+                    <div class="theme">
+                        <div class="theme-item {eq name='$global.web_theme_styleid' value='1'}active{/eq}" data-id="1">
+                            <div class="theme-color">
+                                <span class="circle" style="background: rgb(51, 152, 204);"></span>
+                                <span class="circle subcolor" style="background: rgb(34, 134, 185)"></span>
+                            </div>
+                            <div class="theme-text">宝石蓝</div>
+                            <span class="theme-span-a">
+                                {eq name='$global.web_theme_styleid' value='1'}
+                                <a href="JavaScript:void(0);" class="theme-choose"><i class="iconfont e-duihao1"></i></a>
+                                {/eq}
+                            </span>
+                        </div>
+                        <div class="theme-item {eq name='$global.web_theme_styleid' value='2'}active{/eq}" data-id="2">
+                            <div class="theme-color">
+                                <span class="circle" style="background: rgb(255, 134, 23);"></span>
+                                <span class="circle subcolor" style="background: rgb(245, 157, 76);"></span>
+                            </div>
+                            <div class="theme-text">活力橙</div>
+                            <span class="theme-span-a">
+                                {eq name='$global.web_theme_styleid' value='2'}
+                                <a href="JavaScript:void(0);" class="theme-choose"><i class="iconfont e-duihao1"></i></a>
+                                {/eq}
+                            </span>
+                        </div>
+                        <div class="theme-item {eq name='$global.web_theme_styleid' value='3'}active{/eq}" data-id="3">
+                            <div class="theme-color">
+                                <span class="circle" style="background: rgb(251, 73, 111);"></span>
+                                <span class="circle subcolor" style="background: rgb(255, 126, 154);"></span>
+                            </div>
+                            <div class="theme-text">樱花粉</div>
+                            <span class="theme-span-a">
+                                {eq name='$global.web_theme_styleid' value='3'}
+                                <a href="JavaScript:void(0);" class="theme-choose"><i class="iconfont e-duihao1"></i></a>
+                                {/eq}
+                            </span>
+                        </div>
+                        <div class="theme-item {eq name='$global.web_theme_styleid' value='4'}active{/eq}" data-id="4">
+                            <div class="theme-color">
+                                <span class="circle" style="background: rgb(29, 176, 59);"></span>
+                                <span class="circle subcolor" style="background: rgb(44, 195, 76);"></span>
+                            </div>
+                            <div class="theme-text">玛瑙绿</div>
+                            <span class="theme-span-a">
+                                {eq name='$global.web_theme_styleid' value='4'}
+                                <a href="JavaScript:void(0);" class="theme-choose"><i class="iconfont e-duihao1"></i></a>
+                                {/eq}
+                            </span>
+                        </div>
+                        <div class="theme-item {eq name='$global.web_theme_styleid' value='5'}active{/eq}" data-id="5">
+                            <div class="theme-color">
+                                <span class="circle" style="background: rgb(133, 83, 242);"></span>
+                                <span class="circle subcolor" style="background: rgb(102, 64, 187);"></span>
+                            </div>
+                            <div class="theme-text">魅力紫</div>
+                            <span class="theme-span-a">
+                                {eq name='$global.web_theme_styleid' value='5'}
+                                <a href="JavaScript:void(0);" class="theme-choose"><i class="iconfont e-duihao1"></i></a>
+                                {/eq}
+                            </span>
+                        </div>
+                        {if condition="$php_servicemeal > 1"}
+                        <div class="theme-item {eq name='$global.web_theme_styleid' value='6'}active{/eq}" data-id="6">
+                            <div class="theme-color">
+                                <span class="circle" style="background: rgb(255, 60, 41);"></span>
+                                <span class="circle subcolor" style="background: rgb(221, 65, 50);"></span>
+                            </div>
+                            <div class="theme-text">经典红</div>
+                            <span class="theme-span-a">
+                                {eq name='$global.web_theme_styleid' value='6'}
+                                <a href="JavaScript:void(0);" class="theme-choose"><i class="iconfont e-duihao1"></i></a>
+                                {/eq}
+                            </span>
+                        </div>
+                        <div class="theme-item {eq name='$global.web_theme_styleid' value='7'}active{/eq}" data-id="7">
+                            <div class="theme-color">
+                                <span class="circle" style="background: rgb(42, 42, 46);"></span>
+                                <span class="circle subcolor" style="background: rgb(86, 86, 86);"></span>
+                            </div>
+                            <div class="theme-text">曜石黑</div>
+                            <span class="theme-span-a">
+                                {eq name='$global.web_theme_styleid' value='7'}
+                                <a href="JavaScript:void(0);" class="theme-choose"><i class="iconfont e-duihao1"></i></a>
+                                {/eq}
+                            </span>
+                        </div>
+                        {/if}
+                    </div>
+                </div>
+                {if condition="$php_servicemeal == 0"}
+                    <p class="notic-vip">{$global['sys_tmpserinfo']['authormsg1']}</p>
+                {/if}
+            </dd>
+        </dl>
+        <div class="bot mt30">
+            <input type="hidden" name="theme_id" id="theme_id" value="{$global.web_theme_styleid}">
+            <a href="JavaScript:void(0);" onclick="checkForm();" class="ncap-btn-big ncap-btn-green">保存</a>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var php_servicemeal = {$php_servicemeal|default=0};
+
+        // 主题风格切换
+        $('#theme_login_style').find('.theme-item').click(function() {
+            var id = $(this).data('id');
+            if (6 <= parseInt(id) && 2 > php_servicemeal) {
+                showErrorAlert("{$global['sys_tmpserinfo']['authormsg2']}", 4);
+            } else if (1 < parseInt(id) && 1 > php_servicemeal) {
+                showErrorAlert("{$global['sys_tmpserinfo']['authormsg1']}", 4);
+            } else {
+                // 清除所有项的选择效果
+                $('#theme_login_style').find('.theme-item').removeClass('active');
+                $('#theme_login_style').find('.theme-span-a').empty();
+
+                // 添加当前项的选择效果
+                $(this).addClass('active');
+                $(this).find('.theme-span-a').append('<a href="JavaScript:void(0);" class="theme-choose"><i class="iconfont e-duihao1"></i></a>');
+
+                // ID赋值
+                $('#theme_id').val(parseInt(id));
+            }
+        });
+
+        // 登录背景图切换
+        $('.div_login_bgimg_model').find('li').click(function(){
+            $('.div_login_bgimg_model').find('li').removeClass('active');
+            $(this).addClass('active');
+            var data_model = $(this).attr('data-model');
+            $('#login_bgimg_model').val(data_model);
+            if ('custom' == data_model) {
+                $('#div_custom_login_bgimg').show();
+            } else {
+                $('#div_custom_login_bgimg').hide();
+                // 登录背景图
+                var loginbgimg = $(this).find('img').attr('src');
+                $('#login_bgimg').val(loginbgimg);
+            }
+        });
+    });
+
+    function checkForm() {
+        layer_loading('正在处理');
+        $.ajax({
+            type: 'POST',
+            url : "{:url('Index/theme_conf', ['_ajax'=>1])}",
+            data: $('#postForm').serialize(),
+            dataType: 'json',
+            success: function(res) {
+                layer.closeAll();
+                if (res.code == 1) {
+                    layer.alert(res.msg, {
+                        shade: layer_shade,
+                        area: ['480px', '190px'],
+                        move: false,
+                        title: '提示',
+                        btnAlign:'r',
+                        closeBtn: 3,
+                        btn: ['立即刷新','关闭'],
+                        success: function () {
+                            $(".layui-layer-content").css('text-align', 'left');
+                        },
+                        cancel: function(index, layero) { 
+                            window.location.reload();
+                            return false; 
+                        },
+                        btn2: function(index, layero) {
+                            window.location.reload();
+                        }
+                    }, function() {
+                        top.window.location.reload();
+                    });
+                    // showSuccessMsg(res.msg, 1500, function() {
+                    //     window.location.reload();
+                    // });
+                } else {
+                    showErrorMsg(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                layer.alert(e.responseText, {icon: 5, title:false});
+            }
+        });
+    }
+
+    // 鼠标事件，加载查看大图和更新图片
+    function upimgMouseover(obj)
+    {
+        $(obj).parent().find('div.icaction').show();
+        $(obj).parent().find('div.cover-bg').show();
+    }
+    function upimgMouseout(obj)
+    {
+        $(obj).parent().find('div.icaction').hide();
+        $(obj).parent().find('div.cover-bg').hide();
+    }
+
+
+    function admin_logo_call_back(fileurl_tmp)
+    {
+        $("#admin_logo").val(fileurl_tmp);
+        $("#img_a_admin_logo").attr('href', fileurl_tmp);
+        $("#img_i_admin_logo").attr('onmouseover', "layer_tips=layer.tips('<img src="+fileurl_tmp+" class=\\'layer_tips_img\\'>',this,{tips: [1, '#fff']});");
+    }
+
+    function login_logo_call_back(fileurl_tmp)
+    {
+        $("#login_logo").val(fileurl_tmp);
+        $("#img_a_login_logo").attr('href', fileurl_tmp);
+        $("#img_i_login_logo").attr('onmouseover', "layer_tips=layer.tips('<img src="+fileurl_tmp+" class=\\'layer_tips_img\\'>',this,{tips: [1, '#fff']});");
+    }
+
+    function login_bgimg_call_back(fileurl_tmp)
+    {
+        $("#login_bgimg").val(fileurl_tmp);
+        $("#img_a_login_bgimg").attr('href', fileurl_tmp);
+        $("#img_i_login_bgimg").attr('onmouseover', "layer_tips=layer.tips('<img src="+fileurl_tmp+" class=\\'layer_tips_img\\'>',this,{tips: [1, '#fff']});");
+    }
+    
+    function web_ico_img_call_back(fileurl_tmp)
+    {
+        $("#web_ico").val(fileurl_tmp);
+        $("#img_a_web_ico").attr('href', fileurl_tmp);
+        $("#img_i_web_ico").attr('onmouseover', "layer_tips=layer.tips('<img src="+fileurl_tmp+" width=32 height=32>',this,{tips: [1, '#fff']});");
+    }
+</script>
+{/eq}

@@ -1,0 +1,109 @@
+<div class="reviews_wrapper">
+    <h2>{$commentCount}&nbsp;{zan:lang name='users373' /} </h2>
+    {zan:commentlist name="$Comment" id="field"}
+    <div class="reviews_comment_box">
+        <div class="comment_thmb">
+            <img src="{$field.head_pic}" alt="">
+        </div>
+        <div class="comment_text">
+            <div class="reviews_meta">
+                <div class="star_rating">
+                    <ul class="d-flex star{$field.total_score}">
+                       <li><a href="javascript:void(0);"><i class="icon-star"></i></a></li>
+                       <li><a href="javascript:void(0);"><i class="icon-star"></i></a></li>
+                       <li><a href="javascript:void(0);"><i class="icon-star"></i></a></li>
+                       <li><a href="javascript:void(0);"><i class="icon-star"></i></a></li>
+                       <li><a href="javascript:void(0);"><i class="icon-star"></i></a></li>
+                    </ul>
+                </div>
+                <p><strong>{$field.nickname} </strong> {$field.add_time|date='Y-m-d H:i:s',###}</p>
+                <span>{$field.content}</span>
+            </div>
+        </div>
+    </div>
+    {/zan:commentlist}
+
+    <div class="comment_page" id="comment_page">{$Page}</div>
+
+    <div class="comment_title">
+        <h2>{zan:lang name='users374' /}</h2>
+        <p>{zan:lang name='users375' /} </p>
+    </div>
+    <div class="product_ratting mb-10">
+        <h3>{zan:lang name='users376' /}</h3>
+        <ul class="d-flex select_star">
+            <li><a href="javascript:void(0);" onclick="totalScore(0);"><i class="icon-star active"></i></a></li>
+            <li><a href="javascript:void(0);" onclick="totalScore(1);"><i class="icon-star active"></i></a></li>
+            <li><a href="javascript:void(0);" onclick="totalScore(2);"><i class="icon-star active"></i></a></li>
+            <li><a href="javascript:void(0);" onclick="totalScore(3);"><i class="icon-star active"></i></a></li>
+            <li><a href="javascript:void(0);" onclick="totalScore(4);"><i class="icon-star active"></i></a></li>
+        </ul>
+    </div>
+    <div class="product_review_form">
+        <form id="commentForm">
+            <div class="row">
+                <div class="col-12">
+                    <label for="content">{zan:lang name='users377' /}</label>
+                    <textarea name="content" id="content"></textarea>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <label for="visitors_name">{zan:lang name='users208' /}</label>
+                    {notempty name="$users.users_id"}
+                    <input type="text" id="visitors_name" value="{$users.nickname}" disabled>
+                    {else/}
+                    <input type="text" id="visitors_name" name="visitors_name">
+                    {/notempty}
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <label for="visitors_email">{zan:lang name='users109' /} </label>
+                    {notempty name="$users.users_id"}
+                    <input type="text" id="visitors_email" value="{$users.email}" disabled>
+                    {else/}
+                    <input type="text" id="visitors_email" name="visitors_email">
+                    {/notempty}
+                </div>
+            </div>
+            <input type="hidden" name="productID" value="{$productID}">
+            <input type="hidden" name="total_score" id="total_score" value="5">
+            <a class="a_button" href="javascript:void(0);" onclick="submitComment(this);" data-url="{$submitUrl}">{zan:lang name='users149' /}</a>
+         </form>
+    </div>
+    <script type="text/javascript">
+        // 评分设置
+        function totalScore(score) {
+            $('#total_score').val(score + 1);
+            // 删除所有评分选中效果
+            $('.select_star .icon-star').removeClass('active');
+            // 追加当选评分
+            $('.select_star .icon-star').each(function(index, ele) {
+                $('.select_star .icon-star').eq(index).addClass('active');
+                if (parseInt(index) === parseInt(score)) return false;
+            });
+        }
+
+        // 提交评价
+        function submitComment(obj) {
+            layer_loading(ey_langpack_sys26);
+            $.ajax({
+                url : $(obj).data('url'),
+                data: $('#commentForm').serialize(),
+                type: 'post',
+                dataType: 'json',
+                success: function (res) {
+                    layer.closeAll();
+                    if (1 === parseInt(res.code)) {
+                        showSuccessMsg(res.msg, function () {
+                            AjaxComment(0, 1);
+                        });
+                    } else {
+                        showErrorMsg(res.msg);
+                    }
+                },
+                error: function(e) {
+                    layer.closeAll();
+                    showErrorAlert(e.responseText);
+                }
+            });
+        }
+    </script>
+</div>

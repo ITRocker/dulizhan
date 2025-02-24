@@ -1,0 +1,219 @@
+{include file="public/layout" /}
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="uiset/left" /}
+<div class="fixed-bar mb10" style="min-width:auto;margin-left:100px;">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            <li {if condition="$action == 'productArctype'"} class="current" {/if}>
+                <a href="{:url('Seo/tkd', ['action' => 'productArctype'])}">
+                    <span>产品分类</span>
+                </a>
+            </li>
+            <li {if condition="$action == 'productList'"} class="current" {/if}>
+                <a href="{:url('Seo/tkd', ['action' => 'productList'])}">
+                    <span>产品</span>
+                </a>
+            </li>
+            <li {if condition="$action == 'articleArctype'"} class="current" {/if}>
+                <a href="{:url('Seo/tkd', ['action' => 'articleArctype'])}">
+                    <span>新闻分类</span>
+                </a>
+            </li>
+            <li {if condition="$action == 'articleList'"} class="current" {/if}>
+                <a href="{:url('Seo/tkd', ['action' => 'articleList'])}">
+                    <span>新闻</span>
+                </a>
+            </li>
+            <li {if condition="$action == 'imagesArctype'"} class="current" {/if}>
+                <a href="{:url('Seo/tkd', ['action' => 'imagesArctype'])}">
+                    <span>案例分类</span>
+                </a>
+            </li>
+            <li {if condition="$action == 'imagesList'"} class="current" {/if}>
+                <a href="{:url('Seo/tkd', ['action' => 'imagesList'])}">
+                    <span>案例</span>
+                </a>
+            </li>
+            <li {if condition="$action == 'singleArctype'"} class="current" {/if}>
+                <a href="{:url('Seo/tkd', ['action' => 'singleArctype'])}">
+                    <span>单页</span>
+                </a>
+            </li>
+            <li {if condition="$action == 'otherPages'"} class="current" {/if}>
+                <a href="{:url('Seo/tkd', ['action' => 'otherPages'])}">
+                    <span>其它</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+    
+<div class="page min-hg-c-66 atta" style="min-width:auto;margin-left:100px;">
+    <div class="flexigrid" style="min-height: 600px;">
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th align="center" abbr="article_title" axis="col3" class="w200">
+                                <div class="text-l10">页面</div>
+                            </th>
+                            <th axis="col1" class="w300">
+                                <div class="text-l10">SEO标题</div>
+                            </th>
+                            <th abbr="article_time" axis="col6" class="w300">
+                                <div class="text-l10">SEO关键词</div>
+                            </th>
+                            <th axis="col1" class="w300">
+                                <div class="text-l10">SEO描述</div>
+                            </th>
+                            <th axis="col1" class="w100">
+                                <div class="tc">操作</div>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table style="width: 100%;">
+                    <tbody>
+                    {volist name="$list" id="vo_0" key="key_0"}
+                    <form class="form-horizontal" id="post_form_{$key_0}">
+                        {volist name="$vo_0" id="vo_1"}
+                        <tr id="{$vo_1.id|default=$vo_1.aid}-{$key}" {if condition="$key > 0"} style="display: none;" {/if}>
+                            <td class="w200">
+                                <div class="text-l10">
+                                    <span>{$vo_1.typename|default=$vo_1.title}</span>
+                                    <div class="language-red language-red-{$key_0}" style="display: none;">{$showLangList[$vo_1.lang]['cn_title']}</div>
+                                </div>
+                            </td>
+                            <td class="w300">
+                                <div class="tl tdk-textarea">
+                                    <textarea rows="5" cols="60" name="seo_title[{$vo_1.lang}][{$vo_1.auto_id}]" style="height:54px;" readonly='readonly' class="keywordsTextareawaimao input-txt">{$vo_1.seo_title}</textarea>
+                                    <p class="tip" id="beenWrittenwaimao"><span id="beenWrittenStrwaimao">{$vo_1.seo_title_count}</span> / 255</p>
+                                </div>
+                            </td>
+                            <td class="w300">
+                                <div class="tl tdk-textarea">
+                                    <textarea rows="5" cols="60" name="seo_keywords[{$vo_1.lang}][{$vo_1.auto_id}]" style="height:54px;" readonly='readonly' class="input-txt">{$vo_1.seo_keywords}</textarea>
+                                    <p class="tip">建议根据关键词长度设置5-8个关键词，多个关键词请用逗号隔开</p>
+                                </div>
+                            </td>
+                            <td class="w300">
+                                <div class="tl tdk-textarea">
+                                    <textarea rows="5" cols="60" name="seo_description[{$vo_1.lang}][{$vo_1.auto_id}]" style="height:54px;" readonly='readonly' class="keywordsTextareawaimao input-txt">{$vo_1.seo_description}</textarea>
+                                    <p class="tip" id="beenWrittenwaimao"><span id="beenWrittenStrwaimao">{$vo_1.seo_description_count}</span> / 500</p>
+                                </div>
+                            </td>
+                            {if condition="$key == 0"}
+                            <td class="w100">
+                                <div class="tc">
+                                    <a class="btn blue actionEdit" data-id="{$key_0}">编辑</a>
+                                    <a class="btn blue actionSave" data-id="{$key_0}" style="display: none;">保存</a>
+                                </div>
+                            </td>
+                            {else/}
+                            <td class="w100">
+                                <div class="tc">
+                                </div>
+                            </td>
+                            {/if}
+                        </tr>
+                        {/volist}
+                        <input type="hidden" name="id" value="{$vo_1.id|default=$vo_1.aid}">
+                    </form>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!-- {notempty name="list"}
+        <div class="footer-oper">
+            {include file="public/page" /}
+        </div>
+        {/notempty} -->
+        <!-- <div class="bottom-fixed">
+            <div class="bot4" id="submit_bot2">
+                {empty name="$is_eyou_authortoken"}
+                {if condition="$show_lang == $admin_lang && !empty($doubao['doubao_api']) && !empty($isLanguage)"}
+                <a class="ncap-btn-big ncap-btn-green-b mr15" href="javascript:void(0);"  data-href="{:url('Archives/help', ['aid' => $field.aid, 'translateSource'=> 'Article'])}" onclick="openHelpframe(this, 'AI翻译', '400px', '100%', 'r');" title="AI翻译">AI翻译</a>
+                {/if}
+                {/empty}
+            </div>
+        </div> -->
+    </div>
+</div>
+
+<input type="hidden" id="actionSaveUrl" value="{:url('Seo/tkd', ['_ajax'=>1, 'action' => $action])}">
+<script type="text/javascript">
+    $(document).ready(function () {
+        // 定义可能的后缀数字数组
+        var suffixNumbers = [];
+        // 假设数组元素较多，这里模拟生成几百个元素
+        for (var i = 1; i <= 5000; i++) {
+            suffixNumbers.push(i);
+        }
+
+        // 缓存表格行元素
+        var $tableRows = $('table tr');
+
+        // 生成隐藏行的选择器字符串
+        var hideSelector = suffixNumbers.map(function (num) {
+            return `table tr[id$="-${num}"]`;
+        }).join(', ');
+
+        // 缓存需要隐藏的行元素
+        var $rowsToHide = $(hideSelector);
+
+        $('.actionEdit').click(function (e) {
+            e.preventDefault();
+            // 获取当前点击按钮所在行的 id 前缀
+            var idPrefix = $(this).closest('tr').attr('id').split('-')[0];
+
+            // 移除所有行的 tdk-edit 类，禁用所有 textarea
+            $tableRows.removeClass('tdk-edit').find('textarea').attr('readonly', 'readonly');
+            
+            // 隐藏所有可能的隐藏行
+            $rowsToHide.hide();
+
+            // 显示对应前缀的隐藏行
+            var showSelector = `table tr[id^="${idPrefix}-"]`;
+            $(showSelector).show().addClass('tdk-edit').find('textarea').removeAttr('readonly');
+            $(showSelector).addClass('on');
+            
+            // (隐藏 or 显示)(编辑 or 保存)
+            $('.actionSave, .language-red').hide();
+            $('.actionEdit').show();
+            $(this).hide().next().show();
+            $('.language-red-' + $(this).data('id')).show();
+        });
+
+        $('.actionSave').click(function () {
+            layer_loading('正在处理');
+            $.ajax({
+                type: 'post',
+                url : $('#actionSaveUrl').val(),
+                data: $('#post_form_' + $(this).data('id')).serialize(),
+                dataType: 'json',
+                success: function(res) {
+                    layer.closeAll();
+                    if (1 === parseInt(res.code)) {
+                        layer.msg(res.msg);
+                    } else {
+                        showErrorMsg(res.msg);
+                    }
+                },
+                error: function(e) {
+                    layer.closeAll();
+                    showErrorAlert(e.responseText);
+                }
+            });
+        });
+    });
+</script>
+{include file="public/footer" /}

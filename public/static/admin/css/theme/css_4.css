@@ -1,0 +1,216 @@
+/*引入css_2.css文件*/
+/*官方内置样式表，升级会覆盖变动，请勿修改，否则后果自负*/
+.explanation { background-color: rgb(29, 176, 59, 0.11) !important;}
+.explanation li a {
+    color:rgb(29, 176, 59);
+}
+.system_table td a {
+    color:rgb(29, 176, 59);
+}
+/*左侧收缩图标*/
+#foldSidebar i { font-size: 24px;color:rgb(29, 176, 59); }
+/*左侧菜单*/
+.eycms_cont_left{ background:rgb(29, 176, 59); }
+.eycms_cont_left dl dd a:hover,.eycms_cont_left dl dd a.on,.eycms_cont_left dl dt.on{ background:rgb(44, 195, 76); }
+.eycms_cont_left dl dd a:active{ background:rgb(44, 195, 76); }
+.eycms_cont_left dl.jslist dd{ background:rgb(29, 176, 59); }
+.eycms_cont_left dl.jslist dd a:hover,.eycms_cont_left dl.jslist dd a.on{ background:rgb(44, 195, 76); }
+.eycms_cont_left dl.jslist:hover{ background:rgb(44, 195, 76); }
+/*栏目操作*/
+.cate-dropup .cate-dropup-con a:hover{ background-color: rgb(29, 176, 59); }
+/*按钮*/
+.header-bar>.more>.search .content .ey-form-item .bt-xin {background-color: rgb(29, 176, 59);border-color: rgb(29, 176, 59);}
+.header-bar>.more>.search .content .ey-form-item .bt-xin:hover{ background-color: rgb(44, 195, 76);}
+a.ncap-btn-green { background-color: rgb(29, 176, 59);border-color: rgb(29, 176, 59); }
+a:hover.ncap-btn-green { background-color: rgb(29, 176, 59); }
+.flexigrid .sDiv2 .btn:hover { background-color: rgb(29, 176, 59); }
+.flexigrid .mDiv .fbutton div.add{background-color: rgb(29, 176, 59); border: none;}
+.flexigrid .mDiv .fbutton div.add:hover{ background-color: rgb(44, 195, 76);}
+.flexigrid .mDiv .fbutton div.adds{color:rgb(29, 176, 59);border: 1px solid rgb(29, 176, 59);}
+.flexigrid .mDiv .fbutton div.add.green-b{color:rgb(29, 176, 59);border: 1px solid rgb(29, 176, 59);}
+.flexigrid .fbutton .add.green-b {color: rgb(29, 176, 59);border-color: rgb(29, 176, 59);}
+/*选项卡字体*/
+.tab-base a.current,
+.tab-base a:hover.current {color:rgb(29, 176, 59) !important;}
+.tab-base a.current:after,
+.tab-base a:hover.current:after {background-color: rgb(29, 176, 59);}
+.addartbtn input.btn:hover{ border-bottom: 1px solid rgb(29, 176, 59); }
+.addartbtn input.btn.selected{ color: rgb(29, 176, 59);border-bottom: 1px solid rgb(29, 176, 59);}
+/*会员导航*/
+.member-nav-group .member-nav-item .btn.selected{background: rgb(29, 176, 59);border: 1px solid rgb(29, 176, 59);box-shadow: -1px 0 0 0 rgb(29, 176, 59);}
+.member-nav-group .member-nav-item:first-child .btn.selected{border-left: 1px solid rgb(29, 176, 59) !important;}
+    
+/* 商品订单列表标题 */
+.flexigrid .mDiv .ftitle h3 {border-left: 3px solid rgb(29, 176, 59);} 
+
+/*分页*/
+.pagination > .active > a, .pagination > .active > a:focus, 
+.pagination > .active > a:hover, 
+.pagination > .active > span, 
+.pagination > .active > span:focus, 
+.pagination > .active > span:hover { border-color: rgb(29, 176, 59);color:rgb(29, 176, 59); }
+
+.layui-form-onswitch {border-color: rgb(29, 176, 59) !important;background-color: rgb(29, 176, 59) !important;}
+.onoff .cb-enable.selected { background-color: rgb(29, 176, 59) !important;border-color: rgb(29, 176, 59) !important;}
+.onoff .cb-disable.selected {background-color: rgb(29, 176, 59) !important;border-color: rgb(29, 176, 59) !important;}
+.pcwap-onoff .cb-enable.selected { background-color: rgb(29, 176, 59) !important;border-color: rgb(29, 176, 59) !important;}
+.pcwap-onoff .cb-disable.selected {background-color: rgb(29, 176, 59) !important;border-color: rgb(29, 176, 59) !important;}
+.ncap-form-default dd.opt select:hover {border-color: rgb(29, 176, 59, 0.3) ;box-shadow: 0 0 0 1px rgb(29, 176, 59, 0.3) !important;}
+input[type="text"]:focus,
+input[type="text"]:hover,
+input[type="text"]:active,
+input[type="password"]:focus,
+input[type="password"]:hover,
+input[type="password"]:active,
+textarea:hover,
+textarea:focus,
+textarea:active { border-color: rgb(29, 176, 59, 0.3) ;box-shadow: 0 0 0 1px rgb(29, 176, 59, 0.3) !important;}
+.input-file-show:hover .type-file-button {background-color:rgb(29, 176, 59) !important; }
+.input-file-show:hover {border-color: rgb(29, 176, 59, 0.3) !important;box-shadow: 0 0 5px rgb(29, 176, 59, 0.3) !important;}
+.input-file-show:hover span.show a,
+.input-file-show span.show a:hover { color: rgb(29, 176, 59) !important;}
+.input-file-show:hover .type-file-button {background-color: rgb(29, 176, 59) !important; }
+.select-tree-wrap:hover {border-color: rgb(29, 176, 59, 0.3) !important;box-shadow: 0 0 5px rgb(29, 176, 59, 0.3) !important;}
+.color_z { color: rgb(29, 176, 59) !important;}
+a.imgupload{background-color: rgb(29, 176, 59) !important;border-color: rgb(29, 176, 59) !important;}
+.ncap-form-default-waimao .form-default-box .row .opt #system_param .text_a {color: rgb(29, 176, 59) !important;}
+.flexigrid .bDiv td .yes {color: rgb(29, 176, 59) !important;}
+.flexigrid-xin .tableDiv td .yes {color: rgb(29, 176, 59) !important;}
+/*专题节点按钮*/
+.ncap-form-default .special-add{background-color:rgb(29, 176, 59);border-color:rgb(29, 176, 59);}
+.ncap-form-default .special-add:hover{background-color:rgb(255 126 154);border-color:rgb(255 126 154);}
+
+/*更多功能标题*/
+.on-off_panel .title::before {background-color:rgb(29, 176, 59);}
+.on-off_panel .on-off_list-caidan .icon_bg .on{color: rgb(29, 176, 59);}
+.on-off_panel .e-jianhao {color: rgb(29, 176, 59);}
+
+ /*内容菜单*/
+.ztree li a:hover{color:rgb(29, 176, 59) !important;}
+.ztree li a.curSelectedNode{background-color: rgb(29, 176, 59) !important; border-color:rgb(29, 176, 59) !important;}
+.layout-left .on-off-btn {background-color: rgb(29, 176, 59) !important;}
+
+/*框架正在加载*/
+.iframe_loading{width:100%;background:url(../../images/loading-0.gif) no-repeat center center;}
+
+.layui-btn-normal {background-color: rgb(29, 176, 59);}
+.layui-laydate .layui-this{background-color: rgb(29, 176, 59) !important;}
+.laydate-day-mark::after {background-color: rgb(29, 176, 59) !important;}
+
+/*上传框*/
+.upload-body .upload-con .image-header .image-header-l .layui-btn {
+    background: rgb(29, 176, 59) !important;
+    border-color: rgb(29, 176, 59) !important;
+}
+.upload-body .layui-tab-brief>.layui-tab-title .layui-this {
+    color: rgb(29, 176, 59) !important;
+}
+.upload-body .layui-tab-brief>.layui-tab-title .layui-this:after {
+    border-bottom-color: rgb(29, 176, 59) !important;
+}
+.layui-layer-btn .layui-layer-btn0 {
+    border-color: rgb(29, 176, 59) !important;
+    background-color: rgb(29, 176, 59) !important;
+}
+.upload-body .layui-btn-yes {
+    background: rgb(29, 176, 59) !important;
+    border-color: rgb(29, 176, 59) !important;
+}
+.pagination li.active a {
+    color: rgb(29, 176, 59) !important;
+}
+.upload-nav .item.active {
+    color: rgb(29, 176, 59) !important;
+}
+.upload-body .upload-con .group-item.active a {
+    color: rgb(29, 176, 59) !important;
+}
+.upload-body .upload-con .group-item.active {
+    color: rgb(29, 176, 59) !important;
+    background-color: rgba(25,121,113,0.1);
+}
+.pagination li.active {
+    border-color: rgb(29, 176, 59) !important;
+}
+.upload-body .layui-btn-normal {
+    background-color: rgb(29, 176, 59) !important;
+}
+.upload-body .upload-con .image-list li.up-over .image-select-layer i {
+    color: rgb(29, 176, 59) !important;
+}
+.upload-body .upload-con .image-list li .layer .close {
+    color: rgb(29, 176, 59) !important;
+}
+.upload-dirimg-con .ztree li a.curSelectedNode {
+     background-color: #FFE6B0 !important; 
+     border-color: #FFB951 !important; 
+}
+/*.plug-item-content .plug-item-bottm a, .plug-item-content .plug-status .yes {
+    color: rgb(29, 176, 59) !important;
+}*/
+.ncap-form-default dd.opt .layui-btn{
+    background-color: rgb(29, 176, 59) !important;
+}
+.marketing_panel .title::before{
+    background-color: rgb(29, 176, 59) !important;
+}
+.marketing_panel .marketing_list ul.marketing-nav li a .button button {
+    color: rgb(29, 176, 59) !important;
+    border: 1px solid rgb(29, 176, 59) !important;
+}
+.info_count li a p cite {
+    color: rgb(29, 176, 59) !important;
+}
+.flexigrid .bDiv a.btn, a.ui-btn {
+    color: rgb(29, 176, 59) !important;
+}
+.flexigrid .bDiv a.grey, a.grey {
+    color: #999999!important;
+}
+.item-title a.language_edit {
+    
+}
+.language_dropup .language_dropup_con a span {
+    color: rgb(29, 176, 59) !important;
+    background-color: rgb(29, 176, 59, 0.2) !important;
+}
+.inside_container .inside_menu .inside_body>ul>li>a.current, .inside_container .inside_menu .inside_body>ul>li>a.hover {
+    background-color: rgb(29, 176, 59) !important;
+}
+.tab-base li.current a {
+    color: rgb(29, 176, 59) !important;
+}
+.tab-base li.current {
+    background-color: rgb(29, 176, 59, 0.1) !important;
+}
+.tab-base li.current:after {
+    background-color: rgb(29, 176, 59) !important;
+}
+.item-title a.language_edit {background-color: rgb(29, 176, 59) !important;}
+a.ncap-btn-green-b { color: rgb(29, 176, 59);border-color: rgb(29, 176, 59); }
+a:hover.ncap-btn-green-b { color: rgb(29, 176, 59);border-color: rgb(29, 176, 59); }
+a:hover.ncap-btn-big {box-shadow: 0 0 0 2px rgb(29, 176, 59, 0.15);}
+
+.terminal_box .tem_box .tem_list .edit_box .default {
+    background-color: rgb(29, 176, 59) !important;
+}
+.terminal_box .tem_box .tem_list .edit_box .edit_responsive {
+    background-color: rgb(29, 176, 59, 0.1) !important;
+}
+.terminal_box .tem_box .tem_list .eidt_btn_items .edit_btn {
+    background-color: rgb(29, 176, 59) !important;
+    border: 1px solid rgb(29, 176, 59) !important;
+}
+.ncap-form-default dd.opt .div-input-txt .input-txt-button {
+    background-color: rgb(29, 176, 59) !important;
+}
+.flexigrid .mDiv .ftitle_nav .fbutton div.cur {
+    color: rgb(29, 176, 59) !important;
+    background-color: rgb(29, 176, 59, 0.1) !important;
+}
+.language_dropup .language_dropup_con a.on{
+    color: rgb(29, 176, 59) !important;
+}
+.customvar_attr_input_type_5 button.layui-btn {
+    background-color: rgb(29, 176, 59) !important;
+}

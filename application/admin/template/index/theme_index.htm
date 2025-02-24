@@ -1,0 +1,32 @@
+{include file="public/layout" /}
+<script type="text/javascript" src="__PUBLIC__/plugins/colpick/js/colpick.js"></script>
+<link href="__PUBLIC__/plugins/colpick/css/colpick.css" rel="stylesheet" type="text/css"/>
+<body class="bodystyle" style="overflow-y: scroll; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="fixed-bar mb10">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            <li {eq name="$Request.action" value="theme_index"}class="current"{/eq}>
+                <a href="{:url('Index/theme_index')}">
+                    <span>主题风格</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="page min-hg-c-66">
+    
+    <!-- 操作说明 -->
+    <div id="" class="explanation">
+        <ul>
+            <li>主题颜色、欢迎页设置保存后，要刷新整个后台才看到效果</li>
+        </ul>
+    </div>
+    <br/>
+    <div class="flexigrid">
+        {include file="index/theme_conf" /}
+    </div>
+</div>
+
+{include file="public/footer" /}

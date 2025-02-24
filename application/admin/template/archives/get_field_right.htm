@@ -1,0 +1,445 @@
+<div class="form-defaul-con mb10">
+    {if condition="'ShopProduct' == $Think.const.CONTROLLER_NAME && $show_lang == $admin_lang"}
+    <dl class="row">
+        <dt class="tit"> <label>产品状态</label> </dt>
+        <dd class="opt">
+            <label><input type="radio" name="status" value="1" {if condition="!isset($field.status) || 1 == $field.status"} checked {/if}>立即上架</label>
+            &nbsp;
+            <label><input type="radio" name="status" value="0" {eq name="$field.status" value="0"} checked {/eq}>放入仓库</label>
+        </dd>
+    </dl>
+    {/if}
+
+    {if condition="'Article' == $Think.const.CONTROLLER_NAME || 'Images' == $Think.const.CONTROLLER_NAME"}
+    <dl class="row">
+        <dt class="tit">
+            <div class="tit-l">
+                <label>封面图片</label>
+                <p class="notic">当没有手动上传图片时候，会自动提取正文的第一张图片作为封面图片</p>
+            </div>
+        </dt>
+        <dd class="opt">
+            <div class="dan-pane">
+                <div class="images_upload images_upload_html" style="display: inline-block;">
+                    <a href="javascript:void(0);" {if condition="$show_lang == $admin_lang"} onclick="GetUploadify(1, '', 'allimg', 'goodsPicCallBack');" {/if} class="img-upload mb15" title="点击上传">
+                        <div class="y-line" id="litpic_y_line" {notempty name="$field.litpic"} style="display: none;" {/notempty}></div>
+                        <div class="x-line" id="litpic_x_line" {notempty name="$field.litpic"} style="display: none;" {/notempty}></div>
+                        <img src="{$field.litpic|default=''}" id="litpic_src" class="pic_con" {empty name="$field.litpic"} style="display: none;" {/empty}>
+                    </a>
+                    {if condition="$show_lang == $admin_lang"}
+                    <a href="javascript:void(0);" onclick="goodsPicClear();" class="delect" id="litpic_delect"  {empty name="$field.litpic"} style="display: none;" {/empty}></a>
+                    <input type="hidden" id="litpic" name="litpic" value="{$field.litpic|default=''}">
+                    {/if}
+                </div>
+                <script type="text/javascript">
+                    function goodsPicCallBack(fileurl_tmp) {
+                        $('#litpic').val(fileurl_tmp);
+                        $("input[name=is_litpic]").attr('checked', true);
+                        $('#litpic_src').show().attr('src', fileurl_tmp);
+                        $('#litpic_y_line, #litpic_x_line').hide();
+                        if (fileurl_tmp) $('#litpic_delect').attr('style', '');
+                    }
+                    function goodsPicClear() {
+                        $('#litpic').val('');
+                        $("input[name=is_litpic]").attr('checked', false);
+                        $('#litpic_src').hide().attr('src', '');
+                        $('#litpic_y_line, #litpic_x_line').show();
+                        $('#litpic_delect').attr('style', 'display: none;');
+                        setIsLitpic();
+                    }
+                </script>
+            </div>
+        </dd>
+    </dl>
+    {/if}
+
+    {if condition="'Single' != $Think.const.CONTROLLER_NAME && $show_lang == $admin_lang"}
+    <dl class="row" style="z-index: 2;">
+        <dt class="tit"><label for="">分类</label></dt>
+        <dd class="opt wrapper">
+            <div class="select-tree-wrap">
+                <div class="input-keyword-wrap">
+                    <div class="select-menu-input imitationSelect role_select">
+                        <p class="input-tips" id="classification"><span id="initial"></span></p>
+                    </div>
+                    <i class="fa handle-arrow fa-caret-up" style="display: none; cursor: pointer;"></i>
+                    <i class="fa handle-arrow fa-caret-down" style="cursor: pointer;"></i>
+                </div>
+            </div>
+            <div class="select-tree-down" style="display: none;">
+                <ul class="nav">
+                    {foreach name="arctype_list" item="vo_0"}
+                    <li class="tree-set">
+                        <div class="tree-entry">
+                            <div class="tree-main">
+                                {if condition="!empty($vo_0.has_children)"}
+                                <span class="tree-iconClick" onclick="treeIconClick(this);"><i class="fa fa-angle-down"></i></span>
+                                {else/}
+                                <span class="tree-iconClick" onclick="treeIconClick(this);"></span>
+                                {/if}
+                                <div class="ul-nav" id="navClass_{$vo_0.id}" onclick="navClassClick(this);">
+                                    <input type="checkbox" value="{$vo_0.id}" id="{$vo_0.id}" class="li-input" data-grade="{$vo_0.grade}" data-ids="{$vo_0.id}" data-children="{$vo_0.has_children}" data-names="{$vo_0.typename}">{$vo_0.typename}
+                                </div>
+                            </div>
+                        </div>
+                        {if condition="!empty($vo_0.has_children)"}
+                        <ul class="tree-pack" style="display: block;" id="ul_{$vo_0.id}">
+                            {foreach name="$vo_0.children" item="vo_1"}
+                            <li class="pd0">
+                                <div class="tree-er-entry">
+                                    <div class="tree-er-main">
+                                        {if condition="!empty($vo_1.has_children)"}
+                                        <span class="tree-er-iconClick" onclick="treeIconClick(this);"><i class="fa fa-angle-down"></i></span>
+                                        {else/}
+                                        <span class="tree-er-iconClick" onclick="treeIconClick(this);"></span>
+                                        {/if}
+                                        <div class="ul-nav nav-2nd" id="navClass_{$vo_1.id}" onclick="navClassClick(this);">
+                                            <input type="checkbox" value="{$vo_1.id}" id="{$vo_1.id}" class="li-input" data-grade="{$vo_1.grade}" data-ids="{$vo_0.id}_{$vo_1.id}" data-children="{$vo_1.has_children}" data-names="{$vo_0.typename}->{$vo_1.typename}">{$vo_1.typename}
+                                        </div>
+                                    </div>
+                                </div>
+                                {if condition="!empty($vo_1.has_children)"}
+                                <ul class="tree-pack" style="display: block;" id="ul_{$vo_1.id}">
+                                    {foreach name="$vo_1.children" item="vo_2"}
+                                    <li>
+                                        <div class="ul-nav nav-2nd" id="navClass_{$vo_2.id}" onclick="navClassClick(this);">
+                                            <input type="checkbox" value="{$vo_2.id}" id="{$vo_2.id}" class="li-input" data-grade="{$vo_2.grade}" data-ids="{$vo_0.id}_{$vo_1.id}_{$vo_2.id}" data-children="{$vo_2.has_children}" data-names="{$vo_0.typename}->{$vo_1.typename}->{$vo_2.typename}">{$vo_2.typename}
+                                        </div>
+                                    </li>
+                                    {/foreach}
+                                </ul>
+                                {/if}
+                            </li>
+                            {/foreach}
+                        </ul>
+                        {/if}
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+            <script type="text/javascript">
+                function showHideList(isShow) {
+                    if (true == isShow) {
+                        $('.fa-caret-up').show();
+                        $('.fa-caret-down').hide();
+                        $('.select-tree-down').show();
+                    } else {
+                        $('.fa-caret-up').hide();
+                        $('.fa-caret-down').show();
+                        $('.select-tree-down').hide();
+                    }
+                }
+
+                function treeIconClick(obj) {
+                    $(obj).closest("li").find("ul").toggle();
+                    if ('fa fa-angle-down' == $(obj).find('i').attr('class')) {
+                        $(obj).find('i').attr('class', 'fa fa-angle-right');
+                    }
+                    else if ('fa fa-angle-right' == $(obj).find('i').attr('class')) {
+                        $(obj).find('i').attr('class', 'fa fa-angle-down');
+                    }
+                }
+
+                function navClassClick(obj) {
+                    var checked_2 = $(obj).children("input").prop("checked");
+                    if (checked_2 == false) {
+                        $(obj).children("input").prop("checked", true);
+                    } else {
+                        $(obj).children("input").prop("checked", false);
+                    }
+
+                    checked_2 = $(obj).children("input").prop("checked");
+                    var grade = $(obj).children("input").attr('data-grade');
+                    if (0 === parseInt(grade) || 1 === parseInt(grade)) {
+                        var id = $(obj).children("input").attr('id');
+                        $('#ul_' + id).find("input").each(function() {
+                            var _this = $(this);
+                            if (checked_2 == true) {
+                                _this.prop("checked", true);
+                            } else {
+                                _this.prop("checked", false);
+                            }
+                        });
+                    } else if (2 === parseInt(grade)) {
+                        var dataIds = $(obj).children("input").attr('data-ids');
+                        if (dataIds) {
+                            dataIds = dataIds.split('_');
+                            for (var i = 0; i < dataIds.length; i++) {
+                                if (checked_2 == true) {
+                                    $('#' + dataIds[i]).prop("checked", true);
+                                } else {
+                                    $('#' + dataIds[i]).prop("checked", false);
+                                }
+                            }
+                        }
+                    }
+
+                    $("#classification").empty();
+                    $(".li-input").each(function() {
+                        var _this_1 = $(this);
+                        var checked_3 = _this_1.prop("checked");
+                        var children = _this_1.attr('data-children');
+                        if (checked_3 == true && 0 === parseInt(children)) {
+                            $("#classification").append("<span class='input-keyword-item' data-id='"+_this_1.val()+"' id='span_"+_this_1.val()+"'>" + (_this_1.attr('data-names')) + "<i class='iconfont e-quxiao close' data-ids='"+_this_1.attr('data-ids')+"'></i><input type='hidden' name='stypeid[]' value='"+_this_1.val()+"'></span>");
+                        } else {
+                            $("#classification").children("#span_" + _this_1.val()).remove();
+                        }
+                    });
+
+                    $(".li-input").each(function() {
+                        var _this_2 = $(this);
+                        var checkedBool = false;
+                        var grade = _this_2.attr('data-grade');
+                        var children = _this_2.attr('data-children');
+                        if ((0 === parseInt(grade) || 1 === parseInt(grade)) && parseInt(children) > 0) {
+                            $('#ul_' + _this_2.val()).find("input").each(function() {
+                                var _this_3 = $(this);
+                                if (_this_3.prop("checked") == true) {
+                                    checkedBool = true;
+                                    return false;
+                                }
+                            });
+                            $('#' + _this_2.val()).prop("checked", checkedBool);
+                        }
+                    });
+                    var length = $("#classification").html().length;
+                    if (length === 0) {
+                        $("#classification").append("<span id='initial'>选择分类</span>");
+                    }
+                }
+
+                $(document).on('click', function(e) {
+                    if ($(e.target).closest('.fa-caret-down, .input-keyword-item').length) {
+                        showHideList(true);
+                    }
+                    else if ($(e.target).closest('.imitationSelect').length) {
+                        if ('none' == $('.select-tree-down').css('display')) {
+                            showHideList(true);
+                        } else {
+                            showHideList(false);
+                        }
+                    }
+                    else if (!$(e.target).closest('.select-menu-input, .select-tree-down').length) {
+                        showHideList(false);
+                    }
+                });
+
+                // 处理分类项删除按钮点击事件
+                $("#classification").on("click", ".close", function() {
+                    var _this = $(this);
+                    // 获取当前点击分类关联分类
+                    var dataIds_0 = _this.attr('data-ids');
+                    dataIds_0 = dataIds_0 ? dataIds_0.split('_') : [];
+                    var length_0 = dataIds_0.length ? parseInt(dataIds_0.length) : 0;
+                    // 如果存在则执行
+                    if (parseInt(length_0) > 0) {
+                        // 取消当前点击分类选中效果
+                        $('#' + dataIds_0[length_0-1]).prop("checked", false);
+                        // 获取当前点击分类等级
+                        var grade_0 = $('#' + dataIds_0[length_0-1]).attr('data-grade');
+                        // 处理关联选中
+                        if (2 === parseInt(grade_0) && 0 < parseInt(dataIds_0[1])) {
+                            var checked_1 = false;
+                            $('#ul_' + dataIds_0[1]).find("input").each(function() {
+                                var this_1 = $(this);
+                                if (this_1.prop("checked") == true) {
+                                    checked_1 = true;
+                                    return false;
+                                }
+                            });
+                            $('#' + dataIds_0[1]).prop("checked", checked_1);
+                        }
+                        // 处理当前点击分类的顶级分类
+                        if (0 < parseInt(dataIds_0[0])) {
+                            var checked_0 = false;
+                            $('#ul_' + dataIds_0[0]).find("input").each(function() {
+                                var this_0 = $(this);
+                                if (this_0.prop("checked") == true) {
+                                    checked_0 = true;
+                                    return false;
+                                }
+                            });
+                            $('#' + dataIds_0[0]).prop("checked", checked_0);
+                        }
+                    }
+                    // 删除自身HTML
+                    _this.parent().remove();
+                    // 如果没有选中分类则显示
+                    if ($("#classification").html().length === 0) $("#classification").append("<span id='initial'>选择分类</span>");
+                });
+
+                $(document).ready(function() {
+                    $("#classification").children("#initial").append("选择分类");
+
+                    // 加载选中的分类
+                    var stypeid = "{$field.stypeid|default=''}";
+                    stypeid = stypeid ? stypeid : "{$stypeid|default=''}";
+                    if ('edit' == __action_name__ || stypeid) {
+                        stypeid = stypeid ? stypeid.split(',') : [];
+                        for (var i = 0; i < stypeid.length; i++) {
+                            if (0 < parseInt(stypeid[i])) navClassClick($('#navClass_' + stypeid[i]));
+                        }
+                    }
+
+                    $(".li-input").click(function() {
+                        var checked_1 = $(this).prop("checked");
+                        if (checked_1 == true) {
+                            $(this).prop("checked", false);
+                        } else {
+                            $(this).prop("checked", true);
+                        }
+                    });
+                });
+            </script>
+        </dd>
+    </dl>
+
+    <dl class="row">
+        <dt class="tit"><label for="add_time">发布时间</label></dt>
+        <dd class="opt">
+            {if condition="'add' == $Think.const.ACTION_NAME"}
+            <input type="text" class="input-txt" name="add_time" value="{php}echo date('Y-m-d H:i:s'){/php}" id="add_time" autocomplete="off">
+            {else/}
+            <input type="text" class="input-txt" name="add_time" value="{$field.add_time|MyDate='Y-m-d H:i:s',###}" id="add_time" autocomplete="off">
+            {/if}
+            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+        </dd>
+    </dl>
+    <script type="text/javascript">
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            laydate.render({elem: '#add_time', type: 'datetime'});
+        });
+    </script>
+    {/if}
+</div>
+
+<div class="form-defaul-con mb30">
+    <dl class="row">
+        <dt class="tit">
+            <div class="tit-l">
+                <label for="seo_title">Title</label> 
+                <!-- <p class="notic">即TKD中的Title.每个页面都有自己的Title,作为搜索引擎对页面内容主题判断的第一个标识.建议包含页面相关关键词并提出当前页面内容价值.字符数控制在70以内.</p> -->
+            </div>
+            <div class="tit-r">
+                <p class="notic2 {empty name='$field.seo_title'}none{/empty}" id="monitorInputClass_3"><span>0</span> / 70</p>
+            </div>
+        </dt>
+        <dd class="opt">
+            <input type="text" name="seo_title" value="{$field.seo_title|default=''}" id="seo_title" class="input-txt monitorInputContent" data-id="3" maxlength="70" onkeyup="monitorInputStrEach(this);" onkeypress="monitorInputStrEach(this);">
+        </dd>
+    </dl>
+    
+    <dl class="row">
+        <dt class="tit"> 
+            <div class="tit-l">
+                <label for="seo_description">Description</label> 
+                <!-- <p class="notic">即TKD中的Description.对页面内容的描述,可以理解为对Title的补充,建议出现三次关键词,内容要精简具有可读性.字符数控制在220以内.</p> -->
+            </div>
+            <div class="tit-r">
+                <p class="notic2 {empty name='$field.seo_description'}none{/empty}" id="monitorInputClass_4"><span>0</span> / 220</p>
+            </div>
+        </dt>
+        <dd class="opt">
+            <textarea rows="5" cols="60" name="seo_description" id="seo_description" style="height: 94px;" class="input-txt monitorInputContent" data-id="4" maxlength="220" onkeyup="monitorInputStrEach(this);" onkeypress="monitorInputStrEach(this);">{$field.seo_description|default=''}</textarea>
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="tit">
+            <div class="tit-l">
+                <label for="seo_keywords">KeyWords</label> 
+                <!-- <p class="notic">即TKD中的Keywords.建议放上与页面内容相关的核心关键词和对应的长尾关键词, 建议根据关键词长度设置8-10个关键词,多个关键词请用英文逗号（,）隔开。</p> -->
+            </div>
+        </dt>
+        <dd class="opt">
+            <textarea rows="5" cols="60" name="seo_keywords" id="seo_keywords" style="height: 54px;" class="input-txt" placeholder="多个关键词请用英文逗号（,）隔开">{$field.seo_keywords|default=''}</textarea>
+        </dd>
+    </dl>
+    <!-- <dl class="row">
+        <dt class="tit">
+            <div class="tit-l">
+                <label for="seo_title">标签</label> 
+                <p class="notic"></p>
+            </div>
+            <div class="tit-r">
+                <a href="javascript:void(0);" onclick="get_common_tagindex(this);">显示常用标签</a>&nbsp;<img id="tag_loading" src="__STATIC__/common/images/loading.gif" style="display: none;" />
+            </div>
+        </dt>
+        <dd class="opt">
+            <input type="text" value="{$field.tags}" name="tags" id="tags" class="input-txt" placeholder="多个标签之间以逗号隔开" autocomplete="off" oninput="get_common_tagindex_input(this);" onfocus="$('#often_tags').hide();" onkeyup="this.value=this.value.replace(/[\，]/g,',');" onpaste="this.value=this.value.replace(/[\，]/g,',')">
+            
+            <div class="often_tags" id="often_tags" data-opt="edit" style="display: none;"></div>
+            <div class="often_tags" id="often_tags_input" style="display: none;"></div>
+            <input type="hidden" id="tags_click_count">
+        </dd>
+    </dl> -->
+    
+    {if condition="'edit' == $Think.const.ACTION_NAME"}
+    <dl class="row">
+        <dt class="tit">
+            <div class="tit-l">
+                <label for="htmlfilename">自定义地址</label>
+                <p class="notic">自定义地址可由字母、数字、下划线(_)、连接符(-)等符号组成，除此之外其他字符将自动转为连接符(-)</p>
+            </div>
+            <div class="tit-r">
+            </div>
+        </dt>
+        <dd class="opt">
+            {if condition="$show_lang == $admin_lang"}            
+            <div class="prefix_textarea input-txt mb10">                
+                <div class="prefix" id="htmlfilename_prefix">
+                    {if empty($diy_domain)}__SITE_URL____ROOT_DIR__{else/}{$diy_domain}{/if}
+                    {if $seo_rewrite_format==2}/{$nid}{neq name="$field.channel" value="6"}-details{/neq}/<i></i>{else /}{$diy_dirnamel}/<i></i>{/if}              
+                </div>
+                <textarea name="htmlfilename" id="htmlfilename" class="box_textarea" onkeyup="customRouteLoad(this);" onkeypress="customRouteLoad(this);">{$field.htmlfilename|default=$field.title}</textarea>
+            </div>
+            {else/}            
+            <div class="mb10" style="word-break: break-all;">{:urldecode($field.arcurl)}</div>
+            {/if}
+            <span class="setting" id="customRouteCopyID" onclick="customRouteCopy();" data-clipboard-text="{:urldecode($field.arcurl)}">复制链接</span>
+        </dd>
+    </dl>
+    <script type="text/javascript" src="__SKIN__/js/clipboard.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($("#htmlfilename").length && $(".prefix_textarea").length) {
+                $("#htmlfilename").width();
+                var t = $("#htmlfilename").parent().height(),
+                    e = $("#htmlfilename").prev(".prefix").find("i").position().top - 28,
+                    i = $("#htmlfilename").prev(".prefix").find("i").position().left,
+                    a = $("#htmlfilename").prev(".prefix")[0].getBoundingClientRect().height - 18;
+                $("#htmlfilename").css({top: a, "text-indent": i, height: t - e});
+
+                // 赋值给需要复制的元素
+                //$('#customRouteCopyID').attr('data-clipboard-text', $('#htmlfilename_prefix').text() + $("#htmlfilename").text());
+            }
+        });
+
+        function customRouteLoad(obj) {
+            // 赋值给需要复制的元素
+            //$('#customRouteCopyID').attr('data-clipboard-text', $('#htmlfilename_prefix').text() + $(obj).val());
+        }
+        // 复制
+        function customRouteCopy() {
+            var clipboardObj = new Clipboard('#customRouteCopyID');
+            clipboardObj.on("success", function(e) { showSuccessMsg("复制成功"); });
+            clipboardObj.on("error", function(e) { showErrorMsg("复制失败！请手动复制"); });
+        }
+    </script>
+    {/if}
+    {if condition="'Single' == $Think.const.CONTROLLER_NAME && $show_lang == $admin_lang"}
+    <dl class="row">
+        <dt class="tit">
+            <div class="tit-l"><label>页面模板</label> <p class="notic">当前页面所关联的模板</p></div>
+            <div class="tit-r"></div>
+        </dt>
+        <dd class="opt">
+            <select name="tempview" id="tempview">
+                {volist name='$templateList' id='vo'}
+                <option value="{$vo}" {eq name='$vo' value='$tempview'} selected {/eq}>{$vo}</option>
+                {/volist}
+            </select>
+        </dd>
+    </dl>
+    {/if}
+</div>

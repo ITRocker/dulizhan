@@ -1,0 +1,16 @@
+<div class="sidebar-second ">
+    <ul>
+        <li class="sidebar-second-title">询盘中心</li>
+        <!-- {volist name="$formList" id="left"}
+        <li>
+            <a href="{:custom_url('Form/index', ['form_id' => $left.form_id])}" {if condition="$left.form_id == $Request.param.form_id"} class="active" {/if}>{$left.form_name}</a>
+        </li>
+        {/volist} -->
+        <li> <a href="{:custom_url('Form/index', ['form_id' => 1])}" {if condition="1 == $Request.param.form_id"} class="active" {/if}>产品询盘{if condition="!empty($unreadList[1]['count'])"} <span class="num"></span> {/if}</a> </li>
+        <li> <a href="{:custom_url('Form/index', ['form_id' => 2])}" {if condition="2 == $Request.param.form_id"} class="active" {/if}>联系我们{if condition="!empty($unreadList[2]['count'])"} <span class="num"></span> {/if}</a> </li>
+        <li> <a href="{:custom_url('Form/index', ['form_id' => 3])}" {if condition="3 == $Request.param.form_id"} class="active" {/if}>邮件订阅{if condition="!empty($unreadList[3]['count'])"} <span class="num"></span> {/if}</a> </li>
+        <!-- <li>
+            <a {if condition="in_array($Request.action, ['field_add'])"}class="active"{/if} href='{:custom_url("Form/field_add")}'>添加表单</a>
+        </li> -->
+    </ul>
+</div>

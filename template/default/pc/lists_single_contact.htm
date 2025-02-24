@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html lang="{$zan.global.lang_htmlmark}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta content="telephone=no" name="format-detection" />
+        <title>{$zan.field.seo_title}</title>
+        <meta name="keywords" content="{$zan.field.seo_keywords}" />
+        <meta name="description" content="{$zan.field.seo_description}" />
+        <link href="{zan:global name='web_ico' /}" rel="shortcut icon" type="image/x-icon" />
+        {zan:static file="skin/css/style.css" /}
+        {zan:static file="skin/css/iconfont.css" /}
+        {zan:static file="skin/css/jquery.bxslider.css" /}
+        {zan:static file="skin/js/jquery-3.7.0.min.js" /}
+        {zan:static file="skin/js/trade.js" /}
+        {zan:static file="skin/js/jquery.bxslider.js" /}
+    </head>
+    <body>
+        {zan:include file="header.htm" /}
+        <div class="in_ad">
+            <div class="banner-box">
+                <img src="{zan:global name='web_templets_pc' /}/skin/images/banner.jpg" width="100%">
+                <h1 class="typename"><a href="{$zan.field.typeurl}">{$zan.field.typename}</a></h1>
+            </div>
+        </div>
+        <div id="main" class="w article">
+            <div class="web_position clean s1">
+                <div class="position">{zan:position/}</div>
+            </div>
+            <div class="contenter">
+                <div class="webarticle_detail">
+                    <div class="contents">
+                        <div class="single">
+                            <div class="single_title">{$zan.field.typename}</div>
+                            <div class="single_other">{$zan.field.content}</div>
+                        </div>
+                    </div>
+                    <div class="webart_feedback">
+                        {zan:form type='default' formid='2' id='field'}
+                        <div class="article_feedback_title">
+                            <div class="title">{$field.form_name}</div>
+                            <span></span>
+                            <div class="txt">{$field.intro}</div>
+                        </div>
+                        
+                        <form method="POST" action="{$field.action}" {$field.formhidden} onsubmit="{$field.submit}">
+                            <div class="rows input_rows">
+                                <div class="input_title">
+                                    {$field.itemname_5}{notempty name="$field.required_5"}<font class="fc_red">*</font>{/notempty}
+                                </div>
+                                <input type='text' id='attr_5' name='{$field.attr_5}' class="input" size="30" maxlength="100" placeholder="{$field.placeholder_5}" />
+                                
+                            </div>
+                            <div class="rows input_rows">
+                                <div class="input_title">
+                                    {$field.itemname_7}{notempty name="$field.required_7"}<font class="fc_red">*</font>{/notempty}
+                                </div>
+                                <input type='email' id='attr_7' name='{$field.attr_7}' class="input" size="30" maxlength="100" placeholder="{$field.placeholder_7}" />
+                            </div>
+                            <div class="rows textarea_rows">
+                                <div class="input_title">
+                                    {$field.itemname_8}{notempty name="$field.required_8"}<font class="fc_red">*</font>{/notempty}
+                                </div>
+                                <textarea type='text' id='attr_8' name='{$field.attr_8}' class="form_area contents" placeholder="{$field.placeholder_8}"/></textarea>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="rows">
+                                <input name="submit" type="submit" class="form_button" value="Submit" />
+                            </div>
+                            {$field.hidden}
+                        </form>
+                        {/zan:form}
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        {zan:include file="footer.htm" /}
+    </body>
+</html>

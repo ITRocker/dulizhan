@@ -1,0 +1,87 @@
+{include file="public/layout" /}
+<style type="text/css">
+    a.link_names {
+        background-color: #F5F5F5; border: none; margin-right: 5px;
+    }
+    a.link_active {
+        background-color: rgb(51, 152, 204); border: none; margin-right: 5px; color: rgb(255, 255, 255);
+    }
+    a:hover.ncap-btn {
+        text-decoration: none;
+        color: rgb(255, 255, 255);
+        background-color: rgb(51, 152, 204);
+        border: none;
+    }
+</style>
+
+<body class="bodystyle eyou_body_xin arctype">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+<div class="sidebar-second order-navBox" style="min-height: calc(100%);height: unset;border-top: 1px solid #f0f0f0;">
+    <ul id="accordion" class="accordion">
+        <li>
+            <ul class="submenu">
+                <li>
+                    <a href="{:url('Navigation/link')}" {empty name="$channel"} class="current" {/empty}>基础链接</a>
+                </li>
+                <li>
+                    <a href="{:url('Navigation/link', ['channel' => 2])}" {eq name="$channel" value="2"} class="current" {/eq}>商品分类</a>
+                </li>
+                <li>
+                    <a href="{:url('Navigation/link', ['channel' => 1])}" {eq name="$channel" value="1"} class="current" {/eq}>新闻分类</a>
+                </li>
+                <!-- <li>
+                    <a href="{:url('Navigation/link', ['channel' => 3])}" {eq name="$channel" value="3"} class="current" {/eq}>案例分类</a>
+                </li> -->
+                <li>
+                    <a href="{:url('Navigation/link', ['channel' => 6])}" {eq name="$channel" value="6"} class="current" {/eq}>单页</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div id="page_div" class="page min-hg-c-10 " style="min-width: auto;box-shadow: none;margin-left: 100px;">
+    {if condition="in_array($channel, [1, 2, 3])"}
+        {include file="navigation/link_arctype" /}
+    {elseif condition="in_array($channel, [6])" /}
+        {include file="navigation/link_single" /}
+    {else /}
+        <div class="flexigrid">
+            <span style="font-size: 14px;">基础链接</span>
+            <div class="mt10">
+                <!-- link_active -->
+                {volist name="$basicArr" id="vo"}
+                <a class="ncap-btn link_names" onclick="selectLink(this);" data-hostid="1" data-type_id="{$vo.type_id}" data-type_url="{$vo.type_url}" data-type_name="{$vo.type_name}">{$vo.type_name}</a> 
+                {/volist}
+            </div>
+            <div>&nbsp;</div>
+        </div>
+    {/if}
+</div>
+
+<input type="hidden" id="host_id" value="">
+<input type="hidden" id="type_id" value="">
+<input type="hidden" id="type_url" value="">
+<input type="hidden" id="type_name" value="">
+
+<script type="text/javascript">
+    function selectLink(obj) {
+        // $('#host_id').val($(obj).attr('data-hostid'));
+        // $('#type_id').val($(obj).attr('data-type_id'));
+        // $('#type_url').val($(obj).attr('data-type_url'));
+        // $('#type_name').val($(obj).attr('data-type_name'));
+        $('.link_names').removeClass('link_active');
+        $(obj).addClass('link_active');
+
+        var linkJsonData = [];
+        linkJsonData.host_id = $(obj).attr('data-hostid');
+        linkJsonData.type_id = $(obj).attr('data-type_id');
+        linkJsonData.type_url = $(obj).attr('data-type_url');
+        linkJsonData.type_name = $(obj).attr('data-type_name');
+        parent.loadSelectLink(linkJsonData);
+    }
+</script>
+
+{include file="public/footer" /}

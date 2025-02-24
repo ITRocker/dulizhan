@@ -1,0 +1,81 @@
+<div class="fixed-bar mb10" style="min-width:auto;">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            {eq name="$Think.const.CONTROLLER_NAME.'@index'|is_check_access" value="1"}
+            <li class="tab {eq name="$Request.action" value="index"}current{/eq}"><a href="{:custom_url('Weapp/index')}"><span>我的插件</span></a></li>
+            {/eq}
+            
+            {if condition="0 >= $Think.session.admin_info.role_id"}
+                {eq name="$Think.const.CONTROLLER_NAME.'@plugin'|is_check_access" value="1"}
+                    {eq name="$weapp_plugin_open" value="1"}
+                    <li class="{eq name="$Request.action" value="plugin"}current{/eq}"><a href="{:custom_url('Weapp/plugin')}"><span>云插件库</span></a></li>
+                    {/eq}
+                {/eq}
+                
+                {eq name="$Think.const.CONTROLLER_NAME.'@mybuy'|is_check_access" value="1"}
+                <li class="{eq name="$Request.action" value="mybuy"}current{/eq}"><a href="{:custom_url('Weapp/mybuy', ['install'=>0])}"><span>已购买插件</span></a></li>
+                {/eq}
+            {/if}
+        </ul>
+        {if condition="$Request.action == 'index'"}
+        <div class="flexigrid fr mr10">
+            <form class="navbar-form form-inline" action="{:url('Weapp/index')}" method="get" onsubmit="layer_loading('正在处理');">
+                {$searchform.hidden|default=''}
+                <div class="ftitle">
+                    <div class="sDiv2 fl" style="">
+                        <input type="text" size="30" name="keywords" class="qsbox" placeholder="搜索应用名称..." autocomplete="off">
+                        <input type="submit" class="btn" value="搜索">
+                        <i class="iconfont e-sousuo"></i>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {elseif condition="$Request.action == 'plugin'"/}
+        <div class="flexigrid fr mr5">
+            <form  id="searchForm" class="navbar-form form-inline fl" action="{:url('Weapp/plugin')}" method="get"
+                  onsubmit="layer_loading('正在处理');">
+                {$searchform.hidden|default=''}
+                <div class="sDiv">
+                    <div class="sDiv2 fl" style="">
+                        <select name="is_pay" class="select" style="margin:5px 5px;" onchange="$('#searchForm').submit();">
+                            <option value="">--全部--</option>
+                            <option value="1" {eq name="$Request.param.is_pay" value="1"}selected{/eq}>免费</option>
+                            <option value="2" {eq name="$Request.param.is_pay" value="2"}selected{/eq}>付费</option>
+                            <option value="3" {eq name="$Request.param.is_pay" value="3"}selected{/eq}>已购买</option>
+                        </select>
+                    </div>
+                    <div class="sDiv2 fl" style="">
+                        <input type="text" size="30" name="keywords" class="qsbox" value="{$Request.param.keywords}" placeholder="搜索相关数据...">
+                        <input type="submit" class="btn" value="搜索">
+                        <i class="iconfont e-sousuo"></i>
+                    </div>
+                    
+                </div>
+            </form>
+            <div class="mDiv fl ml10">
+                <div class="fbutton">
+                    <a href="{:url('Weapp/create')}">
+                        <div class="add" title="插件开发者">
+                            <span>插件开发者</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {elseif condition="$Request.action == 'mybuy'"/}
+        <div class="flexigrid fr mr10">
+            <form class="navbar-form form-inline" action="{:url('Weapp/mybuy')}" method="get" onsubmit="layer_loading('正在处理');">
+                {$searchform.hidden|default=''}
+                <div class="ftitle">
+                    <div class="sDiv2 fl" style="">
+                        <input type="hidden" name="install" value="{$Request.param.install|default=0}">
+                        <input type="text" size="30" name="keywords" class="qsbox" placeholder="搜索相关数据..." autocomplete="off">
+                        <input type="submit" class="btn" value="搜索">
+                        <i class="iconfont e-sousuo"></i>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {/if}
+    </div>
+</div>

@@ -1,0 +1,167 @@
+{include file="public/layout" /}
+
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;min-width: auto;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page" style="min-width: auto;box-shadow:none;">
+    <div id="" class="explanation mb10">
+        <ul>
+            <li>按订单总额收取运费,可设置固定运费或按订单总额的百分比设置运费。</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <form class="form-horizontal" id="post_form">
+            <div class="ncap-form-default">
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="">运费类别</label>
+                    </dt>
+
+                    <dd class="opt">
+                        <label>
+                            <input type="radio" name="shop[shop_open_shipping_type]" value="1" {eq name="$usersConfig.shop_open_shipping_type" value="1"} checked="checked" {/eq}/>固定运费
+                        </label>
+                        <!-- &nbsp;&nbsp; -->
+                        <label style="display: none;">
+                            <input type="radio" name="shop[shop_open_shipping_type]" value="2" {eq name="$usersConfig.shop_open_shipping_type" value="2"} checked="checked" {/eq}/>百分比
+                        </label>
+                    </dd>
+                </dl>
+                <dl class="row" id="percent1">
+                    <dt class="tit">
+                        <label for="">运费</label>
+                    </dt>
+                    <dd class="opt">
+                        <input type="text" name="shop[shop_open_shipping_money]" value="{$usersConfig.shop_open_shipping_money}">
+                    </dd>
+                </dl>
+                <dl class="row" id="percent2" style="display: none;">
+                    <dt class="tit">
+                        <label for="">运费值</label>
+                    </dt>
+                    <dd class="opt">
+                        <input type="text">%
+                    </dd>
+                </dl>
+                <div class="bot mt30">
+                    <a href="JavaScript:void(0);" onclick="shopConfig();" class="ncap-btn-big ncap-btn-green" id="submitBtn">保存</a>
+                </div>
+            </div>
+            <!-- <div class="mDiv pb10">
+                <div class="ftitle">
+                    <h3>{$info.template_region}：￥</h3>
+                    <input type="text" value="{$info.template_money}" onchange="changeTableVal('shop_shipping_template','template_id','{$info.template_id}','template_money',this);" style="padding: 0px 6px;width: 80px;" title="输入价格后，点击空白处即可保存！">
+                </div>
+                <form class="navbar-form form-inline" action="{:url('Shop/shipping_template')}" method="get" onsubmit="layer_loading('正在处理');">
+                    {$searchform.hidden|default=''}
+                    <div class="sDiv">
+                        <div class="sDiv2">
+                            <input type="text" size="50"  name="region_name" class="qsbox" style="width: 150px;" value="{$Request.param.region_name}" placeholder="搜索区域...">
+                            <input type="submit" class="btn" value="搜索">
+                            <i class="iconfont e-sousuo"></i>
+                        </div>
+                    </div>
+                </form>
+            </div> -->
+            <!-- <div class="hDiv">
+                <div class="hDivBox">
+                    <table cellspacing="0" cellpadding="0" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th class="sign w10" axis="col0">
+                                <div class="tc"></div>
+                            </th>
+                            <th abbr="ac_id" axis="col4">
+                                <div class="">配送区域</div>
+                            </th>
+                            <th abbr="article_time" axis="col4" class="w100">
+                                <div class="tc">配送金额</div>
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div> -->
+            <!-- <div class="bDiv" style="height: auto;">
+                <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                    <table style="width: 100%">
+                        <tbody>
+                        {empty name="Template"}
+                            <tr>
+                                <td class="no-data" align="center" axis="col0" colspan="50">
+                                    <div class="no_row">
+                                        <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {else/}
+                            {volist name="Template" id="vo"}
+                                <tr>
+                                    <td class="sign">
+                                        <div class="w10 tc">
+                                        </div>
+                                    </td>
+                                    <td style="width: 100%">
+                                        <div style="">
+                                            {$vo.name}
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div class="w100 tc">
+                                            ￥<input type="text" onchange="changeTableVal('shop_shipping_template','template_id','{$vo.template_id}','template_money',this);"  size="4"  value="{$vo.template_money}" style="width: 60px;" title="输入价格后，点击空白处即可保存！"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {/volist}
+                        {/empty}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="iDiv" style="display: none;"></div>
+            </div> -->
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // 为运费类别radio按钮绑定change事件
+        // $('input[type="radio"][name^="percent"]').change(function () {
+        //     var radioValue = $(this).val();
+        //     if (radioValue === "percent0") {
+        //         $('#percent1').show();
+        //         $('#percent2').hide();
+        //     } else {
+        //         $('#percent2').show();
+        //         $('#percent1').hide();
+        //     }
+        // });
+    });
+
+    // 判断输入框是否为空
+    function shopConfig() {
+        layer_loading('正在处理');
+
+        $.ajax({
+            type: 'post',
+            url : "{:custom_url('Shop/conf', ['_ajax'=>1])}",
+            data: $('#post_form').serialize(),
+            dataType: 'json',
+            success: function(res) {
+                layer.closeAll();
+                if (res.code == 1) {
+                    showSuccessMsg(res.msg, 1500, function() {
+                        window.location.reload();
+                    });
+                } else {
+                    showErrorMsg(res.msg);
+                }
+            },
+            error: function(e) {
+                layer.closeAll();
+                showErrorAlert(e.responseText, 5);
+            }
+        });
+    }
+</script>
+{include file="public/footer" /}

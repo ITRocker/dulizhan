@@ -1,0 +1,28 @@
+#ey-mkf {position:fixed;right:5px;/*top:40%;*/transform:translateY(-50%);font-family:Arial,Helvetica,sans-serif;z-index:99999999;}
+#ey-mkf * {box-sizing:border-box;font-size:12px;line-height:1.1}
+#ey-mkf .ey-list {padding:0;border:1px solid #EEE;background-color:#FFF;max-width:78px;border-radius:4px;margin:0}
+#ey-mkf .ey-icon {display:inline-block;background:url(../images/ey-ico23.png)no-repeat;width:28px;height:28px;transform:scale(.8)}
+#ey-mkf .ey-list>li {width:100%;border-top:1px solid #EEE;list-style:none;text-align:center;padding:2px 0 4px;transition:all .2s ease-in-out}
+#ey-mkf .ey-list>li>a>p {margin:0;transform:scale(.9);text-transform:capitalize}
+#ey-mkf .ey-list>li a {color:#555;text-decoration:none;display:block;padding:0 2px}
+#ey-mkf .ey-wechat-img {position:absolute;right:calc(100% - 1px);bottom:0;width:120px;text-align:center;padding:10px 10px 6px;background-color:#FFF;border:1px solid #EEE;border-radius:4px;transform:scale(0);transform-origin:right bottom}
+#ey-mkf .ey-wechat-img img {display:block;max-width:100%;max-height:100%}
+#ey-mkf .ey-wechat-img p {margin:4px 0 0;transform:scale(.9);word-break:break-all}
+#ey-mkf .ey-wechat-img em {display:inline-block;width:16px;height:16px;background:url(../images/ey-ico23.png)-76px -8px/99px no-repeat;vertical-align:middle;margin-right:4px}
+#ey-mkf .ey-list>li:hover .ey-wechat-img {transition:transform .4s;transform:scale(1)}
+#ey-mkf .ey-list>li:hover,.ey-list>li:hover+li {border-color:transparent} 
+#ey-mkf .ey-email .ey-icon {background-position:-8px -6px}
+#ey-mkf .ey-whatsapp .ey-icon {background-position:-52px -50px}
+#ey-mkf .ey-skype .ey-icon {background-position:-52px -6px}
+#ey-mkf .ey-wechat .ey-icon {background-position:-144px -10px}
+#ey-mkf .ey-list li:hover a {color:#FFF} .ey-email:hover {background-color:#f90}
+#ey-mkf .ey-whatsapp:hover {background-color:#2cb740}
+#ey-mkf .ey-skype:hover {background-color:#0091df}
+#ey-mkf .ey-wechat:hover {background-color:#51c332}
+#ey-mkf .ey-email:hover .ey-icon {background-position:-96px -6px}
+#ey-mkf .ey-whatsapp:hover .ey-icon {background-position:-52px -94px}
+#ey-mkf .ey-skype:hover .ey-icon {background-position:-96px -50px}
+#ey-mkf .ey-wechat:hover .ey-icon {background-position:-144px -62px}
+#ey-mkf .ey-list>li:first-child {border-radius:4px 4px 0 0;border:0}
+#ey-mkf .ey-list>li:last-child {border-radius:0 0 4px 4px}
+@media (max-width:768px) {#ey-mkf {display:none}}

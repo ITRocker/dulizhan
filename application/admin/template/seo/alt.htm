@@ -1,0 +1,92 @@
+{include file="public/layout" /}
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="seo/left" /}
+<div class="fixed-bar mb10" style="min-width:auto;margin-left:100px;">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            <li {if condition="'alt'==$Think.const.ACTION_NAME"}class="current"{/if}>
+                <a href="{:url('Seo/alt')}">
+                    <span>图片ALT属性</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="page min-hg-c-66 atta" style="min-width:auto;margin-left:100px;">
+    <div class="explanation" id="">
+        <ul>
+            <li>Google图片搜索高度重视图片Alt属性 ，设置图片Alt属性可以提高网站Google 图片搜索排名</li>
+        </ul>
+    </div>
+    <form method="post" id="handlepost" action="{:U('Seo/alt')}" enctype="multipart/form-data" name="form1">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">自动生成图片ALT属性</dt>
+                <dd class="opt">
+                    <!-- 此处为默认关闭，关闭时，下面所有选项全部隐藏 -->
+                    <label class="curpoin"><input id="alt_open1" name="alt_open" value="1" {if condition="!empty($global['alt_open'])"} checked="checked" {/if} type="radio">开启</label>
+                    &nbsp;
+                    <label class="curpoin"><input id="alt_open0" name="alt_open" value="0" {if condition="empty($global['alt_open'])"} checked="checked" {/if} type="radio">关闭</label>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">适用范围</dt>
+                <dd class="opt">
+                    <label class="curpoin">
+                        <input id="alt_range0" name="alt_range" value="0" {if condition="empty($global['alt_range'])"} checked="checked" {/if} type="radio">缺少ALT属性的图片
+                        <span class="notic2 ml5">仅对ALT属性留空的图片生效</span>
+                    </label>
+                    <div style="height: 0px;width: 100%;display: block;"></div>
+                    <label class="curpoin mt5">
+                        <input id="alt_range1" name="alt_range" value="1" {if condition="!empty($global['alt_range'])"} checked="checked" {/if} type="radio">全站所有图片
+                        <span class="notic2 ml5">对全站所有图片生效，已设置过ALT属性的图片将被覆盖</span>
+                    </label>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label>产品图片ALT属性</label>
+                </dt>
+                <dd class="opt">
+                    <label class="curpoin"><input type="checkbox" name="alt_product_img" value="1" checked="checked">产品名称</label>&nbsp;&nbsp;
+                    <label class="curpoin"><input type="checkbox" name="alt_product_img" value="2">网站名称</label>&nbsp;&nbsp;
+                    <span class="err"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label>产品封面图ALT属性</label>
+                </dt>
+                <dd class="opt">
+                    <label class="curpoin"><input type="checkbox" name="" value="1" checked="checked">产品名称</label>&nbsp;&nbsp;
+                    <label class="curpoin"><input type="checkbox" name="" value="1">网站名称</label>&nbsp;&nbsp;
+                    <span class="err"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label>新闻封面图ALT属性</label>
+                </dt>
+                <dd class="opt">          
+                    <label class="curpoin"><input type="checkbox" name="" value="1" checked="checked">产品名称</label>&nbsp;&nbsp;
+                    <label class="curpoin"><input type="checkbox" name="" value="1">网站名称</label>&nbsp;&nbsp;
+                    <span class="err"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <div class="bottom-fixed">
+                <div class="bot4">
+                    <a href="JavaScript:void(0);" onclick="Submit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">保存</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{include file="public/footer" /}

@@ -1,0 +1,11 @@
+    <div class="fixed-bar mb10" style="min-width:auto;margin-left:100px;">
+        <div class="item-title">
+            <ul class="tab-base nc-row">
+                <li {if condition="in_array($Request.controller, array('Admin'))"}class="current"{/if}>
+                    <a href="{:custom_url('Admin/index')}">
+                        <span>管理员</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>

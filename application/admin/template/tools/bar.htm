@@ -1,0 +1,16 @@
+    <div class="fixed-bar mb10">
+        <div class="item-title">
+            <ul class="tab-base nc-row">
+                <li {eq name="$Request.action" value="index"}class="current"{/eq}>
+                    <a href="{:url('Tools/index')}">
+                        <span>数据备份</span>
+                    </a>
+                </li>
+                <li {if condition="in_array($Request.action, array('restore'))"}class="current"{/if}>
+                    <a href="{:url('Tools/restore')}">
+                        <span>数据还原</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>

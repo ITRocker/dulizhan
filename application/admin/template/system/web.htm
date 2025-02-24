@@ -1,0 +1,550 @@
+{include file="public/layout" /}
+<script type="text/javascript" src="__SKIN__/js/clipboard.min.js"></script>
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="system/left" /}
+{include file="system/bar" /}
+<div class="page min-hg-c-110" style="min-width:auto;margin-left:100px;">
+    <div class="flexigrid htitx">
+        <form method="post" id="handlepost" action="{:url('System/web')}" enctype="multipart/form-data" name="form1">
+            <div class="hDiv" id="oss">
+                <div class="hDivBox">
+                    <table cellspacing="0" cellpadding="0" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th class="sign w10" axis="col0">
+                                <div class="tc"></div>
+                            </th>
+                            <th abbr="article_title" axis="col3" class="w10">
+                                <div class="tc">
+                                   网站信息
+                                </div>
+                            </th>
+                            <th abbr="ac_id" axis="col4">
+                                <div class=""></div>
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="ncap-form-default">
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="site_url">网站状态</label>
+                    </dt>
+                    <dd class="opt">
+                        <label class="curpoin {if condition='$admin_lang != $show_lang'} grey {/if}"><input id="web_status0" name="web_status" value="0" type="radio" {if condition="!isset($config.web_status) OR empty($config.web_status)"} checked="checked"{/if} {if condition='$admin_lang != $show_lang'} disabled="disabled" class="grey" {/if}>开启</label>
+                        &nbsp;
+                        <label class="curpoin {if condition='$admin_lang != $show_lang'} grey {/if}"><input id="web_status1" name="web_status" value="1" type="radio" {if condition="isset($config.web_status) AND $config.web_status eq 1"} checked="checked"{/if} {if condition='$admin_lang != $show_lang'} disabled="disabled" class="grey" {/if}>关闭</label>
+                        <input type="hidden" id="old_web_status" value="{$config.web_status|default='0'}">
+                        <p class="notic">请在默认语言下编辑</p>
+                        {eq name="$web_cmsmode" value="2"}
+                        <dd class="variable">
+                            <div><p><b>变量名</b></p></div>
+                            <div class="r"><b>标签调用</b></div>
+                        </dd>
+                        {/eq}
+                    </dd>
+                </dl>
+                <div id="div_web_status_close" class="{if condition='!isset($config.web_status) OR empty($config.web_status)'}none{/if}">
+                    <dl class="row">
+                        <dt class="tit">
+                            <label for="web_status_mode">&nbsp;</label>
+                        </dt>
+                        <dd class="opt">
+                            <label class="curpoin {if condition='$admin_lang != $show_lang'} grey {/if}">
+                                <input type="radio" name="web_status_mode" value="0" {if condition='empty($config.web_status_mode)'}checked="checked"{/if} {if condition='$admin_lang != $show_lang'} disabled="disabled" class="grey" {/if}/>文案显示&nbsp;&nbsp;
+                            </label>
+                            <label class="curpoin {if condition='$admin_lang != $show_lang'} grey {/if}">
+                                <input type="radio" name="web_status_mode" value="1" {if condition='!empty($config.web_status_mode) && 1 == $config.web_status_mode'}checked="checked"{/if} {if condition='$admin_lang != $show_lang'} disabled="disabled" class="grey" {/if}/>跳转链接&nbsp;&nbsp;
+                            </label>
+                            <label class="curpoin {if condition='$admin_lang != $show_lang'} grey {/if}">
+                                <input type="radio" name="web_status_mode" value="2" {if condition='!empty($config.web_status_mode) && 2 == $config.web_status_mode'}checked="checked"{/if} {if condition='$admin_lang != $show_lang'} disabled="disabled" class="grey" {/if}/>模板页面&nbsp;&nbsp;
+                            </label>
+                        </dd>
+                    </dl>
+                    <dl class="row dl_web_status_mode {if condition='!empty($config.web_status_mode)'}none{/if}" id="dl_web_status_mode_0">
+                        <dt class="tit">
+                            <label for="web_status_text">&nbsp;</label>
+                        </dt>
+                        <dd class="opt">
+                            <input id="web_status_text" name="web_status_text" value="{if condition='!isset($config.web_status_text)'}网站暂时关闭，维护中……{else /}{$config.web_status_text}{/if}" class="input-txt-600 {if condition='$admin_lang != $show_lang'} grey {/if}" type="text" autocomplete="off" {if condition='$admin_lang != $show_lang'} disabled="disabled" {/if} />
+                            <p class="notic">{if condition='$admin_lang != $show_lang'}请在默认语言下编辑{/if}</p>
+                        </dd>
+                    </dl>
+                    <dl class="row dl_web_status_mode {if condition='empty($config.web_status_mode) || 1 != $config.web_status_mode'}none{/if}" id="dl_web_status_mode_1">
+                        <dt class="tit">
+                            <label for="web_status_url">&nbsp;</label>
+                        </dt>
+                        <dd class="opt">
+                            <input id="web_status_url" name="web_status_url" value="{$config.web_status_url|default=''}" class="input-txt-600 {if condition='$admin_lang != $show_lang'} grey {/if}" type="text" placeholder="关闭后，访问网站跳转的URL，http://" autocomplete="off" {if condition='$admin_lang != $show_lang'} disabled="disabled" {/if}/>
+                            <p class="notic">{if condition='$admin_lang != $show_lang'}请在默认语言下编辑{else /}如果设置跳转URL，必须带有http:// 或 https://{/if}</p>
+                        </dd>
+                    </dl>
+                    <dl class="row dl_web_status_mode {if condition='empty($config.web_status_mode) || 2 != $config.web_status_mode'}none{/if}" id="dl_web_status_mode_2">
+                        <dt class="tit">
+                            <label for="web_status_tpl">&nbsp;</label>
+                        </dt>
+                        <dd class="opt">
+                            <input id="web_status_tpl" name="web_status_tpl" value="{if condition="isset($config['web_status_tpl'])"}{$config.web_status_tpl|default=''}{else /}__SITE_URL____ROOT_DIR__/public/close.html{/if}" class="input-txt-600 {if condition='$admin_lang != $show_lang'} grey {/if}" type="text" placeholder="关闭后，访问网站显示的个性化页面，public/close.html" autocomplete="off" {if condition='$admin_lang != $show_lang'} disabled="disabled" {/if}/>
+                            <p class="notic">{if condition='$admin_lang != $show_lang'}请在默认语言下编辑{else /}页面存放路径，根目录/public/{/if}</p>
+                        </dd>
+                    </dl>
+                </div>
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="web_basehost">网站网址</label>
+                    </dt>
+                    <dd class="opt">
+                        <input id="web_basehost" name="web_basehost" value="{$config.web_basehost|default=''}" placeholder="{$Request.scheme}://" class="input-txt-600 {if condition='$admin_lang != $show_lang'} grey {/if}" type="text" {if condition='$admin_lang != $show_lang'} disabled="disabled" {/if}/>
+                        <p class="notic">请在默认语言下编辑</p>
+                    </dd>
+                    <!-- {eq name="$web_cmsmode" value="2"}
+                    <dd class="variable">
+                        <div><p>web_basehost</p></div>
+                        <div class="r"><a href="javascript:void(0);" onclick="showtext('web_basehost');" class="ui-btn3 blue web_basehost" data-clipboard-text="{literal}{zan:global name='web_basehost' /}{/literal}">复制标签</a></div>
+                    </dd>
+                    {/eq} -->
+                </dl>
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="web_name">网站名称</label>
+                    </dt>
+                    <dd class="opt ui-web_name ui-text">
+                        <input id="web_name" name="web_name" value="{$config.web_name|default=''}" class="input-txt-600 ui-input" type="text" data-num="10" />
+                        <p class="notic">一般不超过10个字符</p>
+                        <p class="ui-big-text none">一般不超过10个字符（<span class="ui-textTips">还可以输入10个字符</span>）</p>
+                    </dd>
+                    <!-- {eq name="$web_cmsmode" value="2"}
+                    <dd class="variable">
+                        <div><p>web_name</p></div>
+                        <div class="r"><a href="javascript:void(0);" onclick="showtext('web_name');" class="ui-btn3 blue web_name" data-clipboard-text="{literal}{zan:global name='web_name' /}{/literal}">复制标签</a></div>
+                    </dd>
+                    {/eq} -->
+                </dl>
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="web_logo">网站logo</label>
+                    </dt>
+                    <dd class="opt">
+                        <div class="dan-pane">
+                            <div class="images_upload images_upload_html" style="display:inline-block;">
+                                <a href="javascript:void(0);" onclick="GetUploadify(1, '', 'allimg', 'web_logo_img_call_back');" class="img-upload no-float" title="点击上传">
+                                    <div class="y-line" id="web_logo_local_y_line" {notempty name="$config.web_logo_local"} style="display: none;" {/notempty}></div>
+                                    <div class="x-line" id="web_logo_local_x_line" {notempty name="$config.web_logo_local"} style="display: none;" {/notempty}></div>
+                                    <img src="{$config.web_logo_local}" id="web_logo_local_src" class="pic_con" {empty name="$config.web_logo_local"} style="display: none;" {/empty}>
+                                </a>
+                                <a href="javascript:void(0)" onclick="web_logo_clear_pic('web_logo_local', 'web_logo_local_src', 'web_logo_local_y_line', 'web_logo_local_x_line')" class="delect" title="删除"></a>
+                                <input type="hidden" id="web_logo_local" name="web_logo_local" value="{$config.web_logo_local|default=''}">
+                            </div>
+                            <script type="text/javascript">
+                                function web_logo_img_call_back(fileurl_tmp) {
+                                    $('#web_logo_local_y_line, #web_logo_local_x_line').hide();
+                                    $('#web_logo_local_src').show().attr('src', fileurl_tmp);
+                                    $('#web_logo_local').val(fileurl_tmp);
+                                }
+                                function web_logo_clear_pic(id_0, id_1, id_2, id_3) {
+                                    $('#' + id_0).val('');
+                                    $('#' + id_1).hide().attr('src', '');
+                                    $('#' + id_2 + ', #' + id_3).show();
+                                }
+                            </script>
+                        </div>
+                        
+                    </dd>
+                    <!-- {eq name="$web_cmsmode" value="2"}
+                    <dd class="variable">
+                        <div><p>web_logo</p></div>
+                        <div class="r"><a href="javascript:void(0);" onclick="showtext('web_logo');" class="ui-btn3 blue web_logo" data-clipboard-text="{literal}{zan:global name='web_logo' /}{/literal}">复制标签</a></div>
+                    </dd>
+                    {/eq} -->
+                </dl>
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="web_ico">favicon</label>
+                    </dt>
+                    <dd class="opt">
+                        <div class="dan-pane">
+                            <div class="images_upload images_upload_html" style="display:inline-block;">
+                                <a href="javascript:void(0);" onclick="$('#uploadWebIcoClick').trigger('click');" class="img-upload no-float" title="点击上传">
+                                    <div class="y-line" id="web_ico_local_y_line" {notempty name="$config.web_ico_local"} style="display: none;" {/notempty}></div>
+                                    <div class="x-line" id="web_ico_local_x_line" {notempty name="$config.web_ico_local"} style="display: none;" {/notempty}></div>
+                                    <img src="{$config.web_ico_local}?t={:getTime()}" id="web_ico_local_src" class="pic_con" {empty name="$config.web_ico_local"} style="display: none;" {/empty}>
+                                </a>
+                                <a href="javascript:void(0)" onclick="web_ico_clear_pic('web_ico_local', 'web_ico_local_src', 'web_ico_local_y_line', 'web_ico_local_x_line')" class="delect" title="删除"></a>
+                                <input type="hidden" id="web_ico_local" name="web_ico_local" value="{$config.web_ico_local|default=''}">
+                                <input type="file" accept=".ico" id="uploadWebIcoClick" onchange="uploadWebIcoFile(this);" style="display: none;">
+                            </div>
+                            <script type="text/javascript">
+                                function web_ico_img_call_back(fileurl_tmp) {
+                                    $('#web_ico_local_y_line, #web_ico_local_x_line').hide();
+                                    $('#web_ico_local_src').show().attr('src', fileurl_tmp);
+                                    $('#web_ico_local').val(fileurl_tmp);
+                                }
+                                function web_ico_clear_pic(id_0, id_1, id_2, id_3) {
+                                    $('#' + id_0).val('');
+                                    $('#' + id_1).hide().attr('src', '');
+                                    $('#' + id_2 + ', #' + id_3).show();
+                                }
+                                // 上传favicon.ico
+                                function uploadWebIcoFile(obj) {
+                                    var file = $(obj)[0].files[0];
+                                    if (!file) return false;
+                                    var formData = new FormData();
+                                    formData.append('_ajax', 1);
+                                    formData.append('file', file);
+                                    $.ajax({
+                                        type: 'post',
+                                        url : "{:url('Ueditor/imageUp', ['savepath'=>'allimg','pictitle'=>'banner','dir'=>'images'])}",
+                                        data: formData,
+                                        contentType: false,
+                                        processData: false,
+                                        dataType: 'json',
+                                        // async: false,
+                                        success: function (res) {
+                                            if (res.state == 'SUCCESS') {
+                                                web_ico_img_call_back(res.url);
+                                            } else {
+                                                showErrorAlert(res.state);
+                                            }
+                                        },
+                                        error : function(e) {
+                                            layer.closeAll();
+                                            showErrorAlert(e.responseText);
+                                        }
+                                    })
+                                }
+                            </script>
+                        </div>
+                        <span class="err"></span>
+                        <p class="notic">建议尺寸 32 x 32px 的.ico文件。</p>
+                    </dd>
+                    <!-- {eq name="$web_cmsmode" value="2"}
+                    <dd class="variable">
+                        <div><p>web_ico</p></div>
+                        <div class="r"><a href="javascript:void(0);" onclick="showtext('web_ico');" class="ui-btn3 blue web_ico" data-clipboard-text="{literal}{zan:global name='web_ico' /}{/literal}">复制标签</a></div>
+                    </dd>
+                    {/eq} -->
+                </dl>
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="web_copyright">版权信息</label>
+                    </dt>
+                    <dd class="opt">
+                        <textarea cols="60" id="web_copyright" name="web_copyright" class="h20">{$config.web_copyright|default=''}</textarea>
+                        <p class="notic"></p>
+                    </dd>
+                    <!-- {eq name="$web_cmsmode" value="2"}
+                    <dd class="variable">
+                        <div><p>web_copyright</p></div>
+                        <div class="r"><a href="javascript:void(0);" onclick="showtext('web_copyright');" class="ui-btn3 blue web_copyright" data-clipboard-text="{literal}{zan:global name='web_copyright' /}{/literal}">复制标签</a></div>
+                    </dd>
+                    {/eq} -->
+                </dl>
+                <!-- <dl class="row">
+                    <dt class="tit">
+                        <label for="web_recordnum">备案号</label>
+                    </dt>
+                    <dd class="opt ui-keyword">
+                        {eq name='$config.web_recordnum_mode' value='1'}
+                            <textarea rows="5" cols="60" id="web_recordnum" name="web_recordnum" class="h40">{$config.web_recordnum|default=''}</textarea>
+                        {else /}
+                            <textarea rows="5" cols="60" id="web_recordnum" name="web_recordnum" class="h20">{$config.web_recordnum|htmlspecialchars_decode|strip_tags}</textarea>
+                        {/eq}
+                        <input type="hidden" id="web_recordnum_mode" name="web_recordnum_mode" value="{$config.web_recordnum_mode|default='0'}">
+                        &nbsp;[<a href="javascript:void(0);" onclick="show_recordnum(this);">{eq name='$config.web_recordnum_mode' value='
+                        1'}普通模式{else /}代码模式{/eq}</a>]
+                        <p class="notic"></p>
+                    </dd>
+                    {eq name="$web_cmsmode" value="2"}
+                    <dd class="variable">
+                        <div><p>web_recordnum</p></div>
+                        <div class="r"><a href="javascript:void(0);" onclick="showtext('web_recordnum');" class="ui-btn3 blue web_recordnum" data-clipboard-text="{literal}{zan:global name='web_recordnum' /}{/literal}">复制标签</a></div>
+                    </dd>
+                    {/eq}
+                </dl>
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="web_garecordnum">公安备案号</label>
+                    </dt>
+                    <dd class="opt ui-keyword">
+                        {eq name='$config.web_garecordnum_mode' value='1'}
+                            <textarea rows="5" cols="60" id="web_garecordnum" name="web_garecordnum" class="h40">{$config.web_garecordnum|default=''}</textarea>
+                        {else /}
+                            <textarea rows="5" cols="60" id="web_garecordnum" name="web_garecordnum" class="h20">{$config.web_garecordnum|htmlspecialchars_decode|strip_tags}</textarea>
+                        {/eq}
+                        <input type="hidden" id="web_garecordnum_mode" name="web_garecordnum_mode" value="{$config.web_garecordnum_mode|default='0'}">
+                        &nbsp;[<a href="javascript:void(0);" onclick="show_garecordnum(this);">{eq name='$config.web_garecordnum_mode' value='
+                        1'}普通模式{else /}代码模式{/eq}</a>]
+                        <p class="notic"></p>
+                    </dd>
+                    {eq name="$web_cmsmode" value="2"}
+                    <dd class="variable">
+                        <div><p>web_garecordnum</p></div>
+                        <div class="r"><a href="javascript:void(0);" onclick="showtext('web_garecordnum');" class="ui-btn3 blue web_garecordnum" data-clipboard-text="{literal}{zan:global name='web_garecordnum' /}{/literal}">复制标签</a></div>
+                    </dd>
+                    {/eq}
+                </dl> -->
+            </div>
+            <div class="hDiv">
+                <div class="hDivBox">
+                    <table cellspacing="0" cellpadding="0" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th class="sign w10" axis="col0">
+                                <div class="tc"></div>
+                            </th>
+                            <th abbr="article_title" axis="col3" class="w10">
+                                <div class="tc">首页TDK信息</div>
+                            </th>
+                            <th abbr="ac_id" axis="col4">
+                                <div class=""></div>
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="ncap-form-default">
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="web_title">Title</label>
+                    </dt>
+                    <dd class="opt ui-web_title ui-text">
+                        <input id="web_title" name="web_title" value="{$config.web_title|default=''}" class="h20 w600 ui-input" type="text" data-num="80" />
+                        <p class="notic">标题（Title）一般不超过80个字符</p>
+                        <p class="ui-big-text none">一般不超过80个字符（<span class="ui-textTips">还可以输入80个字符</span>）</p>
+                    </dd>
+                    <!-- {eq name="$web_cmsmode" value="2"}
+                    <dd class="variable">
+                        <div><p>web_title</p></div>
+                        <div class="r"><a href="javascript:void(0);" onclick="showtext('web_title');" class="ui-btn3 blue web_title" data-clipboard-text="{literal}{zan:global name='web_title' /}{/literal}">复制标签</a></div>
+                    </dd>
+                    {/eq} -->
+                </dl>
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="web_keywords">KeyWords</label>
+                    </dt>
+                    <dd class="opt ui-keyword ui-text">
+                        <input id="web_keywords" name="web_keywords" value="{$config.web_keywords|default=''}" class="h20 w600 ui-input" type="text" data-num="100" />
+                        <p class="notic">关键词（KeyWords）一般不超过100个字符</p>
+                        <p class="ui-big-text none">一般不超过100个字符（<span class="ui-textTips">还可以输入100个字符</span>）</p>
+
+    <!-- 
+                        <input type="text" value="{$config.web_keywords|default=''}" name="web_keywords" id="web_keywords" class="input-txt ui-input" data-num="100">
+                        <input type="hidden" id="web_keywords_1607062084" value="web_keywords">
+                        <script type="text/javascript">
+                            $(function() { $('#web_keywords').tagsInput({width: '450px', height: 'auto'}); });
+                        </script>
+                        <span class="err"></span>
+                        <p class="notic">输入标签结束后可用回车或空格分开</p>
+                         -->
+                    </dd>
+                    <!-- {eq name="$web_cmsmode" value="2"}
+                    <dd class="variable">
+                        <div><p>web_keywords</p></div>
+                        <div class="r"><a href="javascript:void(0);" onclick="showtext('web_keywords');" class="ui-btn3 blue web_keywords" data-clipboard-text="{literal}{zan:global name='web_keywords' /}{/literal}">复制标签</a></div>
+                    </dd>
+                    {/eq} -->
+                </dl>
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="web_description">Description</label>
+                    </dt>
+                    <dd class="opt ui-web_description ui-text">
+                        <textarea rows="5" cols="60" id="web_description" name="web_description" style="height:60px;" class="w600 ui-input keywordsTextarea" data-num="200" onkeyup="monitorInputStr();" onkeypress="monitorInputStr();">{$config.web_description|default=''}</textarea>
+                        <p class="notic">描述（Description）建议不超过200个字符</p>
+                        <p class="ui-big-text {empty name='$config.web_keywords'}none{/empty}" id="beenWritten">你已输入<span id="beenWrittenStr">0</span>个字符</p>
+                    </dd>
+                    <!-- {eq name="$web_cmsmode" value="2"}
+                    <dd class="variable">
+                        <div><p>web_description</p></div>
+                        <div class="r"><a href="javascript:void(0);" onclick="showtext('web_description');" class="ui-btn3 blue web_description" data-clipboard-text="{literal}{zan:global name='web_description' /}{/literal}">复制标签</a></div>
+                    </dd>
+                    {/eq} -->
+                </dl>
+            </div>
+            <div class="hDiv">
+                <div class="hDivBox">
+                    <table cellspacing="0" cellpadding="0" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th class="sign w10" axis="col0">
+                                <div class="tc"></div>
+                            </th>
+                            <th abbr="article_title" axis="col3" class="w10">
+                                <div class="tc">
+                                   货币
+                                </div>
+                            </th>
+                            <th abbr="ac_id" axis="col4">
+                                <div class=""></div>
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="ncap-form-default mb30">
+                <dl class="row">
+                    <dt class="tit">
+                        <label for="">货币选择</label>
+                    </dt>
+                    <dd class="opt">
+                        <select name="web_currency_unit" class="w300">
+                            {volist name=":get_currency_list()" id="vo"}
+                                <option value="{$vo.code}" {if condition="!empty($config['web_currency_unit']) && $config['web_currency_unit'] == $vo['code']"} selected="true" {/if}>{$vo.title} ({$vo['code']}/{$vo['unit']})</option>
+                            {/volist}
+                        </select>
+                        <p class="notic"></p>
+                    </dd>
+                </dl>
+            </div>
+            <div class="bottom-fixed">
+                <div class="bot4">
+                    {empty name="$is_eyou_authortoken"}
+                    {if condition="$show_lang == $admin_lang && !empty($doubao['doubao_api']) && !empty($isLanguage)"}
+                    <a class="ncap-btn-big ncap-btn-green-b mr15" href="javascript:void(0);"  data-href="{:url('System/help')}" onclick="openHelpframe(this, 'AI翻译', '400px', '100%', 'r');" title="AI翻译">AI翻译</a>
+                    {/if}
+                    {/empty}
+                    <a href="JavaScript:void(0);" class="ncap-btn-big ncap-btn-green" onclick="adsubmit(true);">保存</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    var show_lang = "{$show_lang}";
+    var admin_lang = "{$admin_lang}";
+
+    $(function(){
+        // tipsText();
+
+        // 关闭站点
+        $('input[name=web_status]').click(function(){
+            $('#div_web_status_close').hide();
+            if ($(this).val() == 1) {
+                $('#div_web_status_close').show();
+            }
+        });
+
+        $('input[name=web_status_mode]').click(function(){
+            var web_status_mode = $(this).val();
+            $('.dl_web_status_mode').hide();
+            $('#dl_web_status_mode_'+web_status_mode).show();
+        });
+    });
+
+    // 翻译参数数组
+    var isSubmit = false;
+    var translateArr = {};
+
+    function adsubmit(isShow) {
+        if (show_lang == admin_lang) {
+            if($('input[name=web_status]:checked').val() == 1){
+                var web_status_mode = $('input[name=web_status_mode]:checked').val();
+                if(web_status_mode == 1){
+                    if ($.trim($('input[name=web_status_url]').val()) == '') {
+                        showErrorMsg('跳转的URL不能为空！');
+                        $('input[name=web_status_url]').focus();
+                        return false;
+                    } else if (!checkURL($('input[name=web_status_url]').val())) {
+                        showErrorMsg('跳转的URL格式不正确！');
+                        $('input[name=web_status_url]').focus();
+                        return false;
+                    }
+                }
+            }
+        }
+        if (isShow) layer_loading('正在处理');
+        $.ajax({
+            type : 'post',
+            url : "{:url('System/web', ['_ajax'=>1])}",
+            data : $('#handlepost').serialize(),
+            dataType : 'json',
+            success : function(res){
+                if (isShow) {
+                    layer.closeAll();
+                    if(res.code == 1){
+                        layer.msg(res.msg, {shade: layer_shade, time: 1000}, function(){
+                            window.location.reload();
+                        });
+                    }else{
+                        showErrorMsg(res.msg);
+                    }
+                } else {
+                    isSubmit = true;
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+
+    function showtext(classname){
+        var clipboard1 = new Clipboard("."+classname);clipboard1.on("success", function(e) {layer.msg("复制成功");});clipboard1.on("error", function(e) {layer.msg("复制失败！请手动复制", {icon:5});}); 
+    }
+    
+    function show_recordnum(obj)
+    {
+        var recordnumObj = $('#web_recordnum');
+        var value = recordnumObj.val();
+        var valuehtml = "";
+
+        if (value.indexOf('&lt;/a&gt;') == -1) {
+            valuehtml = '<a href="https://beian.miit.gov.cn/" rel="nofollow" target="_blank">'+value+'</a>';
+        }
+
+        var web_recordnum_mode = $('#web_recordnum_mode').val();
+        if (web_recordnum_mode == 0) { // 切换为代码模式
+            $('#web_recordnum_mode').val(1);
+            $(obj).html('普通模式');
+            recordnumObj.css('height', '40px');
+            recordnumObj.val(valuehtml);
+        } else { // 切换为普通模式
+            $('#web_recordnum_mode').val(0);
+            $(obj).html('代码模式');
+            recordnumObj.css('height', '20px');
+            recordnumObj.val(removeHTMLTag(value));
+        }
+    }
+    
+    function show_garecordnum(obj)
+    {
+        var gaRecordnumObj = $('#web_garecordnum');
+        var value = gaRecordnumObj.val();
+        var valuehtml = "";
+
+        if (value.indexOf('&lt;/a&gt;') == -1) {
+            var recordcode = value.replace(/([^\d\-]+)/g, '');
+            valuehtml = '<a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode='+recordcode+'" rel="nofollow" target="_blank">'+value+'</a>';
+        }
+
+        var web_garecordnum_mode = $('#web_garecordnum_mode').val();
+        if (web_garecordnum_mode == 0) { // 切换为代码模式
+            $('#web_garecordnum_mode').val(1);
+            $(obj).html('普通模式');
+            gaRecordnumObj.css('height', '40px');
+            gaRecordnumObj.val(valuehtml);
+        } else { // 切换为普通模式
+            $('#web_garecordnum_mode').val(0);
+            $(obj).html('代码模式');
+            gaRecordnumObj.css('height', '20px');
+            gaRecordnumObj.val(removeHTMLTag(value));
+        }
+    }
+
+    //过滤HTML标签
+    function removeHTMLTag(str) {
+        str = str.replace(/<\/?[^>]*>/g, ''); //去除HTML tag
+        str = str.replace(/[ | ]*\n/g, '\n'); //去除行尾空白
+        str = str.replace(/ /ig, ''); //去掉 
+        return str;
+    }
+</script>
+{include file="public/footer" /}

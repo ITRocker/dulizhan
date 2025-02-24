@@ -1,0 +1,240 @@
+{include file="public/layout" /}
+<script type="text/javascript" src="__PUBLIC__/plugins/Echarts/echarts.min.js"></script>
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="seo/left" /}
+<div class="fixed-bar mb10" style="min-width:auto;margin-left:100px;">
+    <div class="item-title">
+        <ul class="tab-base nc-row">
+            <li {if condition="'alt'==$Think.const.ACTION_NAME"}class="current"{/if}>
+                <a href="{:url('Seo/gsc')}">
+                    <span>GSC数据</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="page min-hg-c-66 atta" style="min-width:auto;margin-left:100px;">
+    <div class="explanation" id="">
+        <ul>
+            <li>授权Google Search Console后，可以直接查看网站在搜索结果中的表现，进行分析和优化</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <div class="mDiv mt30">
+            <div class="ftitle">
+                <div class="fbutton">
+                       <a href="">
+                           <div class="add">
+                               <span>绑定账号</span>
+                           </div>
+                       </a>
+                </div>
+            </div>
+        </div>
+        <div class="header-bar mb20 mt30">
+            <div class="more">
+                <div class="search search-nowrap">
+                    <div class="content">
+                        <form id="postForm" action="{:url('Seo/gsc')}" method="get" onsubmit="layer_loading('正在处理');" style="display: unset;">
+                            {$searchform.hidden|default=''}
+                            <input type="hidden" name="form_id" value="{$form_id|default=1}">
+                            <div class="ey-form-item"><label class="users-form-item-label">查询时间：</label>
+                                <div class="users-form-item-content">
+                                    <div class="users-select">
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div class="sDiv2">
+                                                <!-- 内置默认一周时间 -->
+                                                <input type="text" name="add_time" id="eYLaydateTimeLinkage" data-max_date="{php}echo date('Y-m-d');{/php}" autocomplete="off"  class="qsbox" placeholder="请选择" lay-key="1" style="width: 220px;" value="{$Request.param.add_time}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="ey-form-item">
+                            <div class="users-form-item-content">
+                                <span class="bt-xin" onclick="formQuery();">查询</span>
+                                <span class="bt-xin-no" onclick="formQuery('reset');">解除绑定</span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            function formQuery(isReset) {
+                                if (isReset && 'reset' == isReset) {
+                                    window.location.href = $('#postForm').attr('action');
+                                } else {
+                                    $('#postForm').submit();
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="gsc_total_box">
+            <div class="info_count">
+                 <div class="container-fluid">
+                     <ul class="total-box">
+                        <li class="content_total">
+                            <a href="javascript:void(0);" onclick="" data-href="">
+                                <h2>总点击数</h2>
+                                <p title=""><cite>15</cite></p>
+                            </a>
+                        </li>
+                        <li class="content_total">
+                            <a href="javascript:void(0);" onclick="" data-href="">
+                                <h2>总曝光数</h2>
+                                <p title=""><cite>145</cite></p>
+                            </a>
+                        </li>
+                        <li class="content_total">
+                            <a href="javascript:void(0);" onclick="" data-href="">
+                                <h2>平均点击率</h2>
+                                <p title=""><cite>0.69%</cite></p>
+                            </a>
+                        </li>
+                        <li class="content_total">
+                            <a href="javascript:void(0);" onclick="" data-href="">
+                                <h2>平均排名</h2>
+                                <p title=""><cite>25.12</cite></p>
+                            </a>
+                        </li>
+                     </ul>
+                 </div>
+            </div>
+        </div>
+        <div class="list-stats mt30">
+            <div class="stats-con">
+                <div id="stats-box" style="width:40%;height:400px;margin: 0 auto;"></div>
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{include file="public/footer" /}
+<script type="text/javascript">
+
+    /**
+     * 更新组件库
+     * @return {[type]} [description]
+     */
+    var is_update_component_access = {$is_update_component_access|default=0};
+    function update_component_access()
+    {
+        if (1 == is_update_component_access) {
+            $.ajax({
+                type : 'post',
+                url : eyou_basefile+'?m=admin&c=Diyminipro&a=ajax_syn_component_access&lang='+__lang__,
+                data : {mini_id:0, _ajax:1},
+                dataType : 'json',
+                success : function(res){
+                    if(res.code == 1) {
+                        console.log(res.msg);
+                    }
+                }
+            });
+        }
+    }
+    function getBeforeDate(n) {
+        var n = n;
+        var d = new Date();
+        var year = d.getFullYear();
+        var mon = d.getMonth() + 1;
+        var day = d.getDate();
+        if(day <= n) {
+            if(mon > 1) {
+                mon = mon - 1;
+            } else {
+                year = year - 1;
+                mon = 12;
+            }
+        }
+        d.setDate(d.getDate() - n);
+        year = d.getFullYear();
+        mon = d.getMonth() + 1;
+        day = d.getDate();
+        s = year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
+        return s;
+    }
+    update_component_access();
+    
+    	// 基于准备好的dom，初始化echarts实例
+    	var myChart = echarts.init(document.getElementById('stats-box'));
+    
+    	// 指定图表的配置项和数据
+    	var option = {
+    		color: ['#81AEF8', '#36A297', '#5E35B1', '#E8710A'],
+    		title: {
+    			text: ''
+    		},
+    		tooltip: {
+    			trigger: 'axis',
+    		},
+    		legend: {
+    			data: ['点击次数', '点击率', '展示', '排名']
+    		},
+    		grid: {
+    			left: '3%',
+    			right: '4%',
+    			bottom: '3%',
+    			containLabel: true
+    		},
+    		toolbox: {
+    			feature: {
+    				saveAsImage: {}
+    			}
+    		},
+    		xAxis: {
+    			type: 'category',
+    			boundaryGap: false,
+    			data: ['08-13','08-14','08-15','08-16','08-17','08-18','08-19'],
+    			splitLine: {
+    				show: true,
+    				lineStyle: {
+    					color: ['#eee'],
+    					width: 1,
+    					type: 'solid'
+    				}
+    			}
+    		},
+    		yAxis: {
+    			type: 'value',
+    			splitLine: {
+    				show: true,
+    				lineStyle: {
+    					color: ['#eee'],
+    					width: 1,
+    					type: 'solid'
+    				}
+    			}
+    		},
+            series: [{
+            		name: '点击次数',
+            		type: 'line',
+            		data: ['8','6','12','10','16','22','28'],
+            	},
+                {
+                    name: '点击率',
+                    type: 'line',
+                    data: ['5','3','2','7','1','5','8'],
+                },
+                {
+                    name: '展示',
+                    type: 'line',
+                    data: ['1','4','5','4','3','8','3'],
+                },
+                {
+                    name: '排名',
+                    type: 'line',
+                    data: ['9','1','8','5','8','1','11'],
+                },
+            ]
+    	};
+    
+    	// 使用刚指定的配置项和数据显示图表。
+    	myChart.setOption(option);
+      
+</script>

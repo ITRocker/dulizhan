@@ -1,0 +1,173 @@
+{include file="public/layout" /}
+
+{eq name="$editor.editor_select" value="1"}
+    {load href="__PUBLIC__/plugins/Ueditor/ueditor.config.js" /}
+    {load href="__PUBLIC__/plugins/Ueditor/ueditor.all.min.js" /}
+    {load href="__PUBLIC__/plugins/Ueditor/lang/zh-cn/zh-cn.js" /}
+{else/}
+    {load href="__PUBLIC__/plugins/ckeditor/ckeditor.js" /}
+{/eq}
+
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+{include file="archives/left" /}
+<div class="fixed-bar nobg" style="width: auto;margin-left: 100px;">
+    <div class="item-title mb10">
+        <div class="subject">
+            {include file="public/callback_page_1" /}<!-- 返回箭头 -->
+            <h3>添加案例</h3>
+            <h5></h5>
+        </div>
+    </div>
+</div>
+<div class="page pd0 min-hg-c-10 mb-20 nobg" style="min-width:auto;margin-left:100px;">
+    <div class="flexigrid">
+        <form class="form-horizontal" id="post_form">
+            <div class="ncap-form-default ncap-form-default-waimao pt0 pb0">
+                <div class="form-default-box">
+                    <div class="form-default-left">
+                        <div class="form-defaul-con mb10">
+                            {include file="archives/get_field_left" /}
+                        </div>
+                        <div class="form-defaul-con mb10">
+                            <dl class="row <!-- #weapp_diy911873092_images_none# -->">
+                                <dt class="tit">
+                                    <label>图片集</label>
+                                </dt>
+                                <dd class="opt">
+                                    <div class="tab-pane pics" id="tab_imgupload">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="sort-list-img"> <div class="images_upload"></div> </div>
+                                                        <a href="javascript:void(0);"  onClick="GetUploadify(8, '', 'allimg', 'carouselPicCallBack');" class="img-upload mb15" title="点击上传"> <div class="y-line"></div> <div class="x-line"></div> </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- 上传图片显示的样板 start -->
+                                    <div class="images_upload_tpl none">
+                                        <div class="images_upload images_upload_html">
+                                            <div class="images_upload_box">
+                                                <input type="hidden" name="imgupload[]" value="" />
+                                                <a href="javascript:void(0);" onClick="" class="upimg" title="拖动修改排序">
+                                                    <img src="__STATIC__/admin/images/add-button.jpg"/>
+                                                </a>
+                                                <a href="javascript:void(0)" class="delect" title="删除">&nbsp;&nbsp;</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 上传图片显示的样板 end -->
+                                    <script type="text/javascript">
+                                        // 上传产品轮播图回调函数
+                                        function carouselPicCallBack(paths) {
+                                            var  last_div = $(".images_upload_tpl").html();
+                                            for (var i = 0; i < paths.length; i++) {
+                                                // 插入一个 新图片
+                                                if ($(".sort-list-img .images_upload_html").length > 0) {
+                                                    $(".sort-list-img .images_upload_html:last").after(last_div);
+                                                } else {
+                                                    $(".sort-list-img .images_upload:last").before(last_div);
+                                                }
+                                                $(".sort-list-img .images_upload_html:last").find('a:eq(0)').attr('href', paths[i]).attr('onclick', '').attr('target', "_blank");
+                                                $(".sort-list-img .images_upload_html:last").find('img').attr('src', paths[i]);
+                                                $(".sort-list-img .images_upload_html:last").find('a:eq(1)').attr('onclick', "carouselPicClear(this, '"+paths[i]+"')").text('');
+                                                $(".sort-list-img .images_upload_html:last").find('input').val(paths[i]);
+                                            }
+
+                                            setIsLitpic();
+                                        }
+                                        // 轮播图删除
+                                        function carouselPicClear(obj, path) {
+                                            $(obj).parent().parent().remove();
+                                            $.ajax({
+                                                type:'POST',
+                                                url :"{:url('Uploadimgnew/delupload')}",
+                                                data:{action: "del", filename: path, _ajax: 1},
+                                                success: function(){}
+                                            });
+
+                                            setIsLitpic();
+                                        }
+                        
+                                        // 产品相册的拖动排序相关
+                                        $(".sort-list-img").sortable({
+                                            start: function(event, ui) {}, stop: function(event, ui) {}
+                                        });
+                                    </script>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="form-defaul-con mb50">
+                            {include file="archives/get_field_addonextitem" /}
+                        </div>
+                    </div>
+                    <div style="width: 10px;background-color: #f4f4f4;"></div>
+
+                    <div class="form-default-right">
+                        {include file="archives/get_field_right" /}
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-fixed">
+                <div class="bot4">
+                    <input type="hidden" name="editor_addonFieldExt" id="editor_addonFieldExt" value="">
+                    <a href="JavaScript:void(0);" onclick="check_submit();" class="ncap-btn-big ncap-btn-green">保存</a>
+                    {include file="public/callback_page_2" /}<!-- 返回按钮 -->
+                </div>
+            </div> 
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // 判断输入框是否为空
+    function check_submit() {
+        if ($.trim($('input[name=title]').val()) == '') {
+            showErrorMsg('标题不能为空！');
+            $('input[name=title]').focus();
+            return false;
+        }
+
+        layer_loading('正在处理');
+        setTimeout(function (){
+            editor_auto_210607();
+ 
+            $.ajax({
+                type: 'post',
+                url : "{:custom_url('Images/add', ['_ajax'=>1])}",
+                data: $('#post_form').serialize(),
+                dataType: 'json',
+                success: function(res) {
+                    layer.closeAll();
+                    if (res.code == 1) {
+                        openJumpPage("{:custom_url('Archives/archives_jump')}");
+                        // showSuccessMsg(res.msg, 1500, function() {
+                        //     window.location.href = res.url;
+                        // });
+                    } else {
+                        showErrorMsg(res.msg);
+                    }
+                },
+                error: function(e) {
+                    layer.closeAll();
+                    showErrorAlert(e.responseText, 5);
+                }
+            });
+        }, 1);
+    }
+</script>
+<script type="text/javascript">
+    try{
+        var mt20_1649209614 = sessionStorage.getItem("mt20_1649209614");
+        if (mt20_1649209614 == 1){
+            $("#geduan_div").removeClass("h10");
+        }else{
+            $("#geduan_div").addClass("h10");
+        }
+    }catch(e){}
+</script>
+{include file="public/footer" /}

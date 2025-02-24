@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>可视化编辑</title>
+    <script type="text/javascript">
+        var eyou_basefile = "{$Request.baseFile}";
+        var module_name = "{$Think.const.MODULE_NAME}";
+        var __root_dir__ = "__ROOT_DIR__";
+        var __lang__ = "{$home_lang}";
+    </script>  
+    {load href="__STATIC__/common/css/uistyle.css" /}
+    {load href="__STATIC__/common/js/jquery.min.js" /}
+    {load href="__PUBLIC__/plugins/layer-v3.1.0/layer.js" /}
+    {load href="__STATIC__/admin/js/global.js" /}
+    <link rel="stylesheet" type="text/css" href="__STATIC__/admin/js/codemirror/codemirror.css">
+    <script type="text/javascript" src="__STATIC__/admin/js/codemirror/codemirror.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/codemirror/mode/xml/xml.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/codemirror/mode/javascript/javascript.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/codemirror/mode/css/css.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/codemirror/mode/php/php.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/codemirror/mode/clike/clike.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <style type="text/css">
+        .CodeMirror{
+            height: 330px;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel panel-default">
+        <div class="span12 ckeditor">
+            <form class="form-horizontal" id="post_form" onsubmit="return check_submit();">
+                <div class="hend-tab">
+                    <ul class="clearfix">
+                        {volist name="$languageList" id="vo"}
+                        <li class="{if condition="$field['lang'] == $vo['mark']"} action {/if}">
+                            <a href="JavaScript:void(0);">{$vo['cn_title']}</a>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div class="control-group">
+                    {volist name="$languageList" id="vo"}
+                    <div class="control-con {if condition="$field['lang'] == $vo['mark']"} active {/if}" data-mark="{$vo['mark']}">
+                        <textarea id="post_content_{$vo['mark']}" name="content[{$vo['mark']}]" style="width: 100%; height: 200px;">{$field['info'][$vo['mark']]['value']|default=''}</textarea>
+                    </div>
+                    {/volist}
+                </div>
+                <div class="control-group ncap-form-default">
+                    <div class="controls">
+                        <input type="hidden" name="id" value="{$field.id|default=''}">
+                        <input type="hidden" name="type" value="{$field.type|default=''}">
+                        <input type="hidden" name="page" value="{$field.page|default=''}">
+                        <input type="hidden" name="v" value="{$v|default='pc'}">
+                        <!-- <input type="hidden" name="lang" value="{$field.lang|default='cn'}"> -->
+                        <input type="hidden" name="idcode" value="{$field.idcode|default=''}">
+                        <a href="JavaScript:void(0);" onclick="check_submit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">保存</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+        
+        var oldhtml = parent.zan_getOldHtml();
+        $('textarea[name^="content"]').each(function(index, item){
+            if ($.trim($(item).val()) == '') {
+                $(item).val(oldhtml);
+            }
+        });
+        
+        {volist name="$languageList" id="vo"}
+        var editor_{$vo['mark']} = CodeMirror.fromTextArea(document.getElementById("post_content_{$vo['mark']}"), {
+            lineNumbers: true,
+            lineWrapping: true,
+            autofocus:true,  //自动聚焦
+            mode: 'text/html',
+        });
+        {/volist}
+
+        $(document).ready(function() {
+            // 选项卡点击事件
+            $('.hend-tab li').click(function() {
+                // 移除当前选中的样式
+                $('.hend-tab li').removeClass('action');
+                // 为当前点击的选项添加选中样式
+                $(this).addClass('action');
+
+                // 获取当前点击的索引
+                var index = $(this).index();
+
+                // 隐藏所有内容
+                $('.control-con').removeClass('active');
+                // 显示对应索引的内容
+                $('.control-con').eq(index).addClass('active');
+                // 当前编辑器对应的语言标识
+                var mark = $('.control-con').eq(index).data('mark');
+
+                {volist name="$languageList" id="vo"}
+                if (mark == "{$vo['mark']}") {
+                    editor_{$vo['mark']}.toTextArea();
+                    editor_{$vo['mark']} = CodeMirror.fromTextArea(document.getElementById("post_content_{$vo['mark']}"), {
+                        lineNumbers: true,
+                        lineWrapping: true,
+                        autofocus:true,  //自动聚焦
+                        mode: 'text/html',
+                    });
+                }
+                {/volist}
+
+                return false;
+            });
+        });
+
+        var parentObj = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+        function check_submit()
+        {
+            if ($('input[name=id]').val() == '' || $('input[name=id]').val() == undefined || $('input[name=type]').val() == '' || $('input[name=page]').val() == '') {
+                parent.showErrorMsg('缺少系统参数：id、type、page，尝试请求技术支持！');
+                return false;
+            }
+
+            {volist name="$languageList" id="vo"}
+            $("#post_content_{$vo['mark']}").val(editor_{$vo['mark']}.getValue());
+            {/volist}
+
+            layer_loading('正在处理');
+            $.ajax({
+                url: "{:url('api/Uiset/submit', ['_ajax'=>1])}",
+                type: 'POST',
+                dataType: 'JSON',
+                data: $('#post_form').serialize(),
+                success: function(res){
+                    layer.closeAll();
+                    if (res.code == 1) {
+                        var _parent = parent;
+                        _parent.layer.close(parentObj);
+                        _parent.layer.msg(res.msg, {icon: 1, shade: 0.3, time: 1500}, function(){
+                            _parent.window.location.reload();
+                        });
+                    } else {
+                        parent.zan_showErrorAlert(res.msg);
+                    }
+                },
+                error: function(e){
+                    layer.closeAll();
+                    parent.zan_showErrorAlert(e.responseText);
+                }
+            });
+        }
+
+        /**
+         * 封装的加载层
+         */
+        function layer_loading(msg){
+            var loading = layer.msg(
+            msg+'...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请勿刷新页面', 
+            {
+                icon: 1,
+                time: 3600000,
+                shade: [0.2]
+            });
+            var index = layer.load(3, {
+                shade: [0.1,'#fff']
+            });
+
+            return loading;
+        }
+    </script>
+</body>
+</html>
